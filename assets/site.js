@@ -195,3 +195,14 @@ if (xvs.length) {
   }
 }
 document.documentElement.classList.add('motion');
+
+// Menu drop-down in the rail: click or tap to open, Escape or an outside click to close
+(() => {
+  const d = document.querySelector('.rail-drop'); if (!d) return;
+  const b = d.querySelector('.rail-drop-btn');
+  const set = o => { d.classList.toggle('open', o); b.setAttribute('aria-expanded', String(o)); };
+  b.addEventListener('click', e => { e.stopPropagation(); set(!d.classList.contains('open')); });
+  document.addEventListener('click', e => { if (!d.contains(e.target)) set(false); });
+  d.querySelectorAll('.rail-drop-panel a').forEach(a => a.addEventListener('click', () => set(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { set(false); b.focus(); } });
+})();
