@@ -6,7 +6,7 @@ set -u
 cd "$(dirname "$0")/.."
 export GFLOW_CLI_UPDATE_CHECK=0
 PROJECT=$(cat src/flow/PROJECT_ID)
-PLATING=../Menu-repo/img/plating
+PLATING=../Garden/web/menu/img/plating
 # job|output|aspect|refs (comma separated, may be empty)
 JOBS="
 wood|assets/plates/hoarding-wood.png|16:9|src/flow/ref-wood.png

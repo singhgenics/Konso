@@ -1,18 +1,19 @@
-// Builds index.html from src/template.html and the live menu in Dream/food.html + drinks.html.
+// Builds index.html from src/template.html and the live menu in Garden/web/menu/source/food.html + drinks.html.
 // Usage: node src/build.mjs   (re-run after any menu change)
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import { fileURLToPath } from 'url';
-import { loadMenu, DREAM } from '../../Menu-repo/src/menu-data.mjs';
+import { loadMenu } from '../../Garden/web/menu/src/menu-data.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PLATING = path.join(DREAM, 'Menu-repo/img/plating');
+const MENU = path.join(ROOT, '../Garden/web/menu');
+const PLATING = path.join(MENU, 'img/plating');
 const OUT_IMG = path.join(ROOT, 'assets/menu');
 fs.mkdirSync(OUT_IMG, { recursive: true });
 
 // dish name -> plating photo id (Menu-repo data.json), plus lines it names differently
-const data = JSON.parse(fs.readFileSync(path.join(DREAM, 'Menu-repo/src/data.json'), 'utf8'));
+const data = JSON.parse(fs.readFileSync(path.join(MENU, 'src/data.json'), 'utf8'));
 const PHOTO = Object.fromEntries(data.map(d => [d.name, d.id]));
 Object.assign(PHOTO, {
   'Pitcher or tasting paddle': 'paddle', 'Paul John Brilliance': 'neat', 'Single malt flight': 'maltflight',
@@ -23,10 +24,10 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 function price(p) {
-  if (typeof p === 'number') return `₹${p}`;
+  if (typeof p === 'number') return `${p}`;
   if (p === 'daily') return 'Daily';
-  if (/^\d+\+$/.test(p)) return `from ₹${p.slice(0, -1)}`;
-  if (/^₹[\d,]+\+$/.test(p)) return `from ${p.slice(0, -1)}`;
+  if (/^\d+\+$/.test(p)) return `from ${p.slice(0, -1)}`;
+  if (/^[\d,]+\+$/.test(p)) return `from ${p.slice(0, -1)}`;
   return p;
 }
 

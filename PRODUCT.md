@@ -38,7 +38,7 @@ Indo-Chinese from the wok, dim sum and bao from the steamer, and craft beer from
 - No bookings, no ordering, no sign-up: the site is informational while the pub is pre-launch. Walk-ins only once open.
 - No phone number, email or social handles exist yet. Do not invent them; leave space to add later.
 - Opening date is not set. Say "opening soon", never a date.
-- Menu and prices are the live working menu (source: Dream/food.html and drinks.html); they may still change.
+- Menu and prices are the live working menu (source: Garden/web/menu/source/food.html and drinks.html); they may still change.
 
 ## Brand Commitments
 
@@ -50,7 +50,7 @@ Indo-Chinese from the wok, dim sum and bao from the steamer, and craft beer from
 
 ## Evidence on Hand
 
-- Plated dish and drink photos (Google Flow, 1200×896): Dream/Menu-repo/img/plating.
+- Plated dish and drink photos (Google Flow, 1200×896): Garden/web/menu/img/plating.
 - No reviews, press, awards or customer quotes. Never fabricate any.
 
 ## Product Principles

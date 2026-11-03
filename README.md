@@ -12,7 +12,7 @@ node src/build.mjs        # menu + web images -> index.html
 ```
 
 The full menu, prices and dish photos come from the live menu in the Dream repo
-(`food.html`, `drinks.html`) through `../Menu-repo/src/menu-data.mjs` and `../Menu-repo/img/plating`.
+(`food.html`, `drinks.html`) through `../Garden/web/menu/src/menu-data.mjs` and `../Garden/web/menu/img/plating`.
 Run the build after any menu change.
 
 Website copy rules, enforced in `src/build.mjs` (SCRUB): never mention Kolkata, Tangra or City of Joy; happy hour reads 12–6.
