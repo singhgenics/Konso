@@ -17,7 +17,7 @@ Static HTML/CSS/JS, no build step at runtime. Own public repo `singhgenics/Cabin
 
 ## Product Purpose
 
-The public website for Cabin East, a small Pan-Asian pub that is **opening soon** in Cavelossim, South Goa. It tells people what the place is, shows the food and the drinks, and where to find it. Success: a visitor wants to come on opening week and remembers the name.
+The public website for Konso, a small Pan-Asian pub that is **opening soon** in Cavelossim, South Goa. It tells people what the place is, shows the food and the drinks, and where to find it. Success: a visitor wants to come on opening week and remembers the name.
 
 ## Positioning
 
@@ -42,8 +42,8 @@ Indo-Chinese from the wok, dim sum and bao from the steamer, and craft beer from
 
 ## Brand Commitments
 
-- Name **Cabin East**, tagline **WOK | STEAM | DRAUGHT**, always set under the logo.
-- Master logo: the pint-stack (glass holding foam, steamer with dumpling, flame and wok) with Alfa Slab One "CABIN EAST". Assets in Dream/CabinEast/brand-kit/logo.
+- Name **Konso**, tagline **WOK | STEAM | DRAUGHT**, always set under the logo.
+- Master logo: the pint-stack (glass holding foam, steamer with dumpling, flame and wok) with Alfa Slab One "KONSO". Assets in Dream/CabinEast/brand-kit/logo.
 - Palette (owner, 2026-10-29, from the garden decor page): bottle green #1F3D2E leads, with chocolate #4A2A1E, Goa blue #2443A6, old brick #A9533A, brass #C49A3C, burgundy #6A1622, cognac #A2582A, bougainvillea #D81B7A, on cream #F2E8D2. (Earlier: Cabin Red #B5321C, amber, jade; the logo artwork is still red and amber.) Alfa Slab One display, IBM Plex Sans text, IBM Plex Mono labels.
 - Dish names are playful puns (Cabin Fever, Wonton Kenobi, Gose Bumps); keep them exactly.
 - Inspiration given by the owner: craft-pub WordPress themes with cream paper, heavy slab headings, dark bands, photo mosaics (Website/reference). Premium but not intimidating.

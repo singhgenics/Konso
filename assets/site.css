@@ -1,4 +1,4 @@
-/* Cabin East: the hoarding. Bottle-green plywood, pasted cream bills, slab lettering (palette block at the end of this file). */
+/* Konso: the hoarding. Bottle-green plywood, pasted cream bills, slab lettering (palette block at the end of this file). */
 @font-face { font-family: "Alfa Slab One"; src: url("fonts/AlfaSlabOne-Regular.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "IBM Plex Sans"; src: url("fonts/IBMPlexSans.woff2") format("woff2"); font-weight: 100 700; font-stretch: 75% 100%; font-display: swap; }
 @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
@@ -772,3 +772,4 @@ html.lenis, html.lenis body { height: auto; }
   .rail-drop-panel { left: var(--gut); right: var(--gut); top: 100%; margin-top: 0; min-width: 0; }
   .rail-drop-panel a { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1rem; padding: 10px 12px; }
 }
+.hero-wordmark { display: block; width: clamp(260px, 38vw, 560px); height: auto; filter: drop-shadow(0 4px 24px rgba(0,0,0,.35)); }

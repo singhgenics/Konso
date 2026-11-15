@@ -1,7 +1,7 @@
-# Cabin East website
+# Konso website
 
-Public site for Cabin East (Wok | Steam | Draught), opening soon in Cavelossim, South Goa.
-Live at https://singhgenics.github.io/Cabin-East/ (GitHub Pages, `main`, root).
+Public site for Konso (Wok | Steam | Draught), opening soon in Cavelossim, South Goa.
+Live at https://singhgenics.github.io/Konso/ (GitHub Pages, `main`, root).
 
 Static HTML/CSS/JS, no runtime build. `index.html` is generated; edit `src/template.html`.
 
