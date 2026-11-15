@@ -773,3 +773,7 @@ html.lenis, html.lenis body { height: auto; }
   .rail-drop-panel a { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 48px; font-size: 1rem; padding: 10px 12px; }
 }
 .hero-wordmark { display: block; width: clamp(260px, 38vw, 560px); height: auto; filter: drop-shadow(0 4px 24px rgba(0,0,0,.35)); }
+
+/* Prata has fine hairlines, so small headings read better in normal case; large display headings stay uppercase */
+.slip h3, .hours h3, .route-title, .mcell h3, .hero-stamp { text-transform: none; }
+.hero-stamp { letter-spacing: .01em; }
