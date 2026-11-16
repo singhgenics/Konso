@@ -38,7 +38,7 @@ The garden picture is an artist's impression and is labelled as one on the page.
 
 ## The moat sections
 
-Page order: hero, moat strip, Steam (dim sum, bao), Draught (cocktail scene, craft beer, craft cocktails), deals, story, wok, garden, find us.
+Page order: hero, moat strip, Steam (dim sum, bao), Bar (cocktail scene, bottled beer, craft cocktails; no draught beer, 2026-11-16), deals, story, wok, garden, find us.
 
 The full menu (Food / Drinks tabs) is its own page, `menu.html` (2026-11-16), listed in the rail's Menu drop-down as "Full menu" next to the Picture menu; every "see the menu" link goes there. `src/split-menu.mjs` cuts it out of the built `index.html` (`src/build.mjs` runs it last; the template still holds the menu section). Dish and drink cards are pulled from the live menu by name in `src/template.html` (`{{Name|img}}` etc.); the counts in the moat strip are live (`{{#dimsum}}`). Four extra Flow scenes (`dimsum`, `bao`, `cocktails`, `beers` in `src/gen-images.sh`) are captioned as illustrations.
 

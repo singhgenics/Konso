@@ -245,10 +245,10 @@ a { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1.5p
   display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; padding: 22px 24px; border-radius: 4px;
   background: #2A221D; box-shadow: inset 0 0 0 2px rgba(242, 232, 210, .16), inset 0 0 0 6px #2A221D, inset 0 0 0 7px rgba(228, 155, 29, .28), 0 14px 26px -14px #000;
 }
-.tap-1 { rotate: -.6deg; } .tap-2 { rotate: .5deg; } .tap-3 { rotate: -.3deg; }
+.tap-1 { rotate: -.6deg; } .tap-2 { rotate: .5deg; } .tap-3 { rotate: -.3deg; } .tap-4 { rotate: .4deg; }
 .tap > * { grid-column: 1; }
 .tap .price { grid-column: 2; grid-row: 1 / span 3; align-self: start; color: var(--amber); font-size: 1.15rem; text-align: right; }
-.tap .price::after { content: "330 / 500 ml"; display: block; font-size: .75rem; color: #BDB09A; margin-top: 4px; letter-spacing: .04em; }
+.tap .price::after { content: "bottle"; display: block; font-size: .75rem; color: #BDB09A; margin-top: 4px; letter-spacing: .04em; }
 .tap h3 { font: 400 clamp(1.6rem, 2.6vw, 2.2rem)/1 var(--slab); }
 .tap-1 h3 { color: #F2C24A; } .tap-2 h3 { color: #EE8C9B; } .tap-3 h3 { color: var(--amber); }
 .tap-sub { font-weight: 600; color: #E6DAC0; }
