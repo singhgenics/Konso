@@ -71,3 +71,17 @@ The hero is `assets/video/hero-bao.mp4` (a steaming bao, 1280 px wide, seamless 
 ## Brand kit (2026-11-16)
 
 The site is dressed in the Konso brand kit only: `assets/brandkit.css` (loaded after `site.css`) maps every colour to the kit's bottle green #051C0A, Konso green #0B2A14, gold foil #D89D3C and cream #F2E8D2, drops the wood and paper textures, and gives each scroll scene its own kit shade (dim sum: warm gold glow; bao: darkest green; cocktail: stronger gold glow). Logos are the kit SVGs in `assets/brand/` (from `Garden/web/brand-kit/logo/svg`). Only the veg / non-veg marks and the chilli icons keep their own colours. The older palette notes in `DESIGN.md` and the end of `site.css` are overridden, not deleted.
+
+## The menu page follows the picture menu (2026-11-16)
+
+`menu.html` is built from the one menu, `Garden/menu/build.py` (the picture menu): names, descriptions, prices, veg marks, heat, allergen lines, sections and deals. After any menu change:
+
+```sh
+python3 src/menu-sync.py     # from Website/: rewrites the dishes in menu.html; build.py is only read
+```
+
+The website keeps its own photo for a dish when it has one (`assets/menu/*.webp`, matched by name); dishes without one get the picture-menu photo (`assets/menu/pm-*.webp`). Print-only copies in the picture menu (classes it hides on screen, like `bowl-dim`) are skipped. If a section is renamed in `build.py`, the script stops and asks for the `FOOD` / `DRINKS` lists at its top to be updated. The allergen lines carry the picture menu's note that the chef still has to confirm them.
+
+## Speed
+
+Scene pictures load only as each scene comes near, and below-the-fold video posters are set only as their clip comes near (`assets/site.js`); the hero poster is preloaded. Lighthouse, phone profile, 2026-11-16: home 95 / 100 / 100 / 100, menu 95 / 100 / 100 / 100 (performance, accessibility, best practices, SEO).

@@ -797,3 +797,10 @@ html.lenis, html.lenis body { height: auto; }
   .hero-shade { inset: 0 0 auto 0; height: auto; aspect-ratio: 13 / 10; background: linear-gradient(0deg, #0C1C14 0%, rgba(12, 28, 20, .55) 18%, rgba(12, 28, 20, 0) 45%); }
   .hero-inner { margin-top: -34px; padding: 0 var(--gut) 52px; }
 }
+
+/* menu page lines synced from the picture menu (src/menu-sync.py): deals, allergens, the footnote */
+.dish-note { grid-template-columns: 1fr; padding: 14px 16px; background: rgba(216, 157, 60, .14); border-left: 3px solid var(--amber); }
+.dish-note .dish-name { font-size: 1.15rem; }
+.dish-allergen { font-size: .8125rem; color: var(--ink-soft); opacity: .8; margin-top: 4px; }
+.menu-foot { margin-top: clamp(28px, 4vw, 48px); font-size: .875rem; color: var(--ink-soft); max-width: 70ch; }
+.menu-sec { break-inside: avoid-column; } .dish { break-inside: avoid; }   /* a section stays in one column */

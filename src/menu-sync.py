@@ -1,0 +1,133 @@
+# Builds the website's menu page (menu.html) from the one menu: Garden/menu/build.py (the picture menu).
+# Names, descriptions, prices, veg marks, heat, allergens, sections and deals all come from there,
+# so a dish or price is changed once, in build.py, and both menus follow.
+#   usage (from Website/):  python3 src/menu-sync.py
+# Dish photos: the website keeps its own photo for a dish when it has one (assets/menu/*.webp, matched by name);
+# picture-menu photos are converted for dishes that have none. build.py itself is only read, never written.
+import html, os, re, sys
+from PIL import Image
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MENU_DIR = os.path.join(ROOT, '..', 'Garden', 'menu')
+PAGE = os.path.join(ROOT, 'menu.html')
+
+# ---- run build.py's data and page composition, with card/rows/sh swapped for recorders, stopping before it writes anything
+src = open(os.path.join(MENU_DIR, 'build.py'), encoding='utf-8').read()
+src = src[:src.index('def b64(')]                                   # stop before images are embedded and index.html is written
+REC = []
+hook = '''
+def card(img,name,sub,price,tag='',ar='3/2',span=6):
+    REC.append(('card',dict(img=img,name=name,desc=sub,price=price,tag=tag))); return f'\\x00{len(REC)-1}\\x00'
+def rows(items,cols=2):
+    REC.append(('rows',[dict(name=n,desc=d,price=p) for n,d,p in items])); return f'\\x00{len(REC)-1}\\x00'
+def sh(title,small,lede='',sub=False):
+    REC.append(('sh',dict(title=title,small=small,lede=lede,sub=sub))); return f'\\x00{len(REC)-1}\\x00'
+'''
+src = src.replace('# ---- food face ----', hook + '# ---- food face ----', 1)
+ns = {'REC': REC, '__name__': 'menu_sync'}
+cwd = os.getcwd(); os.chdir(MENU_DIR)
+try: exec(compile(src, 'build.py', 'exec'), ns)
+finally: os.chdir(cwd)
+VEG, AL, HEAT, body = ns['VEG'], ns['AL'], ns['HEAT'], ns['body']
+
+# the wok "hero" card is hand-written in build.py: read it into a dish
+hero = ns['hero']
+hv = re.findall(r'<span>([^<]+?) <b>(\d+)</b></span>', hero)
+REC.append(('card', dict(img=re.search(r'img/([\w-]+)\.jpg', hero).group(1), name=re.search(r'</i>([^<]+)</h3>', hero).group(1).strip(),
+    desc=re.search(r'<p>(.*?)</p>', hero, re.S).group(1).strip() + ' ' + ' · '.join(f'{a.lower()} {b}' for a, b in hv),
+    price=f'from {min(int(b) for _, b in hv)}', tag=re.search(r'class="tag[^"]*">([^<]+)<', hero).group(1))))
+body = body.replace(hero, f'\x00{len(REC)-1}\x00')
+
+def text(s): return html.unescape(re.sub(r'<[^>]+>', ' ', s)).replace(' ', ' ').strip()
+def clean(s): return re.sub(r'\s+', ' ', text(s)).strip()
+
+# ---- walk the page in order: sections, headings, cards, rows and deal bands
+# classes the picture menu hides on screen (CSS rules like .x{display:none} outside its print rules), so print-only copies are skipped
+SCREEN_HIDDEN = set(re.findall(r'^\.([\w-]+)\{display:none\}', ns['PRINT'].split('@page')[0], re.M)) | set(re.findall(r'\.([\w-]+)\{display:none\}', ns['PRINT'].split('@page')[0]))
+SCREEN_HIDDEN -= {'band'}
+SECS = []   # [{'id','title','small','lede','items':[...]}]
+for sid, inner in re.findall(r'<section class="sec[^"]*" id="(\w+)">(.*?)</section>', body, re.S):
+    cur = None
+    for m in re.finditer(r'\x00(\d+)\x00|<div class="(band[^"]*)"[^>]*>(.*?)</div>', inner, re.S):
+        if m.group(1) is not None:
+            kind, d = REC[int(m.group(1))]
+            if kind == 'sh':
+                cur = dict(id=f'm-{re.sub(r"[^a-z]+", "-", clean(d["title"]).lower()).strip("-")}', title=clean(d['title']), small=clean(d['small']), lede=clean(d['lede']), items=[])
+                SECS.append(cur)
+            elif kind == 'card': cur['items'].append(dict(d, kind='dish', photo=True))
+            else: cur['items'] += [dict(x, kind='dish', photo=False) for x in d]
+        else:
+            if set(m.group(2).split()) & SCREEN_HIDDEN: continue            # print-only copies (hidden on the phone menu)
+            band = re.sub(r'<s>(.*?)</s>', r'(usually \1)', m.group(3))   # crossed-out regular prices
+            strong = clean(''.join(re.findall(r'<strong>(.*?)</strong>', band, re.S)))
+            rest = clean(re.sub(r'<strong>.*?</strong>', '', band, flags=re.S))
+            item = dict(kind='note', title=strong, desc=rest)
+            if cur is None: continue
+            cur['items'].insert(0, item) if not cur['items'] else cur['items'].append(item)
+
+FOOD = ['m-dim-sum-bao', 'm-from-the-wok', 'm-soups-salads', 'm-mains', 'm-something-sweet']
+DRINKS = ['m-beer', 'm-cocktails', 'm-zero-proof', 'm-whisky-vodka']
+by = {s['id']: s for s in SECS}
+missing = [k for k in FOOD + DRINKS if k not in by] + [s['id'] for s in SECS if s['id'] not in FOOD + DRINKS]
+if missing: sys.exit(f'menu-sync: section names changed in build.py, update FOOD/DRINKS: {missing}')
+
+# ---- photos: keep the website's own photo for a dish, else convert the picture-menu photo
+page = open(PAGE, encoding='utf-8').read()
+PHOTO = {html.unescape(a).lower(): s for s, a in re.findall(r'<img class="dish-img" src="(assets/menu/[\w-]+\.webp)" alt="([^"]+?), (?:plated|served)"', page)}
+def photo(d):
+    key = clean(d['name']).lower()
+    if key in PHOTO: return PHOTO[key]
+    if d.get('photo'):
+        out = f'assets/menu/pm-{d["img"]}.webp'
+        if not os.path.exists(os.path.join(ROOT, out)):
+            im = Image.open(os.path.join(MENU_DIR, 'img', d['img'] + '.jpg')).convert('RGB')
+            w, h = im.size; t = 478 / 640                                  # crop to the website's 4:3-ish dish frame
+            if h / w > t: nh = int(w * t); im = im.crop((0, (h - nh) // 2, w, (h - nh) // 2 + nh))
+            else: nw = int(h / t); im = im.crop(((w - nw) // 2, 0, (w - nw) // 2 + nw, h))
+            im.resize((640, 478), Image.LANCZOS).save(os.path.join(ROOT, out), 'WEBP', quality=80, method=6)
+        return out
+    return None
+
+# ---- markup in the website's own classes
+CHILLI = '<svg viewBox="0 0 12 16" aria-hidden="true"><path d="M7.5 1.2c.3 1-.1 1.8-.9 2.3 2.4.6 3.6 2.6 3.2 5.4-.5 3.3-3.3 6.1-7.6 6.5-.7.1-1-.6-.4-1 2.5-1.6 3.4-3.9 3.2-6.2-.1-1.6.6-3.2 2-4.1-.4-.6-.4-1.4.1-2 .2-.4.4-.6.4-.9z"/></svg>'
+DIET = {'v': ('diet-veg', 'Vegetarian'), 'nv': ('diet-nonveg', 'Non-vegetarian'), 'vn': ('diet-both', 'Veg or non-veg')}
+E = lambda s: html.escape(s, quote=True)
+def marks(name):
+    out = ''
+    if name in VEG:
+        c, t = DIET[VEG[name]]; out += f'<span class="diet {c}" title="{t}"><span class="sr">{t}</span></span>'
+    h = HEAT.get(name, 0)
+    if h: out += f'<span class="heat" title="Heat {h} of 3"><span class="sr">Heat {h} of 3</span>{CHILLI * h}</span>'
+    return out
+def dish(d):
+    if d['kind'] == 'note':
+        return f'<li class="dish dish-note">\n<div class="dish-body">\n<h4 class="dish-name">{E(d["title"])}</h4>\n<p class="dish-what">{E(d["desc"])}</p>\n</div>\n</li>'
+    name = clean(d['name']); words = name.split(' ')
+    head = (E(' '.join(words[:-1])) + ' ' if len(words) > 1 else '') + f'<span class="nw">{E(words[-1])}{marks(name)}</span>'
+    if d.get('tag'): head += f' <span class="tag">{E("Goa" if d["tag"] == "Konkan touch" else d["tag"])}</span>'
+    img = photo(d)
+    pic = f'<img class="dish-img" src="{img}" alt="{E(name)}, served" loading="lazy" decoding="async" width="640" height="478">\n' if img else ''
+    al = AL.get(name, '')
+    alh = f'\n<p class="dish-allergen">Contains: {E(al)}</p>' if al else ''
+    return (f'<li class="dish{" has-img" if img else ""}">\n{pic}<div class="dish-body">\n<h4 class="dish-name">{head}</h4>\n'
+            f'<p class="dish-what">{E(clean(d["desc"]))}</p>{alh}\n</div>\n<p class="dish-price">{E(clean(d.get("price", "")))}</p>\n</li>')
+def section(s):
+    sub = s['small'] + (f' · {s["lede"]}' if s['lede'] else '')
+    return (f'<section class="menu-sec" id="{s["id"]}" aria-labelledby="h{s["id"][1:]}">\n<header class="menu-sec-head"><h3 id="h{s["id"][1:]}">{E(s["title"])}</h3><p>{E(sub)}</p></header>\n'
+            '<ul class="dish-list">' + '\n'.join(dish(d) for d in s['items']) + '</ul>\n</section>')
+def panel(pid, ids):
+    secs = [by[i] for i in ids]; total = sum(len(s['items']) for s in secs); col, n = [[], []], 0
+    for s in secs: col[0 if n < total / 2 else 1].append(s); n += len(s['items'])
+    return (f'<div class="menu-panel" id="panel-{pid}" role="tabpanel" aria-labelledby="tab-{pid}">' +
+            ''.join(f'<div class="menu-col">{chr(10).join(section(s) for s in c)}</div>' for c in col if c) + '</div>')
+
+foot = clean(re.search(r'<p class="foot">(.*?)</p>', body, re.S).group(1)).replace('• to ••• spice', 'chillies show the heat')
+foot = re.sub(r'\s*veg\s+non-veg\s*·\s*chillies show the heat, one to three\.', ' The marks show veg and non-veg; chillies show the heat, one to three.', foot)
+new = (f'{panel("food", FOOD)}\n{panel("drinks", DRINKS)}\n'
+       f'<p class="menu-foot">{E(foot)} Allergens still to be confirmed by our chef before opening.</p>')
+a = page.index('<div class="menu-body">') + len('<div class="menu-body">')
+b = page.rindex('</div>', a, page.rindex('</section>', 0, page.index('</main>')))   # the closing tag of menu-body, found from the end
+page = page[:a] + '\n' + new + '\n  ' + page[b:]
+open(PAGE, 'w', encoding='utf-8').write(page)
+n = sum(len(s['items']) for s in SECS)
+print(f'menu-sync: {len(SECS)} sections, {n} lines ({sum(1 for s in SECS for d in s["items"] if d["kind"]=="note")} deals) written to menu.html')

@@ -67,6 +67,10 @@ if (story && chapters.length) {
 
 // the hero clip autoplays, but never under reduced motion or ?still (the poster stays)
 document.querySelectorAll('video[autoplay]').forEach(v => { if (still || matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.pause(); } });
+// below-the-fold video posters are set only as their clip comes near (two screens away), so they don't compete with the hero
+{ const vids = document.querySelectorAll('video[data-poster]'); const set = v => { v.poster = v.dataset.poster; v.removeAttribute('data-poster'); };
+  if (still || !('IntersectionObserver' in window)) vids.forEach(set);
+  else { const po = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { po.unobserve(e.target); set(e.target); } }), { rootMargin: '200% 0px' }); vids.forEach(v => po.observe(v)); } }
 // looping clips play only while on screen (and never under reduced motion or ?still: the poster stays)
 const loops = document.querySelectorAll('video[data-loop]');
 if (loops.length && 'IntersectionObserver' in window && !still && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -110,12 +114,18 @@ if (xvs.length) {
   }));
   if (calm) items.forEach(it => it.el.classList.add('xv-calm'));
   else {
-    // show a stage only once all its pictures have loaded and decoded (one retry each), so layers never pop in piecemeal
-    items.forEach(it => {
+    // a scene's pictures load only as it comes near (about two screens away), so the page opens fast;
+    // the stage shows once they have all loaded and decoded (one retry each), so layers never pop in piecemeal
+    const prep = it => {
       const imgs = [...it.layers, it.whole].filter(Boolean);
+      imgs.forEach(img => { img.loading = 'eager'; });
       const ok = img => img.decode().catch(() => new Promise(res => { const src = img.src; img.src = ''; img.src = src; img.decode().then(res, res); }));
       Promise.race([Promise.all(imgs.map(ok)), new Promise(r => setTimeout(r, 6000))]).then(() => it.stage.classList.add('xv-ready'));
-    });
+    };
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { near.unobserve(e.target); prep(items.find(it => it.el === e.target)); } }), { rootMargin: '200% 0px' });
+      items.forEach(it => near.observe(it.el));
+    } else items.forEach(prep);
     const sy = () => (lenis ? lenis.scroll : scrollY);
     const measure = it => {                                          // the only layout reads: on load and on resize
       const cs = getComputedStyle(it.el), r = it.el.getBoundingClientRect();
