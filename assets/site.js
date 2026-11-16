@@ -84,14 +84,14 @@ if (loops.length && 'IntersectionObserver' in window && !still && !matchMedia('(
 // whole-page smooth scrolling (Lenis, self-hosted): wheel and trackpad glide, touch stays native, anchors ease to their target
 let lenis = null;
 if (!still && window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  lenis = new Lenis({ lerp: .085, wheelMultiplier: 1, smoothWheel: true });
+  lenis = new Lenis({ lerp: .13, wheelMultiplier: 1, smoothWheel: true });   // a short glide: smooth, but settles in ~0.7 s instead of ~1.5 s
   const loop = t => { lenis.raf(t); requestAnimationFrame(loop); };
   requestAnimationFrame(loop);
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href^="#"]'); if (!a || a.getAttribute('href').length < 2) return;
     const to = document.querySelector(a.getAttribute('href')); if (!to) return;
     e.preventDefault();
-    lenis.scrollTo(to, { offset: -(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0), duration: 1.3, easing: t => 1 - Math.pow(1 - t, 4) });
+    lenis.scrollTo(to, { offset: -(parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0), duration: .9, easing: t => 1 - Math.pow(1 - t, 4) });
     history.pushState(null, '', a.getAttribute('href'));
   });
 }
@@ -167,7 +167,9 @@ if (xvs.length) {
     let last = 0, running = false;
     const frame = now => {
       const dt = Math.min(64, now - (last || now)); last = now;
-      const k = 1 - Math.exp(-dt / (lenis ? 60 : 100));               // frame-rate independent easing (~60-100 ms)
+      // with Lenis the scroll is already smoothed, so the scene follows it 1:1 (no second layer of lag);
+      // without it (native wheel steps) the scene eases over ~70 ms, frame-rate independent
+      const k = lenis ? 1 : 1 - Math.exp(-dt / 70);
       let busy = false;
       items.forEach(it => {
         if (!it.live) return;
@@ -186,7 +188,7 @@ if (xvs.length) {
     let rq = 0;
     const remeasure = () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(() => { items.forEach(measure); kick(); }); };
     addEventListener('scroll', kick, { passive: true });
-    if (lenis) lenis.on('scroll', kick);
+    if (lenis) lenis.on('scroll', () => { items.forEach(aim); frame(performance.now()); });   // draw in the same frame Lenis scrolls
     addEventListener('resize', remeasure); addEventListener('load', remeasure);
     if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body);   // late images or fonts moving the page
     document.documentElement.classList.add('xv-on');

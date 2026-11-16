@@ -96,6 +96,16 @@ Rules that keep them lag-free (measured 60 fps, no long tasks, desktop and phone
 
 ## Motion and loading
 
+Motion rules (reviewed 2026-11-16 with ui-ux-pro-max, Emil Kowalski's design engineering and Apple's fluid-interface guidance):
+- **Smooth scroll** is Lenis at `lerp .13`: a short glide that settles in under a second after a flick (it was ~1.5 s at `.085` and felt floaty). Anchor jumps take 0.9 s.
+- **Scenes follow the scroll 1:1** while Lenis runs, drawn in the same frame (no second layer of easing on top of Lenis). They ease over ~70 ms only when Lenis is off.
+- **Menu drop-down** grows from its button (180 ms ease-out, from 0.97 scale) and closes faster than it opens (120 ms); it never snaps.
+- **Press feedback** on every pressable thing: buttons and tabs 0.97, headline cards 0.98. Hover effects only on real pointers (`hover: hover and pointer: fine`).
+- **Photo reveal** settles from 1.2x over 800 ms; lists stagger 55 ms per item.
+- **Phones** drop the per-layer blurred shadows on the moving scene layers and use one static soft shadow under the dish (cheap for phone GPUs).
+- Measured: whole page scrolled with real wheel input at 4x CPU slowdown, 1 frame over 25 ms in 966 (desktop), 0 in 1,080 (phone).
+
+
 Motion plays once: cards and photos settle in on first view, lists stagger in, video clips play only while on screen. The hero poster is preloaded; every other video poster is set only as its clip comes near. Lighthouse on a phone profile (2026-11-16): home 95 performance, menu page 95, both 100 accessibility, best practices and SEO.
 
 ## Do and don't

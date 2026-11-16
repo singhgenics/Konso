@@ -76,3 +76,7 @@ body { background: var(--k-cream); color: var(--k-green); }
 .story a, .chapter a { text-decoration-color: var(--k-gold-lo); }
 @media (hover: hover) { .go:hover, .story a:hover, .chapter a:hover { color: var(--k-gold-lo); } }
 .draught .go, .xv-cap a, .hoarding .go { color: var(--k-gold); }
+/* top bar: hover and open states in gold (the old hover colour was dark green, invisible on the green bar) */
+@media (hover: hover) and (pointer: fine) { .rail-nav a:hover, .rail-drop-btn:hover { color: var(--k-gold-hi); } }
+.rail-drop.open .rail-drop-btn { color: var(--k-gold-hi); }
+.rail-drop-panel a:hover { background: rgba(216, 157, 60, .12); }

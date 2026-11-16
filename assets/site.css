@@ -145,7 +145,7 @@ a { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1.5p
 
   /* photos: the framed image fades up while it settles from a slight zoom (opacity + scale only, composited, no clipping) */
   .motion [data-reveal]:not(.in) .ph > img { opacity: 0; scale: 1.26; }
-  .motion [data-reveal].in .ph > img { animation: photo-in 1200ms var(--ease-photo) backwards; }
+  .motion [data-reveal].in .ph > img { animation: photo-in 800ms var(--ease-photo) backwards; }
   .motion img[loading="lazy"]:not(.ready) { opacity: 0; }
   .motion img[loading="lazy"] { transition: opacity 500ms ease; }
   .motion [data-stagger]:not(.in) > * { opacity: 0; transform: translateY(10px); }
@@ -166,9 +166,9 @@ a { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1.5p
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .motion .ph > img { animation: photo-drift linear both; animation-timeline: view(); }
-    .motion [data-reveal].in .ph > img { animation: photo-in 1200ms var(--ease-photo) backwards, photo-drift linear both; animation-timeline: auto, view(); }
+    .motion [data-reveal].in .ph > img { animation: photo-in 800ms var(--ease-photo) backwards, photo-drift linear both; animation-timeline: auto, view(); }
     .motion .steam-photo .ph > img, .motion .steam-photo.in .ph > img { animation: none; }
-    .motion .steam-photo.in .ph > img { animation: photo-in 1200ms var(--ease-photo) backwards; }
+    .motion .steam-photo.in .ph > img { animation: photo-in 800ms var(--ease-photo) backwards; }
   }
 }
 
@@ -804,3 +804,24 @@ html.lenis, html.lenis body { height: auto; }
 .dish-allergen { font-size: .8125rem; color: var(--ink-soft); opacity: .8; margin-top: 4px; }
 .menu-foot { margin-top: clamp(28px, 4vw, 48px); font-size: .875rem; color: var(--ink-soft); max-width: 70ch; }
 .menu-sec { break-inside: avoid-column; } .dish { break-inside: avoid; }   /* a section stays in one column */
+
+/* ---- motion polish (2026-11-16, ui-ux-pro-max + Emil Kowalski + Apple fluid-motion review) ---- */
+/* Menu drop-down: grows from its button (origin top right) on open, leaves faster than it arrives; never snaps */
+.rail-drop-panel { display: flex; visibility: hidden; opacity: 0; transform: translateY(-6px) scale(.97); transform-origin: top right; pointer-events: none;
+  transition: opacity 120ms ease-in, transform 120ms ease-in, visibility 0s linear 120ms; }
+.rail-drop.open .rail-drop-panel { visibility: visible; opacity: 1; transform: none; pointer-events: auto;
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease), visibility 0s; }
+@media (max-width: 820px) { .rail-drop-panel { transform-origin: top center; } }
+/* the four headline cards answer a press */
+.mcell { transition: background-color 200ms ease, transform 160ms var(--ease); }
+.mcell:active { transform: scale(.98); }
+/* photo reveal: a shorter, gentler settle (was 1.2 s from 1.26x) */
+@keyframes photo-in { from { opacity: 0; scale: 1.2; } }
+/* phones: no per-layer blurred shadows on the moving scene layers (costly on phone GPUs, Safari especially);
+   one static soft shadow under the dish instead */
+@media (max-width: 820px), (pointer: coarse) {
+  .xv-l, .xv-whole { filter: none; }
+  .xv-stage::after { content: ''; position: absolute; left: 22%; right: 22%; bottom: 3%; height: 7%; border-radius: 50%; z-index: 0; pointer-events: none;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, .42), rgba(0, 0, 0, 0)); }
+}
+@media (prefers-reduced-motion: reduce) { .rail-drop-panel, .rail-drop.open .rail-drop-panel { transition: opacity 120ms ease, visibility 0s; transform: none; } .mcell:active { transform: none; } }
