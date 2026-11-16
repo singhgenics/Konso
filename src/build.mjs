@@ -168,3 +168,5 @@ html = html.replace(/\{\{#explode:(dimsum|bao|cocktail)\}\}/g, (_, k) => explode
 html = html.replace(/\{\{#(dimsum|bao|cocktails|taps)\}\}/g, (_, k) => String(count(k)));
 fs.writeFileSync(path.join(ROOT, 'index.html'), html);
 console.log('index.html written:', food.length, 'food sections,', drinks.length, 'drinks sections');
+// the full menu lives on its own page (menu.html), not on the home page
+execFileSync(process.execPath, [path.join(ROOT, 'src/split-menu.mjs')], { stdio: 'inherit' });
