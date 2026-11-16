@@ -14,6 +14,10 @@ def key(path, n):
     if n == 'beer':   # the empty top of the glass shows pale green through it: key it out (rows of the glass only, hops stay)
         dom = g - np.maximum(r, b); rr = np.zeros_like(alpha, bool); rr[int(H * .40):int(H * .69)] = True
         alpha = np.where(rr & (dom > 10), alpha * np.clip(1 - (dom - 10) / 14, 0, 1), alpha)
+    if n == 'cocktail':   # clear glass and ice: green shows through them everywhere, so pull it out of the whole picture, and keep the glass faintly visible
+        dom = g - np.maximum(r, b)
+        alpha = np.where((alpha > .02) & (dom > 6), np.maximum(alpha, .38), alpha)
+        g = np.minimum(g, np.maximum(r, b) + 4)
     A = Image.fromarray((alpha * 255).astype('uint8'))
     core = np.asarray(A.filter(ImageFilter.MinFilter(3))).astype(float) / 255      # pull the edge in 1px
     band = (np.asarray(A.filter(ImageFilter.MinFilter(9))) < 250) & (alpha > 0)    # a few px around every edge
@@ -22,7 +26,8 @@ def key(path, n):
     rgba = np.dstack([r, g2, b, alpha * 255]).clip(0, 255).astype('uint8')
     return rgba, alpha, H, W
 
-for n in ['dimsum', 'bao']:
+import sys
+for n in (sys.argv[1:] or ['dimsum', 'bao', 'cocktail']):
     rgba, alpha, H, W = key(f'assets/flow/x-{n}.jpg', n)
     rows = (alpha > .5).sum(1) > 3
     bands, s = [], None
@@ -32,6 +37,11 @@ for n in ['dimsum', 'bao']:
             if y - s > 12: bands.append((s, y))
             s = None
     if s is not None: bands.append((s, H))
+    m = []                                   # a thin clear stem can break one object into two bands: join bands under 12px apart
+    for b in bands:
+        if m and b[0] - m[-1][1] < 12: m[-1] = (m[-1][0], b[1])
+        else: m.append(b)
+    bands = m
     assert len(bands) == 5, (n, bands)
     layers = []
     for i, (t, bt) in enumerate(bands):

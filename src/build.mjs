@@ -144,9 +144,9 @@ const XV = {
   bao: { word: 'Bao', kicker: 'How a bao is built', alt: 'Illustration of a pork belly bao pulled apart into its layers',
     tags: ['Steamed bun', 'Coriander and peanut crumb', 'Braised pork belly, hoisin', 'Cucumber', 'Bun base'],
     cap: 'Two to a plate, finished to order.', link: ['#bao', 'See the bao'] },
-  beer: { word: 'Beer', kicker: 'How a pint is poured', alt: 'Illustration of a pint of craft lager being poured from a brass tap', frames: fs.readdirSync(path.join(ROOT, 'assets/pour')).filter(f => /^f-\d+\.webp$/.test(f)).length, k1: 'Ready to drink', only: true,
-    tags: ['The tap', 'Thick foam', 'Craft lager', 'Hops and malt', 'Coaster'],
-    cap: 'Three craft taps from small breweries up the coast.', link: ['#beer', 'See the taps'] },
+  cocktail: { word: 'Cocktail', kicker: 'How a cocktail is made', mid: 'Shaking it up', k1: 'Ready to drink', alt: 'Illustration of a kokum feni sour pulled apart into its parts: orange and star anise, egg-white foam, the ruby pour, ice and the coupe',
+    tags: ['Dried orange, star anise', 'Egg-white foam', 'Kokum feni sour', 'Ice, kokum petals', 'Coupe'],
+    cap: 'Shaken to order with Goa feni and kokum.', link: ['#cocktails', 'See the cocktails'] },
 };
 const pct = v => (v * 100).toFixed(3) + '%';
 function explode(name) {
@@ -154,18 +154,17 @@ function explode(name) {
   const layers = c.only ? '' : d.layers.map((l, i) => `<img class="xv-l" src="assets/explode/${name}-${i}.webp" alt="" data-dy="${l.dy.toFixed(4)}" data-i="${i}" style="z-index:${d.layers.length - i};left:${pct(l.x)};top:${pct(l.y)};width:${pct(l.w)}" width="${Math.round(l.w * 896)}" height="${Math.round(l.h * 1200)}" decoding="async">`).join('');
   const tags = '';   // the label plaques were removed at the owner's request (2026-10-29)
   const w = d.whole, whole = c.only ? '' : `<img class="xv-whole" src="assets/explode/${name}-whole.webp" alt="" style="left:${pct(w.x)};top:${pct(w.y)};width:${pct(w.w)}" width="600" height="800" decoding="async">`;
-  return `<section class="xv xv-${name}" data-xv${c.frames ? ` data-frames="${c.frames}" data-k1="${c.k1}"${c.only ? ' data-only' : ''}` : ''} aria-label="${esc(c.kicker)}">
+  return `<section class="xv xv-${name}" data-xv${c.k1 ? ` data-k1="${c.k1}"` : ''}${c.mid ? ` data-mid="${c.mid}"` : ''} aria-label="${esc(c.kicker)}">
   <div class="xv-stick">
-    ${c.frames ? '<canvas class="xv-pour-cv" width="1024" height="576" aria-hidden="true"></canvas>' : ''}
     <p class="xv-kicker">${c.kicker}</p>
     <p class="xv-word" aria-hidden="true">${c.word}</p>
-    <div class="xv-stage" style="--ratio:${d.ratio.toFixed(4)}" role="img" aria-label="${esc(c.alt)}">${c.frames ? '' : ''}${layers}${whole}${tags}</div>
+    <div class="xv-stage" style="--ratio:${d.ratio.toFixed(4)}" role="img" aria-label="${esc(c.alt)}">${layers}${whole}${tags}</div>
     <div class="xv-bar" aria-hidden="true"><i></i></div>
     <p class="xv-cap"><span>${c.cap}</span> <a href="${c.link[0]}">${c.link[1]}</a> <em>Illustration</em></p>
   </div>
 </section>`;
 }
-html = html.replace(/\{\{#explode:(dimsum|bao|beer)\}\}/g, (_, k) => explode(k));
+html = html.replace(/\{\{#explode:(dimsum|bao|cocktail)\}\}/g, (_, k) => explode(k));
 html = html.replace(/\{\{#(dimsum|bao|cocktails|taps)\}\}/g, (_, k) => String(count(k)));
 fs.writeFileSync(path.join(ROOT, 'index.html'), html);
 console.log('index.html written:', food.length, 'food sections,', drinks.length, 'drinks sections');

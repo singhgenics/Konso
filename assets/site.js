@@ -92,9 +92,9 @@ if (!still && window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').ma
   });
 }
 
-// exploded views: a tall section pins the stage while scroll pulls the layers together into one dish.
-// The scroll position only sets a target; the picture eases toward it every frame, so wheel notches and
-// touch flicks glide instead of stepping (frame-rate independent, nothing but transform and opacity moves).
+// exploded views: a tall section pins the stage while scroll pulls the layers together into one dish or drink.
+// Lag-free by design: positions are measured once (and again only when the page resizes), so scrolling reads no layout;
+// scroll only sets a target and the picture eases toward it every frame; only transform and opacity ever change.
 const xvs = [...document.querySelectorAll('[data-xv]')];
 if (xvs.length) {
   const calm = still || matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -103,10 +103,10 @@ if (xvs.length) {
   const out = t => 1 - Math.pow(1 - t, 3);
   const items = xvs.map(el => ({
     el, stick: el.querySelector('.xv-stick'), stage: el.querySelector('.xv-stage'), cap: el.querySelector('.xv-cap'),
-    word: el.querySelector('.xv-word'), kicker: el.querySelector('.xv-kicker'), k0: el.querySelector('.xv-kicker').textContent, k1: el.dataset.k1 || 'Ready to eat', pf: +el.dataset.frames || 0, only: el.hasAttribute('data-only'), cv: el.querySelector('.xv-pour-cv'), frames: [], shown: -1, pcur: -1, ptarget: 0, started: false, rv: 1, pp: 0,
-    bar: el.querySelector('.xv-bar i'), whole: el.querySelector('.xv-whole'),
-    layers: [...el.querySelectorAll('.xv-l')], tags: [...el.querySelectorAll('.xv-tag')],
-    target: 0, cur: -1, h: 0, label: '',
+    word: el.querySelector('.xv-word'), kicker: el.querySelector('.xv-kicker'), k0: el.querySelector('.xv-kicker').textContent,
+    k1: el.dataset.k1 || 'Ready to eat', mid: el.dataset.mid || 'Coming together',
+    bar: el.querySelector('.xv-bar i'), whole: el.querySelector('.xv-whole'), layers: [...el.querySelectorAll('.xv-l')],
+    top: 0, padT: 0, run: 1, h: 0, t: 0, enter: 1, target: 0, cur: -1, ecur: -1, label: '', live: false,
   }));
   if (calm) items.forEach(it => it.el.classList.add('xv-calm'));
   else {
@@ -116,82 +116,71 @@ if (xvs.length) {
       const ok = img => img.decode().catch(() => new Promise(res => { const src = img.src; img.src = ''; img.src = src; img.decode().then(res, res); }));
       Promise.race([Promise.all(imgs.map(ok)), new Promise(r => setTimeout(r, 6000))]).then(() => it.stage.classList.add('xv-ready'));
     });
-    const measure = it => { it.h = it.stage.offsetHeight; };
+    const sy = () => (lenis ? lenis.scroll : scrollY);
+    const measure = it => {                                          // the only layout reads: on load and on resize
+      const cs = getComputedStyle(it.el), r = it.el.getBoundingClientRect();
+      it.padT = parseFloat(cs.paddingTop) || 0;
+      it.top = r.top + sy() + it.padT;                               // where the pinned run starts
+      it.run = Math.max(1, r.height - it.padT - (parseFloat(cs.paddingBottom) || 0) - it.stick.offsetHeight);
+      it.bottom = r.top + sy() + r.height;
+      it.railTop = parseFloat(getComputedStyle(it.stick).top) || 0;
+      it.h = it.stage.offsetHeight;
+    };
     const aim = it => {                                              // scroll position -> target progress (0 apart, 1 together)
-      const r = it.el.getBoundingClientRect(), run = r.height - it.stick.offsetHeight;
-      it.t = clamp(-r.top / Math.max(1, run), 0, 1);
-      if (it.pf && it.only) {                                        // the pour is the whole scene: scroll plays it, then the caption arrives
-        it.ptarget = clamp((it.t - .04) / .8, 0, 1) * (it.pf - 1); it.target = 0; it.rv = 0;
-      } else if (it.pf) {                                            // act 1: the glass fills under the tap; act 2: it pulls apart and comes together
-        it.ptarget = clamp((it.t - .03) / .34, 0, 1) * (it.pf - 1);
-        it.target = clamp((it.t - .5) / .4, 0, 1);
-        it.rv = smooth(clamp((it.t - .38) / .1, 0, 1));
-      } else it.target = clamp((it.t - .1) / .62, 0, 1);
-      it.live = r.bottom > -200 && r.top < innerHeight + 200;
+      const y = sy();
+      it.t = clamp((y - it.top) / it.run, 0, 1);
+      it.target = clamp((it.t - .08) / .64, 0, 1);
+      // the stage rises gently into place while the scene scrolls in, before it pins
+      const d = it.top - y - it.railTop;                             // distance (px) still to go before the scene pins
+      it.etarget = clamp(1 - d / (innerHeight * .75), 0, 1);
+      it.live = y + innerHeight > it.top - it.padT - 300 && y < it.bottom + 300;
     };
-    const paintPour = it => {                                         // draw the nearest loaded frame at or below the current one
-      let k = Math.round(it.pcur); while (k > 0 && !it.frames[k]) k--;
-      if (it.frames[k] && k !== it.shown) { it.cv.getContext('2d').drawImage(it.frames[k], 0, 0, it.cv.width, it.cv.height); it.shown = k; }
-    };
-    const loadPour = it => {
-      if (it.started) return; it.started = true;
-      const order = [...Array(it.pf).keys()].sort((a, b) => (a % 6 ? 1 : 0) - (b % 6 ? 1 : 0) || a - b);   // every 6th frame first
-      order.forEach(i => { const im = new Image(); im.decoding = 'async'; im.onload = () => { it.frames[i] = im; it.shown = -1; paintPour(it); }; im.src = `assets/pour/f-${String(i).padStart(3, '0')}.webp`; });
-    };
-    items.filter(it => it.pf).forEach(it => new IntersectionObserver(es => { if (es[0].isIntersecting) loadPour(it); }, { rootMargin: '1800px 0px' }).observe(it.el));
     const draw = it => {
-      const p = it.cur, h = it.h;
-      it.layers.forEach((l, i) => {                                   // outer layers leave first, so the stack folds in a wave
-        const q = smooth(clamp((p - i * .04) / .84, 0, 1)), bump = Math.sin(q * Math.PI);
-        l.style.transform = `translate3d(0, ${(+l.dataset.dy * h * q).toFixed(2)}px, 0) rotate(${((i % 2 ? 1 : -1) * 3 * bump).toFixed(2)}deg) scale(${(1 + .045 * bump).toFixed(4)})`;
+      const p = it.cur, h = it.h, e = smooth(p), en = out(it.ecur);
+      it.layers.forEach((l, i) => {                                   // outer layers leave first, so the stack folds in a wave; all land by p = .82
+        const q = smooth(clamp((p - i * .04) / .66, 0, 1)), bump = Math.sin(q * Math.PI);
+        l.style.transform = `translate3d(0, ${(+l.dataset.dy * h * q).toFixed(2)}px, 0) rotate(${((i % 2 ? 1 : -1) * 2.5 * bump).toFixed(2)}deg) scale(${(1 + .04 * bump).toFixed(4)})`;
       });
-      const fuse = smooth(clamp((p - .86) / .12, 0, 1));              // the layers dissolve into the finished dish
-      it.layers.forEach(l => l.style.opacity = ((1 - fuse) * it.rv).toFixed(3));
-      if (it.whole) { it.whole.style.opacity = (fuse * it.rv).toFixed(3); it.whole.style.transform = `scale(${(.97 + .03 * fuse).toFixed(4)})`; }
-      it.tags.forEach((g, i) => {
-        const q = smooth(clamp((p - i * .04) / .84, 0, 1));
-        g.style.transform = `translate3d(0, calc(-50% + ${(+g.dataset.dy * h * q).toFixed(2)}px), 0)`;
-        g.style.opacity = ((1 - smooth(clamp(p / .28, 0, 1))) * it.rv).toFixed(3);
-      });
-      const done = it.only ? out(clamp((it.pcur / (it.pf - 1) - .9) / .1, 0, 1)) : out(clamp((p - .9) / .1, 0, 1)), e = smooth(p);
+      const fuse = smooth(clamp((p - .84) / .12, 0, 1));              // once every layer has landed, they dissolve into the finished piece
+      const lo = (1 - fuse).toFixed(3);
+      it.layers.forEach(l => { if (l._o !== lo) { l.style.opacity = lo; l._o = lo; } });
+      if (it.whole) { it.whole.style.opacity = fuse.toFixed(3); it.whole.style.transform = `scale(${(.975 + .025 * fuse).toFixed(4)})`; }
+      const done = out(clamp((p - .9) / .1, 0, 1));
       it.cap.style.opacity = done.toFixed(3);
       it.cap.style.transform = `translate3d(0, ${((1 - done) * 18).toFixed(1)}px, 0)`;
-      it.word.style.transform = `translate3d(0, ${((.5 - e) * 70).toFixed(1)}px, 0) scale(${(.92 + .16 * e).toFixed(4)})`;
-      let sc = .9 + .17 * e;                                           // slow push-in as it comes together
-      if (it.pf) {
-        it.pp = clamp(it.pcur / (it.pf - 1), 0, 1); paintPour(it);
-        it.cv.style.opacity = (1 - it.rv).toFixed(3); it.word.style.opacity = it.rv.toFixed(3);
-        sc = (1 - it.rv) * (.94 + .06 * it.pp) + it.rv * sc;
-      }
-      it.stage.style.transform = `scale(${sc.toFixed(4)})`;
+      it.word.style.transform = `translate3d(0, ${((.5 - e) * 70 + (1 - en) * 90).toFixed(1)}px, 0) scale(${(.92 + .16 * e).toFixed(4)})`;
+      it.stage.style.transform = `translate3d(0, ${((1 - en) * 70).toFixed(1)}px, 0) scale(${(.9 + .17 * e - (1 - en) * .05).toFixed(4)})`;
       it.bar.style.transform = `scaleX(${it.t.toFixed(4)})`;
-      let label = p < .06 ? it.k0 : p > .94 ? it.k1 : 'Coming together';
-      if (it.only) label = it.pp < .03 ? it.k0 : it.pp > .97 ? 'Poured' : 'Pouring';
-      else if (it.pf && p < .06) label = it.rv < .2 ? (it.pp < .03 ? it.k0 : it.pp > .97 ? 'Poured' : 'Pouring') : 'What’s in a pint';
+      const label = p < .06 ? it.k0 : p > .94 ? it.k1 : it.mid;
       if (label !== it.label) { it.label = label; it.kicker.textContent = label; }
     };
     let last = 0, running = false;
     const frame = now => {
       const dt = Math.min(64, now - (last || now)); last = now;
+      const k = 1 - Math.exp(-dt / (lenis ? 60 : 100));               // frame-rate independent easing (~60-100 ms)
       let busy = false;
       items.forEach(it => {
         if (!it.live) return;
-        if (it.cur < 0) it.cur = it.target;
-        const k = 1 - Math.exp(-dt / (lenis ? 55 : 95));              // ~95ms time constant
+        if (it.cur < 0) { it.cur = it.target; it.ecur = it.etarget; draw(it); return; }
         let moved = false;
-        if (it.pf) { if (it.pcur < 0) it.pcur = it.ptarget; const pd = it.ptarget - it.pcur; if (Math.abs(pd) > .02) { it.pcur += pd * k; moved = true; } else if (it.pcur !== it.ptarget) { it.pcur = it.ptarget; moved = true; } }
-        const d = it.target - it.cur;
-        if (Math.abs(d) > .0004) { it.cur += d * k; busy = true; moved = true; }
-        else if (it.cur !== it.target) { it.cur = it.target; moved = true; }
-        if (moved) { draw(it); if (it.pf && Math.abs(it.ptarget - it.pcur) > .02) busy = true; }
+        for (const [c, g] of [['cur', 'target'], ['ecur', 'etarget']]) {
+          const d = it[g] - it[c];
+          if (Math.abs(d) > .0004) { it[c] += d * k; busy = moved = true; }
+          else if (it[c] !== it[g]) { it[c] = it[g]; moved = true; }
+        }
+        if (moved) draw(it);
       });
       if (busy) requestAnimationFrame(frame); else { running = false; last = 0; }
     };
     const kick = () => { items.forEach(aim); if (!running) { running = true; requestAnimationFrame(frame); } };
-    const remeasure = () => { items.forEach(measure); items.forEach(it => it.cur = -1); kick(); };
-    addEventListener('scroll', kick, { passive: true }); addEventListener('resize', remeasure);
+    let rq = 0;
+    const remeasure = () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(() => { items.forEach(measure); kick(); }); };
+    addEventListener('scroll', kick, { passive: true });
+    if (lenis) lenis.on('scroll', kick);
+    addEventListener('resize', remeasure); addEventListener('load', remeasure);
+    if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body);   // late images or fonts moving the page
     document.documentElement.classList.add('xv-on');
-    remeasure();
+    items.forEach(measure); kick();
   }
 }
 document.documentElement.classList.add('motion');

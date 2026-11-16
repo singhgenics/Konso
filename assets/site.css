@@ -641,7 +641,7 @@ html, body { overflow-x: hidden; overflow-x: clip; }
 
 .xv img { transition: none !important; }
 .xv-whole { position: absolute; z-index: 6; display: block; height: auto; opacity: 0; pointer-events: none; will-change: transform, opacity; filter: drop-shadow(0 20px 26px rgba(0, 0, 0, .38)); }
-.xv-beer .xv-whole { filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .5)); }
+.xv-cocktail .xv-whole { filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .5)); }
 .xv-calm .xv-whole { display: none; }   /* scroll drives these every frame: no fade-in, no easing lag */
 .xv-on .xv-stage { opacity: 0; transition: opacity 420ms var(--ease); }
 .xv-on .xv-stage.xv-ready { opacity: 1; }
@@ -652,12 +652,6 @@ html.lenis, html.lenis body { height: auto; }
 .fire-photo figcaption { margin-top: 10px; font-size: .875rem; font-style: italic; color: var(--ink-soft); }
 .ck-photo .ph { aspect-ratio: 16 / 9; box-shadow: 0 18px 40px -20px #000; }
 
-/* ---- the pour, inside the beer scene: scroll plays a frame sequence of the glass filling, then the pint pulls apart ---- */
-.xv-pour-cv { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; z-index: 0; }
-.xv-on .xv-pour-cv { display: block; }
-.xv-calm .xv-pour-cv { display: none; }
-.xv-on .xv-beer { height: 430vh; }
-@media (max-width: 820px) { .xv-on .xv-beer { height: 380vh; } }
 
 /* ---- hero: the wok toss, full width ---- */
 .hero { position: relative; min-height: calc(100svh - 68px); display: grid; align-items: end; overflow: clip; color: var(--cream); background: var(--ink); }
@@ -714,8 +708,6 @@ html.lenis, html.lenis body { height: auto; }
   .hero .main-actions .btn { flex: 1 1 0; padding: 0 .6em; }
 }
 .fire-photo .ph { aspect-ratio: 16 / 9; }
-.xv-on .xv-beer { height: 260vh; }
-@media (max-width: 820px) { .xv-on .xv-beer { height: 240vh; } }
 
 /* ---- palette (2026-10-29): the garden decor palette. Bottle green leads; chocolate, Goa blue, old brick, brass, burgundy, cognac, bougainvillea support. ---- */
 :root {
@@ -739,8 +731,8 @@ html.lenis, html.lenis body { height: auto; }
 .xv-dimsum { background: radial-gradient(ellipse at 50% 46%, rgba(0, 0, 0, 0) 20%, rgba(32, 12, 6, .6) 100%), url("img/hoarding-wood-brick.webp") center / cover, var(--brick); }
 .xv-bao { background: radial-gradient(ellipse at 50% 46%, #2F5A43 0%, var(--bottle) 48%, #12261B 100%); }
 .draught { background: #2B1912; }
-.xv-beer { background: radial-gradient(ellipse at 50% 46%, #5E3A2A 0%, #3A2218 46%, #25150F 100%); }
-.xv-beer .xv-word { color: rgba(196, 154, 60, .1); }
+.xv-cocktail { background: radial-gradient(ellipse at 50% 46%, #6A1622 0%, #3C1A16 46%, #2B1912 100%); }
+.xv-cocktail .xv-word { color: rgba(196, 154, 60, .1); }
 .hero-stamp { color: var(--bottle); }
 .hero-shade { background: linear-gradient(90deg, rgba(12, 28, 20, .55) 0%, rgba(12, 28, 20, .2) 45%, rgba(12, 28, 20, 0) 70%), linear-gradient(0deg, rgba(12, 28, 20, .6), rgba(12, 28, 20, 0) 35%); }
 @media (max-width: 820px) { .hero-shade { background: linear-gradient(0deg, rgba(12, 28, 20, .92) 0%, rgba(12, 28, 20, .7) 38%, rgba(12, 28, 20, 0) 62%); } }
@@ -751,11 +743,22 @@ html.lenis, html.lenis body { height: auto; }
 /* calmer hoarding (2026-10-29): flat bottle green with a faint grain and a thin brass rule instead of heavy plywood */
 .hoarding { background: linear-gradient(rgba(31, 61, 46, .84), rgba(31, 61, 46, .84)), url("img/hoarding-wood-green.webp") center / auto 100% repeat-x, var(--bottle); border-top: 3px solid var(--brass); border-bottom: 3px solid var(--brass); }
 .xv-dimsum { background: radial-gradient(ellipse at 50% 46%, rgba(0, 0, 0, 0) 20%, rgba(32, 12, 6, .6) 100%), linear-gradient(rgba(169, 83, 58, .88), rgba(169, 83, 58, .88)), url("img/hoarding-wood-brick.webp") center / cover, var(--brick); }
-.xv-bao, .xv-beer { border-top: 3px solid var(--brass); }
+
 
 /* softer big colours (2026-10-29): the story map in a deep navy, the dim sum scene in a deeper brick */
 :root { --goa-navy: #1B3070; --brick-deep: #7E3B29; --jade: var(--goa-navy); }
 .xv-dimsum { background: radial-gradient(ellipse at 50% 46%, rgba(0, 0, 0, 0) 18%, rgba(24, 8, 4, .66) 100%), linear-gradient(rgba(126, 59, 41, .9), rgba(126, 59, 41, .9)), url("img/hoarding-wood-brick.webp") center / cover, var(--brick-deep); }
+
+/* smooth scene edges (2026-11-16): each scene fades in from the page colour and back out into it, no hard colour cut.
+   The fades live in the section's top and bottom padding; the pinned stage stays inside the content box, so it never sits under a fade. */
+.xv-on .xv { --fade: 28vh; --edge: var(--cream); padding: var(--fade) 0; height: calc(340vh + 2 * var(--fade)); }
+.xv-on .xv-cocktail { --edge: #2B1912; }
+.xv-on .xv::before, .xv-on .xv::after { content: ''; position: absolute; left: 0; right: 0; height: calc(var(--fade) + 1px); z-index: 0; pointer-events: none; }
+.xv-on .xv::before { top: 0; background: linear-gradient(var(--edge), color-mix(in srgb, var(--edge) 55%, transparent) 40%, transparent); }
+.xv-on .xv::after { bottom: 0; background: linear-gradient(transparent, color-mix(in srgb, var(--edge) 55%, transparent) 60%, var(--edge)); }
+.xv-on .xv-stick { z-index: 1; }
+.xv-on .xv-stage, .xv-on .xv-word, .xv-on .xv-cap { backface-visibility: hidden; }
+@media (max-width: 820px) { .xv-on .xv { --fade: 20vh; height: calc(300vh + 2 * var(--fade)); } }
 
 /* Menu drop-down in the top rail */
 .rail-drop { position: relative; }

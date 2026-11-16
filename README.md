@@ -38,11 +38,11 @@ The garden picture is an artist's impression and is labelled as one on the page.
 
 ## The moat sections
 
-Page order: hero, moat strip, Steam (dim sum, bao), Draught (craft beer, craft cocktails), deals, story, wok, garden, menu, find us. Dish and drink cards are pulled from the live menu by name in `src/template.html` (`{{Name|img}}` etc.); the counts in the moat strip are live (`{{#dimsum}}`). Four extra Flow scenes (`dimsum`, `bao`, `cocktails`, `beers` in `src/gen-images.sh`) are captioned as illustrations.
+Page order: hero, moat strip, Steam (dim sum, bao), Draught (cocktail scene, craft beer, craft cocktails), deals, story, wok, garden, menu, find us. Dish and drink cards are pulled from the live menu by name in `src/template.html` (`{{Name|img}}` etc.); the counts in the moat strip are live (`{{#dimsum}}`). Four extra Flow scenes (`dimsum`, `bao`, `cocktails`, `beers` in `src/gen-images.sh`) are captioned as illustrations.
 
 ## Exploded scenes
 
-`x-dimsum`, `x-bao`, `x-beer` in `src/gen-images.sh` are Flow exploded views on flat chroma green (prompts in `src/flow/x-*.txt`). `python3 src/explode/slice.py` keys the green out and cuts each into five transparent layers (`assets/explode/`, layout in `src/explode/*.json`); `src/build.mjs` writes the scene markup (`{{#explode:name}}`) and `assets/site.js` drives it from scroll.
+`x-dimsum`, `x-bao`, `x-cocktail` in `src/gen-images.sh` are Flow exploded views on flat chroma green (prompts in `src/flow/x-*.txt`). `python3 src/explode/slice.py [name]` keys the green out and cuts each into five transparent layers (`assets/explode/`, layout in `src/explode/*.json`); `src/build.mjs` writes the scene markup (`{{#explode:name}}`) and `assets/site.js` drives it from scroll.
 
 Each scene also has a `x-<name>-whole` Flow picture (the finished dish, no steam: steam keys to green flecks) that the layers dissolve into; `slice.py` writes it as `assets/explode/<name>-whole.webp`.
 
@@ -58,6 +58,10 @@ Whole-page smooth scrolling is Lenis (self-hosted `assets/lenis.min.js`, v1.1.20
 
 `src/gen-video.sh [job]` makes the clips (Veo Lite, ~10 credits each, one at a time; prompts `src/flow/v-*.txt`, raw files in `/tmp/vids`). Encode as loops with the same ffmpeg xfade recipe, 800 px wide (480 for portrait), into `assets/video/`: `dimsum-pleat`, `bao-steam`, `beer-trio`, `garden-dusk`, `noodle-cart`, plus `wok-toss` and `cocktail-shake`. Each plays only while on screen.
 
-The beer scene is a scroll-scrubbed pour: `assets/pour/f-000..059.webp` are 60 frames (10 fps, 1024x576, colour-graded) of the `pourwide` clip (start frame `assets/flow/pour-wide.jpg`, prompts `pour-wide.txt` and `v-pourwide.txt`) painted on a full-bleed canvas by scroll position (`data-frames` on the beer `data-xv` section, `assets/site.js`); the beer scene is the pour only (the exploded beer view was removed).
+The Draught section opens with the cocktail scene (2026-11-16): a kokum feni sour pulled apart into garnish, egg-white foam, the ruby pour, ice and the coupe, coming together as you scroll (`x-cocktail`, `x-cocktail-whole`). It replaced the scroll-scrubbed beer pour (its frames, `assets/pour/`, are in git history).
+
+Scene motion (`assets/site.js`): positions are measured on load and resize only, so scrolling reads no layout; only transform and opacity change. Each scene fades in from the page colour and back out through its top and bottom padding (`--fade` in `assets/site.css`), and every layer lands before the finished picture fades in, so there is no double image. Measured 2026-11-16: steady 60 fps, no long tasks, desktop and phone.
+
+`src/build.mjs` cannot run at the moment: its menu source (`Garden/web/menu/src/menu-data.mjs`) was removed and the website menu is frozen in `index.html`. To change the scenes, edit `src/build.mjs` (XV) or `src/template.html`, then run `node src/patch-scenes.mjs`, which rewrites only the scenes inside `index.html`.
 
 The hero is `assets/video/hero-bao.mp4` (a steaming bao, 1280 px wide, seamless loop, `hero-bao` image + `herobao` clip in the Flow scripts). The wok-toss clip (`assets/video/wok-toss.mp4`) plays in the wok section further down.

@@ -33,6 +33,8 @@ pour-start|assets/flow/pour-start.jpg|9:16|
 x-dimsum-whole|assets/flow/x-dimsum-whole.jpg|3:4|
 x-bao-whole|assets/flow/x-bao-whole.jpg|3:4|
 x-beer-whole|assets/flow/x-beer-whole.jpg|3:4|
+x-cocktail|assets/flow/x-cocktail.jpg|3:4|
+x-cocktail-whole|assets/flow/x-cocktail-whole.jpg|3:4|
 "
 want=" $* "
 echo "$JOBS" | while IFS='|' read -r job out asp refs; do
