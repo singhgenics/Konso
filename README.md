@@ -67,3 +67,7 @@ Scene motion (`assets/site.js`): positions are measured on load and resize only,
 `src/build.mjs` cannot run at the moment: its menu source (`Garden/web/menu/src/menu-data.mjs`) was removed and the website menu is frozen in `index.html`. To change the scenes, edit `src/build.mjs` (XV) or `src/template.html`, then run `node src/patch-scenes.mjs`, which rewrites only the scenes inside `index.html`.
 
 The hero is `assets/video/hero-bao.mp4` (a steaming bao, 1280 px wide, seamless loop, `hero-bao` image + `herobao` clip in the Flow scripts). The wok-toss clip (`assets/video/wok-toss.mp4`) plays in the wok section further down.
+
+## Brand kit (2026-11-16)
+
+The site is dressed in the Konso brand kit only: `assets/brandkit.css` (loaded after `site.css`) maps every colour to the kit's bottle green #051C0A, Konso green #0B2A14, gold foil #D89D3C and cream #F2E8D2, drops the wood and paper textures, and gives each scroll scene its own kit shade (dim sum: warm gold glow; bao: darkest green; cocktail: stronger gold glow). Logos are the kit SVGs in `assets/brand/` (from `Garden/web/brand-kit/logo/svg`). Only the veg / non-veg marks and the chilli icons keep their own colours. The older palette notes in `DESIGN.md` and the end of `site.css` are overridden, not deleted.
