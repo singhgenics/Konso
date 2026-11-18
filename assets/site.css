@@ -825,3 +825,12 @@ html.lenis, html.lenis body { height: auto; }
     background: radial-gradient(closest-side, rgba(0, 0, 0, .42), rgba(0, 0, 0, 0)); }
 }
 @media (prefers-reduced-motion: reduce) { .rail-drop-panel, .rail-drop.open .rail-drop-panel { transition: opacity 120ms ease, visibility 0s; transform: none; } .mcell:active { transform: none; } }
+
+/* prices: bold, at the end of the description (or on their own line for options); no right-hand column, no leaders */
+.dish { grid-template-columns: 1fr; }
+.dish.has-img { grid-template-columns: 76px minmax(0, 1fr); }
+.dish .pe { font: 700 1.1rem/1 var(--mono); color: var(--red); white-space: nowrap; margin-left: 4px; }
+.dish-opts { display: flex; flex-wrap: wrap; gap: 2px 18px; margin-top: 4px; font-size: .9375rem; }
+.dish-opts b { font: 700 1.1rem/1.2 var(--mono); color: var(--red); margin-left: 3px; }
+.dish-opts span::first-letter { text-transform: uppercase; }
+@media (max-width: 640px) { .dish.has-img { grid-template-columns: 60px minmax(0, 1fr); } }

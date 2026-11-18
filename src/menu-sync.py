@@ -35,7 +35,7 @@ hero = ns['hero']
 hv = re.findall(r'<span>([^<]+?) <b>(\d+)</b></span>', hero)
 REC.append(('card', dict(img=re.search(r'img/([\w-]+)\.jpg', hero).group(1), name=re.search(r'</i>([^<]+)</h3>', hero).group(1).strip(),
     desc=re.search(r'<p>(.*?)</p>', hero, re.S).group(1).strip() + ' ' + ' · '.join(f'{a.lower()} {b}' for a, b in hv),
-    price=f'from {min(int(b) for _, b in hv)}', tag=re.search(r'class="tag[^"]*">([^<]+)<', hero).group(1))))
+    price='', tag=re.search(r'class="tag[^"]*">([^<]+)<', hero).group(1))))
 body = body.replace(hero, f'\x00{len(REC)-1}\x00')
 
 def text(s): return html.unescape(re.sub(r'<[^>]+>', ' ', s)).replace(' ', ' ').strip()
@@ -109,8 +109,14 @@ def dish(d):
     pic = f'<img class="dish-img" src="{img}" alt="{E(name)}, served" loading="lazy" decoding="async" width="640" height="478">\n' if img else ''
     al = AL.get(name, '')
     alh = f'\n<p class="dish-allergen">Contains: {E(al)}</p>' if al else ''
+    desc, price = ns['split_price'](clean(d['desc']), clean(d.get('price', '')))
+    if price and ' · ' not in price and not re.search(r'[A-Za-z]{3}', price):      # one price: bold, at the end of the description, same line
+        what = f'<p class="dish-what">{E(desc)} <b class="pe">{E(price)}</b></p>'
+    else:                                                                          # variants: their own clear line, label then bold number
+        opts = ''.join(f'<span>{E(m.group(1).strip())} <b>{E(m.group(2))}</b></span>' if (m := re.match(r'^(.*?)(\d[\d,]*(?: / \d[\d,]*)?)$', x.strip())) and m.group(1).strip() else f'<span><b>{E(x.strip())}</b></span>' for x in price.split(' · ')) if price else ''
+        what = f'<p class="dish-what">{E(desc)}</p>' + (f'\n<p class="dish-opts">{opts}</p>' if opts else '')
     return (f'<li class="dish{" has-img" if img else ""}">\n{pic}<div class="dish-body">\n<h4 class="dish-name">{head}</h4>\n'
-            f'<p class="dish-what">{E(clean(d["desc"]))}</p>{alh}\n</div>\n<p class="dish-price">{E(clean(d.get("price", "")))}</p>\n</li>')
+            f'{what}{alh}\n</div>\n</li>')
 def section(s):
     sub = s['small'] + (f' · {s["lede"]}' if s['lede'] else '')
     return (f'<section class="menu-sec" id="{s["id"]}" aria-labelledby="h{s["id"][1:]}">\n<header class="menu-sec-head"><h3 id="h{s["id"][1:]}">{E(s["title"])}</h3><p>{E(sub)}</p></header>\n'
