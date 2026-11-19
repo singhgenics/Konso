@@ -31,17 +31,18 @@
   <!-- Hero: the opening look -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__stage" data-depth="hero">
-      <video class="hero__media" autoplay muted loop playsinline preload="auto" poster="assets/v2/img/hero.webp" aria-hidden="true">
-        <source src="assets/v2/video/hero.mp4" type="video/mp4">
-      </video>
+      <video class="hero__media" muted loop playsinline preload="auto" poster="assets/v2/img/hero.webp" data-src="assets/v2/video/hero.mp4" data-src-sm="assets/v2/video/hero-sm.mp4" aria-hidden="true"></video>
     </div>
-    <h1 class="hero__title" id="hero-title"><span class="hero__line hero__line--a">Pan Asian kitchen</span> <span class="hero__line hero__line--b">and bar</span></h1>
-    <p class="hero__left">Konso, Cavelossim, South Goa. Opening soon.</p>
+    <h1 class="hero__title" id="hero-title">
+      <img class="hero__mark" src="assets/v2/brand/konso-wordmark-gold-tight.svg" alt="Konso" width="718" height="272">
+      <span class="hero__tag">Pan Asian Kitchen <span aria-hidden="true">|</span> Bar</span>
+    </h1>
+    <p class="hero__left">Opening soon<br>Cavelossim, South Goa</p>
     <p class="hero__right">Noon to 11 pm<br>Closed Mondays</p>
   </section>
 
   <section class="poster" aria-labelledby="toss-t">
-    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/wokstudio.webp" data-src="assets/v2/video/wokstudio.mp4" aria-hidden="true"></video>
+    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/wokstudio.webp" data-src="assets/v2/video/wokstudio.mp4" data-src-sm="assets/v2/video/wokstudio-sm.mp4" aria-hidden="true"></video>
     <h2 class="poster__word foil" id="toss-t">Toss</h2>
     <p class="poster__cap">Konso Fever</p>
   </section>
@@ -96,7 +97,7 @@
 
 
   <section class="poster" aria-labelledby="pourw-t">
-    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/kokumpour.webp" data-src="assets/v2/video/kokumpour.mp4" aria-hidden="true"></video>
+    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/kokumpour.webp" data-src="assets/v2/video/kokumpour.mp4" data-src-sm="assets/v2/video/kokumpour-sm.mp4" aria-hidden="true"></video>
     <h2 class="poster__word foil" id="pourw-t">Pour</h2>
     <p class="poster__cap">Kokum Feni Sour</p>
   </section>

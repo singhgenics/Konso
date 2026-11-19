@@ -140,7 +140,7 @@ A two-temperature palette: cool, near-black greens for the room, warm cream and 
 ### Neutral
 - **Bottle Green** (#06180D): body background under the ground raster, text on the gold tab, the browser color-scheme anchor.
 - **Ground Edge** (#041209) and **Ground Pool** (#103E20): the darkest edge and the brightest emerald of the ground raster. They live in the image, not in CSS; check contrast against the pool, the brightest point text can land on.
-- **Bar Scrim** (rgba(5,28,10,.92)): the top bar once the visitor has scrolled past 85% of the hero.
+- **Bar Scrim** (rgba(5,28,10,.92)): the top bar once the visitor has scrolled past 45% of the hero.
 - **Steam Cream** (#F2E8D2): body text, section headings, nav links, dish captions. 15.1:1 on bottle green.
 - **Quiet Cream** (#CFC4A8): legal line and secondary text. 10.6:1 on bottle green, 7:1 on the pool.
 
@@ -157,7 +157,7 @@ A two-temperature palette: cool, near-black greens for the room, warm cream and 
 **Character:** Prata is the brand kit's high-contrast didone-leaning serif, used at poster scale with tight negative tracking; Montserrat is the kit's lockup face, quiet in body, tracked and uppercased only for the nav row.
 
 ### Hierarchy
-- **Display** (400, clamp(52px, 7vw, 120px), 0.95): the split hero headline, "Pan Asian kitchen" above the clip and "and bar" below it, in foil. Phone: clamp(34px, 10vw, 44px).
+- **Hero wordmark**: the kit's gold foil wordmark artwork (konso-wordmark-gold-tight.svg, never retyped) at clamp(220px, 30vw, 540px) wide (62vw on phones), with the lockup descriptor "Pan Asian Kitchen | Bar" beneath it in Montserrat 600, uppercase, 0.32em tracking, gold (13px, 0.24em on phones). Together they are the page h1.
 - **Display Poster** (400, clamp(88px, 15vw, 240px), 0.85): the single verb on a poster screen ("Toss", "Pour"), in foil. Phone: 26vw.
 - **Display Place** (400, clamp(64px, 15.4vw, 260px), 0.9): the place name in Find us, in foil, as a maps link. Phone: 14.6vw.
 - **Headline Dish** (400, clamp(64px, 11.5vw, 200px), 0.88): dish names in the line-up, in foil. Phone: clamp(48px, 15vw, 88px).
@@ -178,7 +178,7 @@ All Prata headings carry kerning and ligatures on, `text-wrap: balance`, and tra
 A single full-bleed column of screen-height scenes over the fixed ground. The horizontal gutter is fluid (clamp(16px, 3.2vw, 48px)); vertical rhythm is measured in svh so each scene owns roughly one viewport: hero 100svh, posters 100svh, the line-up a pinned 100svh stage with a runway of 4 × 80svh (4 × 70svh on phones), the bar and Find us padded at 12svh / 8svh and 8svh / 6svh.
 
 - **Top bar:** a three-column grid (1fr auto 1fr): wordmark left, links centred, Sound and Menu right. Fixed, transparent over the hero, scrim after it.
-- **Hero:** the 16:9 clip centred at 96svh tall, the headline split above and below it, location line bottom-left and hours bottom-right at mid-height.
+- **Hero:** the wordmark and descriptor centred near the top (9svh); the 16:9 clip below them (76svh tall, starting 24svh down) so the dumpling hangs under the name and the bowl sits at the foot; "Opening soon / Cavelossim, South Goa" bottom-left and hours bottom-right at 9svh from the bottom.
 - **Poster:** the clip fills the screen; one word and one caption sit left at max 40% width, vertically centred.
 - **The bar:** four glasses in a four-column grid, bottoms on one line (align end), max 1400px, captions centred under each.
 - **Find us:** lead line, the place name at full width, the menu link.
@@ -206,13 +206,13 @@ Almost no geometry of its own; the silhouettes are the food. The only drawn shap
 - **Top bar:** gold wordmark SVG (44-60px tall, 42px on phones) left; three label-style links centred, gap clamp(18px, 2.4vw, 40px). Hover turns the link gold highlight and draws a 1.5px gold underline from the left (0.45s). The bar takes the scrim after the hero. Anchor links scroll smoothly through Lenis.
 
 ### Hero
-The Veo clip of a dumpling on chopsticks, mask-feathered into the ground, scales in from 1.08 and fades in on load; the two foil headline lines rise out of an overflow mask with a 0.15s stagger. A few cut-out ingredients drift at the edges, each with its own parallax speed and spin.
+The gold wordmark is revealed by a clip-path wipe from the bottom (1.1s, cubic-bezier(.23,1,.32,1)), the descriptor rises in 0.5s later; the Veo clip of a dumpling on chopsticks, mask-feathered into the ground, settles from 1.08 over 1.4s. The small top-bar wordmark stays hidden until the visitor has scrolled past 45% of the hero, so the name is never shown twice. A few cut-out ingredients drift at the edges with their own parallax speed and spin.
 
 ### Poster
 One clip, one word, one caption: a full-screen Veo loop (masked top and bottom) slowly zooms from 1.14 to 1.0 across the scroll; a foil verb and an 18px gold-highlight caption naming the dish or drink. Clips load and play only near the viewport.
 
 ### The Line-up (signature)
-One pinned 100svh stage on which four dishes take turns, its small cream heading anchored bottom-left. Each dish's foil name rises in, then the cut-out dish drops from above with a back-ease overshoot and a tilt, crossing the bottom of its name; six of its own ingredients burst outward and spin behind the name; then it slides down and fades as the next one lands, so the stage is never empty. Dishes with a clip hand the still over to the live clip in the same spot once the clip is playing. With reduced motion the stage unpins into a plain stack.
+One pinned 100svh stage on which four dishes take turns, its small cream heading anchored bottom-left. Each dish's foil name rises in, then the cut-out dish drops from above on a spring (stiffness 150, damping 17: a soft bounce on landing, interruptible, the same feel at any scroll speed) with a tilt, crossing the bottom of its name; scroll decides which dish is on, the springs decide how it moves; six of its own ingredients burst outward and spin behind the name; then it slides down and fades on a quicker, bounceless spring (stiffness 260, damping 30) as the next one lands, so the stage is never empty. If a mouse or trackpad visitor stops between two dishes, the page eases (0.8s) to the nearer one; touch scrolling is never steered. Dish clips preload while the line-up is still a screen away. Dishes with a clip hand the still over to the live clip in the same spot once the clip is playing. With reduced motion the stage unpins into a plain stack.
 
 ### The Bar
 Four cut-out glasses at dish scale (clamp(240px, 46vh, 520px) tall, 30vh on phones), bottoms on one line, each named in Prata title below. Hover lifts a glass 10px and scales it 1.03. A single happy-hour line closes the section.

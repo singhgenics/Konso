@@ -11,7 +11,7 @@
   /* Smooth scroll */
   let lenis = null;
   if (!reduce && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 0.95 });
     document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
       const t = document.querySelector(a.getAttribute('href'));
       if (t) { e.preventDefault(); lenis.scrollTo(t, { offset: 0 }); }
@@ -21,7 +21,6 @@
   /* Hero arrives */
   const hero = document.querySelector('.hero');
   const heroMedia = hero.querySelector('.hero__media');
-  hero.querySelectorAll('.hero__line').forEach(l => { l.innerHTML = `<span>${l.innerHTML}</span>`; });
   const ready = () => setTimeout(() => hero.classList.add('is-ready'), 30);
   ready();
 
@@ -45,7 +44,7 @@
   };
   document.querySelectorAll('.spice').forEach((h, i) => scatter(h, phone() ? 6 : 10, 7 + i * 13));
   const heroSpice = document.createElement('div'); heroSpice.className = 'spice'; heroSpice.setAttribute('aria-hidden', 'true');
-  hero.appendChild(heroSpice); { let k = 0; scatter(heroSpice, phone() ? 3 : 6, 3, () => (phone() ? [20, 58, 30] : [22, 74, 30, 82, 18, 66])[k++ % (phone() ? 3 : 6)]); }
+  hero.appendChild(heroSpice); { let k = 0; scatter(heroSpice, phone() ? 3 : 6, 3, () => (phone() ? [44, 62, 52] : [22, 60, 34, 52, 16, 44])[k++ % (phone() ? 3 : 6)]); }
 
   /* The line-up: each dish gets a burst of its own ingredients, placed once */
   const BURST = {
@@ -75,12 +74,13 @@
   const io = new IntersectionObserver(es => es.forEach(e => {
     const v = e.target;
     if (e.isIntersecting) {
-      if (!v.src && v.dataset.src) { v.src = v.dataset.src; }
+      if (!v.src && v.dataset.src) { v.src = phone() && v.dataset.srcSm ? v.dataset.srcSm : v.dataset.src; }
       if (!reduce) v.play().catch(() => {});
       v.closest('section')?.classList.add('is-in');
     } else { v.pause(); }
   }), { rootMargin: '25% 0px' });
   clips.forEach(v => io.observe(v));
+  if (heroMedia.dataset.src && !reduce) { heroMedia.src = phone() ? heroMedia.dataset.srcSm : heroMedia.dataset.src; heroMedia.play().catch(() => {}); }
   const heroIO = new IntersectionObserver(([e]) => { if (reduce) return; e.isIntersecting ? heroMedia.play().catch(() => {}) : heroMedia.pause(); });
   heroIO.observe(hero);
   if (reduce) heroMedia.removeAttribute('autoplay'), heroMedia.pause();
@@ -104,53 +104,83 @@
     M.hero = hero.offsetHeight;
   };
 
-  // one clock for the whole line-up: each dish has a slot; it lands, holds while its ingredients burst, then hands over
-  const dropFrame = (d, i, y) => {
-    const n = drops.length;
-    const seg = ((y - M.drops.top + vh * 0.55) / Math.max(1, M.drops.h - vh + vh * 0.55)) * n;
-    const local = seg - i;
-    const a = clamp((local + 0.02) / 0.3);                              // arrival
-    const b = ease(clamp((local - 0.12) / 0.7));                        // burst
-    const e = i === n - 1 ? 0 : ease(clamp((local - 0.82) / 0.18));    // hand-over to the next dish
-    const s = easeOutBack(a);
-    const fall = (1 - s) * -vh * 0.7 + e * vh * 0.35;
-    d.el.style.visibility = (a <= 0 || e >= 1) ? 'hidden' : 'visible';
-    if (a <= 0 || e >= 1) return;
-    d.dish.style.opacity = (clamp(a * 2.5 - 0.3) * (1 - e)).toFixed(3);
-    d.dish.style.transform = `translate3d(0,${fall.toFixed(1)}px,0) rotate(${((1 - s) * -16 + e * 8).toFixed(2)}deg) scale(${(0.86 + 0.14 * s - 0.08 * e).toFixed(4)})`;
-    d.word.style.opacity = (clamp(a * 4) * (1 - e)).toFixed(3);
-    d.word.style.transform = `translate3d(0,${((1 - ease(a)) * 50 - e * 40).toFixed(1)}px,0)`;
-    const R = Math.min(vw, vh * 1.3);
-    d.bits.forEach(t => {
-      const r = R * t.dist * (0.25 + 0.75 * b);
-      const x = Math.cos(t.ang) * r * (phone() ? 0.8 : 1.25), yy = Math.sin(t.ang) * r * 0.8 - b * vh * (t.far ? 0.03 : 0.08);
-      t.img.style.transform = `translate3d(${x.toFixed(1)}px,${yy.toFixed(1)}px,0) rotate(${(t.spin * b).toFixed(1)}deg) scale(${(0.5 + 0.5 * Math.min(1, b * 1.6)).toFixed(3)})`;
-      t.img.style.opacity = ((t.far ? 0.55 : 1) * clamp(a * 3 - 1.2) * (1 - e)).toFixed(3);
-    });
-    if (d.clip) {
-      const want = a > 0.98 && local > 0.15 && local < 0.8;
-      if (want !== d.live) {
-        d.live = want;
-        if (want) { if (!d.clip.src) d.clip.src = d.clip.dataset.clip; d.clip.play().then(() => { if (d.live) d.dish.classList.add('is-live'); }).catch(() => {}); }
-        else { d.dish.classList.remove('is-live'); d.clip.pause(); }
+  // One clock for the whole line-up. Scroll decides WHICH dish is on (target); springs decide HOW it moves,
+  // so a landing always feels the same at any scroll speed and reverses smoothly mid-flight.
+  const spring = (st, target, k, c, dt) => { const acc = k * (target - st.x) - c * st.v; st.v += acc * dt; st.x += st.v * dt; if (Math.abs(target - st.x) < 0.0005 && Math.abs(st.v) < 0.0005) { st.x = target; st.v = 0; } };
+  drops.forEach(d => { d.inS = { x: 0, v: 0 }; d.outS = { x: 0, v: 0 }; d.local = -1; d.vis = ''; });
+  const PH = phone();
+  const slotOf = y => ((y - M.drops.top + vh * 0.55) / Math.max(1, M.drops.h - vh + vh * 0.55)) * drops.length;
+  const yOfSlot = seg => seg / drops.length * Math.max(1, M.drops.h - vh + vh * 0.55) + M.drops.top - vh * 0.55;
+  const dropTargets = y => { const seg = slotOf(y); drops.forEach((d, i) => { d.local = seg - i; d.tIn = d.local > -0.05 ? 1 : 0; d.tOut = (i < drops.length - 1 && d.local > 0.86) ? 1 : 0; }); };
+  const dropStep = dt => {
+    let moving = false;
+    drops.forEach(d => {
+      spring(d.inS, d.tIn, 150, 17, dt);          // arrival: a little weight, a soft bounce on landing
+      spring(d.outS, d.tOut, 260, 30, dt);        // hand-over: quicker than arriving, no bounce
+      if (d.inS.v || d.outS.v || d.inS.x !== d.tIn || d.outS.x !== d.tOut) moving = true;
+      const xin = d.inS.x, xout = clamp(d.outS.x);
+      const vis = (xin < 0.01 && d.tIn === 0) || xout > 0.99 ? 'hidden' : 'visible';
+      if (vis !== d.vis) { d.vis = vis; d.el.style.visibility = vis; }
+      if (vis === 'hidden') return;
+      const up = 1 - xin;                                       // 1 = still above the screen
+      d.dish.style.opacity = (clamp(xin * 2) * (1 - xout)).toFixed(3);
+      d.dish.style.transform = `translate3d(0,${(up * -vh * 0.6 + xout * vh * 0.3).toFixed(1)}px,0) rotate(${(up * -14 + xout * 8).toFixed(2)}deg) scale(${(0.9 + 0.1 * Math.min(1, xin) - 0.08 * xout).toFixed(4)})`;
+      d.word.style.opacity = (clamp(xin * 3) * (1 - xout)).toFixed(3);
+      d.word.style.transform = `translate3d(0,${(clamp(up) * 36 - xout * 28).toFixed(1)}px,0)`;
+      const b = ease(clamp((d.local - 0.1) / 0.7));            // the burst follows the scroll (parallax)
+      const R = Math.min(vw, vh * 1.3);
+      d.bits.forEach(t => {
+        const r = R * t.dist * (0.25 + 0.75 * b);
+        const x = Math.cos(t.ang) * r * (PH ? 0.8 : 1.25), yy = Math.sin(t.ang) * r * 0.8 - b * vh * (t.far ? 0.03 : 0.08);
+        t.img.style.transform = `translate3d(${x.toFixed(1)}px,${yy.toFixed(1)}px,0) rotate(${(t.spin * b).toFixed(1)}deg) scale(${(0.5 + 0.5 * Math.min(1, b * 1.6)).toFixed(3)})`;
+        t.img.style.opacity = ((t.far ? 0.55 : 1) * clamp(xin * 2 - 0.6) * (1 - xout)).toFixed(3);
+      });
+      if (d.clip) {
+        const want = xin > 0.95 && xout < 0.05 && d.local > 0.12 && d.local < 0.84;
+        if (want !== d.live) {
+          d.live = want;
+          if (want) { if (!d.clip.src) d.clip.src = d.clip.dataset.clip; d.clip.play().then(() => { if (d.live) d.dish.classList.add('is-live'); }).catch(() => {}); }
+          else { d.dish.classList.remove('is-live'); d.clip.pause(); }
+        }
       }
-    }
+    });
+    return moving;
+  };
+  // Clips for the line-up load while it is still a screen away, so the hand-over never waits on the network
+  let clipsWarm = false;
+  const warmClips = () => { if (clipsWarm) return; clipsWarm = true; drops.forEach(d => { if (d.clip && !d.clip.src) { d.clip.preload = 'auto'; d.clip.src = d.clip.dataset.clip; } }); };
+  // After the visitor stops between two dishes, ease to the nearer one (mouse and trackpad only; never fights a finger)
+  const fine = matchMedia('(pointer: fine)').matches;
+  let settleT = 0, settling = false;
+  const settle = () => {
+    if (!lenis || !fine || settling) return;
+    const y = lenis.scroll; if (y < M.drops.top || y > M.drops.top + M.drops.h - vh) return;
+    const seg = slotOf(y), i = Math.floor(seg), f = seg - i;
+    if (f > 0.12 && f < 0.82) return;                         // resting on a dish already
+    const to = f >= 0.82 ? Math.min(drops.length - 0.5, i + 1.45) : i + 0.45;
+    const ty = yOfSlot(to); if (Math.abs(ty - y) > vh * 0.6) return;
+    settling = true; lenis.scrollTo(ty, { duration: 0.8, easing: t => 1 - Math.pow(1 - t, 4), onComplete: () => { settling = false; } });
   };
 
-  let lastY = -1;
-  const frame = () => {
+  let lastY = -1, springing = false, lastT = 0;
+  const frame = (t = performance.now()) => {
+    const dt = Math.min(1 / 30, Math.max(1 / 240, (t - (lastT || t)) / 1000 || 1 / 60)); lastT = t;
     const y = lenis ? lenis.scroll : scrollY;
-    if (y === lastY) return;                       // nothing moved, nothing written
-    lastY = y;
-    bar.classList.toggle('is-solid', y > M.hero * 0.85);
-    if (reduce) return;
-    if (y < M.hero * 1.2) heroMedia.style.translate = `0 ${(y * -0.18).toFixed(1)}px`;
-    if (y > M.drops.top - vh && y < M.drops.top + M.drops.h) drops.forEach((d, i) => dropFrame(d, i, y));
-    M.posters.forEach(P => { if (y > P.top - vh && y < P.top + P.h) { const q = clamp((y - P.top + vh) / (P.h + vh)); P.el.style.transform = `scale(${(1.14 - q * 0.14).toFixed(4)})`; } });
-    floats.forEach(f => { const rel = y + vh / 2 - f.top; if (Math.abs(rel) < vh * 1.4) f.el.style.transform = `translate3d(0,${(-rel * f.speed).toFixed(1)}px,0) rotate(${(rel / vh * f.spin).toFixed(1)}deg)`; });
+    const inDrops = y > M.drops.top - vh * 1.5 && y < M.drops.top + M.drops.h;
+    if (y !== lastY) {
+      lastY = y;
+      bar.classList.toggle('is-solid', y > M.hero * 0.45);
+      if (reduce) return;
+      if (y < M.hero * 1.2) heroMedia.style.translate = `0 ${(y * -0.18).toFixed(1)}px`;
+      if (inDrops) { warmClips(); dropTargets(y); springing = true; }
+      M.posters.forEach(P => { if (y > P.top - vh && y < P.top + P.h) { const q = clamp((y - P.top + vh) / (P.h + vh)); P.el.style.transform = `scale(${(1.14 - q * 0.14).toFixed(4)})`; } });
+      floats.forEach(f => { const rel = y + vh / 2 - f.top; if (Math.abs(rel) < vh * 1.4) f.el.style.transform = `translate3d(0,${(-rel * f.speed).toFixed(1)}px,0) rotate(${(rel / vh * f.spin).toFixed(1)}deg)`; });
+      clearTimeout(settleT); if (inDrops) settleT = setTimeout(settle, 220);
+    }
+    if (springing && !reduce) springing = dropStep(dt);
   };
 
-  const loop = t => { if (lenis) lenis.raf(t); frame(); requestAnimationFrame(loop); };
+  const loop = t => { if (lenis) lenis.raf(t); frame(t); requestAnimationFrame(loop); };
   addEventListener('load', measure);
   addEventListener('resize', () => { measure(); frame(); });
   measure();
