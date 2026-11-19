@@ -6,6 +6,7 @@
 <title>Konso · Pan Asian Kitchen | Bar · Cavelossim, Goa</title>
 <meta name="description" content="Konso is a Pan Asian kitchen and bar opening soon in Cavelossim, South Goa: dim sum and bao from the steamer, fire from the wok, kokum cocktails at the bar.">
 <meta name="theme-color" content="#06180D">
+<meta name="format-detection" content="telephone=no">
 <meta property="og:title" content="Konso · Pan Asian Kitchen | Bar">
 <meta property="og:description" content="Dim sum, wok fire and kokum cocktails. Opening soon in Cavelossim, South Goa.">
 <meta property="og:url" content="https://singhgenics.github.io/Konso/">
@@ -23,7 +24,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/v2/brand/konso-monogram-K-gold.svg" type="image/svg+xml">
 <link rel="preload" href="assets/v2/fonts/Prata-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/v2/img/hero.webp" as="image">
+<link rel="preload" href="assets/v2/img/hero-sm.webp" as="image" media="(max-width: 820px)">
+<link rel="preload" href="assets/v2/img/hero.webp" as="image" media="(min-width: 821px)">
 <link rel="stylesheet" href="assets/v2/konso.css">
 </head>
 <body>
@@ -41,7 +43,7 @@
   <!-- Hero: the opening look -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__stage" data-depth="hero">
-      <video class="hero__media" muted loop playsinline preload="auto" poster="assets/v2/img/hero.webp" data-src="assets/v2/video/hero.mp4" data-src-sm="assets/v2/video/hero-sm.mp4" aria-hidden="true"></video>
+      <video class="hero__media" muted loop playsinline preload="auto" poster="assets/v2/img/hero-sm.webp" data-poster="assets/v2/img/hero.webp" data-src="assets/v2/video/hero.mp4" data-src-sm="assets/v2/video/hero-sm.mp4" aria-hidden="true"></video>
     </div>
     <h1 class="hero__title" id="hero-title">
       <img class="hero__mark" src="assets/v2/brand/konso-wordmark-gold-tight.svg" alt="Konso" width="718" height="272">
@@ -52,7 +54,7 @@
   </section>
 
   <section class="poster" aria-labelledby="toss-t">
-    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/wokstudio.webp" data-src="assets/v2/video/wokstudio.mp4" data-src-sm="assets/v2/video/wokstudio-sm.mp4" aria-hidden="true"></video>
+    <video class="poster__media" muted loop playsinline preload="none" data-poster="assets/v2/img/wokstudio.webp" data-poster-sm="assets/v2/img/wokstudio-sm.webp" data-src="assets/v2/video/wokstudio.mp4" data-src-sm="assets/v2/video/wokstudio-sm.mp4" aria-hidden="true"></video>
     <h2 class="poster__word foil" id="toss-t">Toss</h2>
     <p class="poster__cap">Konso Fever</p>
   </section>
@@ -66,8 +68,8 @@
         <h3 class="drop__word foil">Steamer for two</h3>
         <div class="drop__burst" aria-hidden="true"></div>
         <div class="drop__media">
-          <img class="drop__dish" src="assets/v2/cut/steamer.webp" alt="Two bamboo steamers of siu mai and crystal dumplings" width="1200" height="900" loading="lazy" decoding="async">
-          <video class="drop__clip" muted loop playsinline preload="none" data-clip="assets/v2/video/steamer.mp4" poster="assets/v2/img/clip-steamer.webp" aria-hidden="true"></video>
+          <img class="drop__dish" src="assets/v2/cut/steamer.webp" srcset="assets/v2/cut/steamer-720.webp 720w, assets/v2/cut/steamer.webp 1200w" sizes="(max-width: 820px) 92vw, 56vw" alt="Two bamboo steamers of siu mai and crystal dumplings" width="1200" height="900" loading="lazy" decoding="async">
+          <video class="drop__clip" muted loop playsinline preload="none" data-clip="assets/v2/video/steamer.mp4" data-poster="assets/v2/img/clip-steamer.webp" data-poster-sm="assets/v2/img/clip-steamer-sm.webp" aria-hidden="true"></video>
         </div>
       </div>
     </article>
@@ -76,8 +78,8 @@
         <h3 class="drop__word foil">Bao Down</h3>
         <div class="drop__burst" aria-hidden="true"></div>
         <div class="drop__media drop__media--wide">
-          <img class="drop__dish" src="assets/v2/cut/baodown.webp" alt="Two pork belly bao with cucumber and peanut crumb" width="1200" height="900" loading="lazy" decoding="async">
-          <video class="drop__clip" muted loop playsinline preload="none" data-clip="assets/v2/video/baodown.mp4" poster="assets/v2/img/clip-baodown.webp" aria-hidden="true"></video>
+          <img class="drop__dish" src="assets/v2/cut/baodown.webp" srcset="assets/v2/cut/baodown-720.webp 720w, assets/v2/cut/baodown.webp 1200w" sizes="(max-width: 820px) 92vw, 56vw" alt="Two pork belly bao with cucumber and peanut crumb" width="1200" height="900" loading="lazy" decoding="async">
+          <video class="drop__clip" muted loop playsinline preload="none" data-clip="assets/v2/video/baodown.mp4" data-poster="assets/v2/img/clip-baodown.webp" data-poster-sm="assets/v2/img/clip-baodown-sm.webp" aria-hidden="true"></video>
         </div>
       </div>
     </article>
@@ -86,7 +88,7 @@
         <h3 class="drop__word foil">Konso Fever</h3>
         <div class="drop__burst" aria-hidden="true"></div>
         <div class="drop__media drop__media--wide">
-          <img class="drop__dish" src="assets/v2/cut/fever.webp" alt="Konso Fever chicken tossed with green chillies" width="1200" height="900" loading="lazy" decoding="async">
+          <img class="drop__dish" src="assets/v2/cut/fever.webp" srcset="assets/v2/cut/fever-720.webp 720w, assets/v2/cut/fever.webp 1200w" sizes="(max-width: 820px) 92vw, 56vw" alt="Konso Fever chicken tossed with green chillies" width="1200" height="900" loading="lazy" decoding="async">
         </div>
       </div>
     </article>
@@ -95,7 +97,7 @@
         <h3 class="drop__word foil">K-Pop Wings</h3>
         <div class="drop__burst" aria-hidden="true"></div>
         <div class="drop__media">
-          <img class="drop__dish" src="assets/v2/cut/kpop.webp" alt="Korean fried wings in red gochujang glaze" width="1200" height="900" loading="lazy" decoding="async">
+          <img class="drop__dish" src="assets/v2/cut/kpop.webp" srcset="assets/v2/cut/kpop-720.webp 720w, assets/v2/cut/kpop.webp 1200w" sizes="(max-width: 820px) 92vw, 56vw" alt="Korean fried wings in red gochujang glaze" width="1200" height="900" loading="lazy" decoding="async">
         </div>
       </div>
     </article>
@@ -107,7 +109,7 @@
 
 
   <section class="poster" aria-labelledby="pourw-t">
-    <video class="poster__media" muted loop playsinline preload="none" poster="assets/v2/img/kokumpour.webp" data-src="assets/v2/video/kokumpour.mp4" data-src-sm="assets/v2/video/kokumpour-sm.mp4" aria-hidden="true"></video>
+    <video class="poster__media" muted loop playsinline preload="none" data-poster="assets/v2/img/kokumpour.webp" data-poster-sm="assets/v2/img/kokumpour-sm.webp" data-src="assets/v2/video/kokumpour.mp4" data-src-sm="assets/v2/video/kokumpour-sm.mp4" aria-hidden="true"></video>
     <h2 class="poster__word foil" id="pourw-t">Pour</h2>
     <p class="poster__cap">Kokum Feni Sour</p>
   </section>
@@ -117,19 +119,19 @@
     <h2 class="pour__title" id="pour-title">The bar</h2>
     <div class="glasses">
       <figure class="glass">
-        <img src="assets/v2/cut/drink-kokumsour.webp" alt="Kokum feni sour in a coupe with a pink-white foam" width="900" height="1200" loading="lazy" decoding="async">
+        <img src="assets/v2/cut/drink-kokumsour.webp" srcset="assets/v2/cut/drink-kokumsour-360.webp 360w, assets/v2/cut/drink-kokumsour.webp 800w" sizes="(max-width: 820px) 40vw, 22vw" alt="Kokum feni sour in a coupe with a pink-white foam" width="900" height="1200" loading="lazy" decoding="async">
         <figcaption>Kokum Feni Sour</figcaption>
       </figure>
       <figure class="glass">
-        <img src="assets/v2/cut/drink-gose.webp" alt="Pink kokum gose in a tall glass" width="900" height="1200" loading="lazy" decoding="async">
+        <img src="assets/v2/cut/drink-gose.webp" srcset="assets/v2/cut/drink-gose-360.webp 360w, assets/v2/cut/drink-gose.webp 800w" sizes="(max-width: 820px) 40vw, 22vw" alt="Pink kokum gose in a tall glass" width="900" height="1200" loading="lazy" decoding="async">
         <figcaption>Gose Bumps</figcaption>
       </figure>
       <figure class="glass">
-        <img src="assets/v2/cut/drink-lychee.webp" alt="Lychee and lemongrass martini crowned with a whole lychee" width="900" height="1200" loading="lazy" decoding="async">
+        <img src="assets/v2/cut/drink-lychee.webp" srcset="assets/v2/cut/drink-lychee-360.webp 360w, assets/v2/cut/drink-lychee.webp 800w" sizes="(max-width: 820px) 40vw, 22vw" alt="Lychee and lemongrass martini crowned with a whole lychee" width="900" height="1200" loading="lazy" decoding="async">
         <figcaption>Lychee &amp; Lemongrass Martini</figcaption>
       </figure>
       <figure class="glass">
-        <img src="assets/v2/cut/drink-margarita.webp" alt="Tamarind chilli margarita with a chilli-salt rim" width="900" height="1200" loading="lazy" decoding="async">
+        <img src="assets/v2/cut/drink-margarita.webp" srcset="assets/v2/cut/drink-margarita-360.webp 360w, assets/v2/cut/drink-margarita.webp 800w" sizes="(max-width: 820px) 40vw, 22vw" alt="Tamarind chilli margarita with a chilli-salt rim" width="900" height="1200" loading="lazy" decoding="async">
         <figcaption>Tamarind Chilli Margarita</figcaption>
       </figure>
     </div>

@@ -356,3 +356,41 @@ body{line-height:1.65}
 .hero__mark{width:clamp(220px,30vw,540px)}
 .hero__media{margin-top:24svh}
 @media (max-width:820px){.hero__title{top:12svh}.hero__mark{width:62vw}.hero__media{margin-top:0;top:24svh;height:auto}}
+
+/* Mobile pass, 2026-11-20 */
+/* the hero picture paints on the first frame; only its gentle settle animates */
+.hero__media,.js .hero__media{opacity:1}
+/* touch: no grey tap flash, no double-tap zoom delay on controls */
+html{-webkit-tap-highlight-color:transparent}
+a,button,input,.tab,.sound{touch-action:manipulation}
+/* anchors glide when the platform's own scrolling is in charge (touch screens) */
+@media (prefers-reduced-motion:no-preference){html:not(.lenis){scroll-behavior:smooth}}
+/* notch and home-bar safe areas (viewport-fit=cover) */
+.bar{padding-left:max(var(--gut),env(safe-area-inset-left));padding-right:max(var(--gut),env(safe-area-inset-right));padding-top:max(12px,env(safe-area-inset-top))}
+.foot{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+@media (max-width:820px){
+  .bar{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+  .hero__left{bottom:max(5svh,calc(env(safe-area-inset-bottom) + 16px))}
+}
+/* phones held sideways: everything has to fit a short screen */
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  .hero{min-height:100svh}
+  .hero__title{top:6svh}
+  .hero__mark{width:26vw}
+  .hero__media{width:auto;height:84svh;left:auto;margin-left:0;top:auto;margin-top:16svh}
+  .hero__left{bottom:6svh;left:max(16px,env(safe-area-inset-left));right:auto;text-align:left;max-width:30vw}
+  .drop__dish{width:min(56vh,40vw)}
+  .drop__word{font-size:clamp(40px,9vw,72px)}
+  .poster{align-content:center;padding-top:0;justify-items:start;text-align:left}
+  .poster__media{top:0;height:100%}
+  .poster__word{font-size:15vw}
+  .glasses{grid-template-columns:repeat(4,1fr)}
+  .glass img{height:44vh}
+}
+@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
+  .hero__title{top:calc(64px + env(safe-area-inset-top))}
+  .hero__mark{width:22vw}
+  .hero__media{margin-top:22svh;height:80svh}
+  .hero .spice{display:none}
+  .hero__right{bottom:6svh;right:max(16px,env(safe-area-inset-right))}
+}

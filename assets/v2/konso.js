@@ -10,7 +10,9 @@
 
   /* Smooth scroll */
   let lenis = null;
-  if (!reduce && window.Lenis) {
+  const coarse = matchMedia('(pointer: coarse)').matches;
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+  if (!reduce && window.Lenis && !coarse) {
     lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 0.95 });
     document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
       const t = document.querySelector(a.getAttribute('href'));
@@ -74,14 +76,17 @@
   const io = new IntersectionObserver(es => es.forEach(e => {
     const v = e.target;
     if (e.isIntersecting) {
+      if (!v.poster && v.dataset.poster) v.poster = phone() && v.dataset.posterSm ? v.dataset.posterSm : v.dataset.poster;
+      if (saveData) return;
       if (!v.src && v.dataset.src) { v.src = phone() && v.dataset.srcSm ? v.dataset.srcSm : v.dataset.src; }
       if (!reduce) v.play().catch(() => {});
       v.closest('section')?.classList.add('is-in');
     } else { v.pause(); }
-  }), { rootMargin: '25% 0px' });
+  }), { rootMargin: '100% 0px' });
   clips.forEach(v => io.observe(v));
-  if (heroMedia.dataset.src && !reduce) { heroMedia.src = phone() ? heroMedia.dataset.srcSm : heroMedia.dataset.src; heroMedia.play().catch(() => {}); }
-  const heroIO = new IntersectionObserver(([e]) => { if (reduce) return; e.isIntersecting ? heroMedia.play().catch(() => {}) : heroMedia.pause(); });
+  if (!phone() && heroMedia.dataset.poster) heroMedia.poster = heroMedia.dataset.poster;
+  if (heroMedia.dataset.src && !reduce && !saveData) { heroMedia.src = phone() ? heroMedia.dataset.srcSm : heroMedia.dataset.src; heroMedia.play().catch(() => {}); }
+  const heroIO = new IntersectionObserver(([e]) => { if (reduce || saveData) return; e.isIntersecting ? heroMedia.play().catch(() => {}) : heroMedia.pause(); });
   heroIO.observe(hero);
   if (reduce) heroMedia.removeAttribute('autoplay'), heroMedia.pause();
 
@@ -148,7 +153,7 @@
   };
   // Clips for the line-up load while it is still a screen away, so the hand-over never waits on the network
   let clipsWarm = false;
-  const warmClips = () => { if (clipsWarm) return; clipsWarm = true; drops.forEach(d => { if (d.clip && !d.clip.src) { d.clip.preload = 'auto'; d.clip.src = d.clip.dataset.clip; } }); };
+  const warmClips = () => { if (clipsWarm) return; clipsWarm = true; drops.forEach(d => { if (!d.clip) return; if (!d.clip.poster && d.clip.dataset.poster) d.clip.poster = phone() ? d.clip.dataset.posterSm : d.clip.dataset.poster; if (saveData) { d.clip = null; return; } if (!d.clip.src) { d.clip.preload = 'auto'; d.clip.src = d.clip.dataset.clip; } }); };
   // After the visitor stops between two dishes, ease to the nearer one (mouse and trackpad only; never fights a finger)
   const fine = matchMedia('(pointer: fine)').matches;
   let settleT = 0, settling = false;
@@ -180,12 +185,14 @@
     if (springing && !reduce) springing = dropStep(dt);
   };
 
-  const loop = t => { if (lenis) lenis.raf(t); frame(t); requestAnimationFrame(loop); };
+  let ticking = false;
+  const loop = t => { if (lenis) lenis.raf(t); frame(t); if (lenis || springing) requestAnimationFrame(loop); else ticking = false; };
+  const wake = () => { if (!ticking) { ticking = true; lastT = 0; requestAnimationFrame(loop); } };
   addEventListener('load', measure);
   addEventListener('resize', () => { measure(); frame(); });
   measure();
-  if (reduce) { frame(); addEventListener('scroll', frame, { passive: true }); }
-  else requestAnimationFrame(loop);
+  if (reduce) { frame(); addEventListener('scroll', () => frame(), { passive: true }); }
+  else { wake(); if (!lenis) addEventListener('scroll', wake, { passive: true }); }
 })();
 
 /* Music: the visitor turns it on; fades in and out */
