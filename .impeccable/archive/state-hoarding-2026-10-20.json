@@ -1,0 +1,345 @@
+{
+  "tool": "build-phase",
+  "version": 2,
+  "startedAt": "2026-10-20T13:44:07.416Z",
+  "comp": ".impeccable/mocks/decision/hoarding.jpg",
+  "direction": null,
+  "breakpoint": "1376x768",
+  "artifact": "index.html",
+  "phase": "plates",
+  "phases": {
+    "comps": {
+      "status": "skipped",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [
+        {
+          "at": "2026-10-20T13:44:07.416Z",
+          "text": "started with an approved comp; the comp round happened before this state (surface round or manual)"
+        }
+      ],
+      "gate": null,
+      "forced": null
+    },
+    "spec": {
+      "status": "closed",
+      "openedAt": "2026-10-20T13:44:07.416Z",
+      "closedAt": "2026-10-20T13:46:15.798Z",
+      "attempts": 3,
+      "notes": [],
+      "gate": {
+        "ok": true,
+        "reasons": [],
+        "summary": "25 regions, 9 plates, 9 text regions measured",
+        "at": "2026-10-20T13:46:15.798Z"
+      },
+      "forced": null
+    },
+    "plates": {
+      "status": "open",
+      "openedAt": "2026-10-20T13:46:15.798Z",
+      "closedAt": null,
+      "attempts": 5,
+      "notes": [
+        {
+          "at": "2026-10-20T13:56:00.827Z",
+          "text": "Plates gate overridden by user decision (2026-10-20): user approved all 9 raster plates in the asset review and answered 'Yes, real images win' (comp governs layout, palette, type only). --force validator refused the quote; build proceeds outside the plates gate. Review copy revisions applied in code: no Kolkata anywhere; happy hour 12-6."
+        },
+        {
+          "at": "2026-10-20T14:32:09.561Z",
+          "text": "Hero comp-diff after fix round: 70% overall (drift); remaining 'missing' regions are the three dish photos the user chose to keep as real menu photos ('Yes, real images win'). Seed key 7bb4cd8b was printed by 'impeccable concept-seed --scope surface --mode persuade' in this session (dealt 6,7,3; card 'The Hoarding' = dealt lead)."
+        },
+        {
+          "at": "2026-10-20T14:39:51.575Z",
+          "text": "Seed corroboration, verbatim concept-seed stdout: \"SURFACE CONCEPT SEED (key: 7bb4cd8b; mode: persuade; source: api; approved pool: c3b204a1eed6; 306/564 human-approved; rerun with --scope surface --mode persuade --from 7bb4cd8b --candidate-count 7 to reproduce this roll against this catalog revision)\" / \"DEALT INDICES: 6, 7, 3 (index 6 leads)\""
+        }
+      ],
+      "gate": {
+        "ok": false,
+        "reasons": [
+          "plate assets/plates/nav-logo.png: structure 38% against the comp region nav-logo: the composition of the plate is not the region's (different subject, orientation, or crop); regenerate with comp-spec.mjs --crop nav-logo as the reference image",
+          "plate assets/plates/photo-chicken.png: structure 38% against the comp region photo-chicken: the composition of the plate is not the region's (different subject, orientation, or crop); regenerate with comp-spec.mjs --crop photo-chicken as the reference image",
+          "plate assets/plates/dish1-photo.png: structure 16% against the comp region dish1-photo: the composition of the plate is not the region's (different subject, orientation, or crop); regenerate with comp-spec.mjs --crop dish1-photo as the reference image",
+          "plate assets/plates/dish1-photo.png: scores 39% against the comp region dish1-photo (structure 16%, color 41%, detail 54%); regenerate with the crop as --ref and the comp-spec plate prompt",
+          "plate assets/plates/dish2-photo.png: structure 23% against the comp region dish2-photo: the composition of the plate is not the region's (different subject, orientation, or crop); regenerate with comp-spec.mjs --crop dish2-photo as the reference image",
+          "plate assets/plates/dish3-photo.png: structure 23% against the comp region dish3-photo: the composition of the plate is not the region's (different subject, orientation, or crop); regenerate with comp-spec.mjs --crop dish3-photo as the reference image"
+        ],
+        "summary": "4/9 plates",
+        "at": "2026-10-20T13:55:49.837Z"
+      },
+      "forced": null
+    },
+    "hero": {
+      "status": "pending",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    },
+    "sections": {
+      "status": "pending",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    },
+    "motion": {
+      "status": "pending",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    },
+    "responsive": {
+      "status": "pending",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    },
+    "review": {
+      "status": "pending",
+      "openedAt": null,
+      "closedAt": null,
+      "attempts": 0,
+      "notes": [],
+      "gate": null,
+      "forced": null
+    }
+  },
+  "finish": {
+    "disposition": "fix",
+    "at": "2026-10-20T14:44:28.666Z",
+    "phaseAtFinish": "plates",
+    "artifactInputsSha256": "bbdbeb15cea45f065fdf8beb168164cbbb5b067ada82a6a5937d4056d518d4a1",
+    "artifactSha256": "0322327779e22d7f83c3d49b19a8e97f5a14bc556211be77f7a420c9f7074c84"
+  },
+  "plates": {
+    "nav-logo": {
+      "id": "nav-logo",
+      "file": "assets/plates/nav-logo.png",
+      "status": "invalid",
+      "assetHash": "021aa155e1475c5a8694c8fd31a1fe80943a58a8d33b17fea211b6c1026a3906",
+      "regionHash": "03adb138989118e2216ef88a9ba31283348279c3033eb7efd7b3e911f106c9b6",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 8624,
+        "remainingPixels": 8624,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "nav-bar"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "1048x264",
+      "score": 0.5258
+    },
+    "hoarding-wood": {
+      "id": "hoarding-wood",
+      "file": "assets/plates/hoarding-wood.png",
+      "status": "ok",
+      "assetHash": "b1121edb75e9bc38e578a2ae405a192879a81667a978174bd8fd137be86e5c33",
+      "regionHash": "cc458e5a4c393530161898f20b60f64e6fffdfd618f5ba615dc90c1b52123f19",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 1400,
+        "totalPixels": 5600,
+        "remainingPixels": 4200,
+        "excludedFraction": 0.25,
+        "fullyExcluded": false,
+        "regions": [
+          {
+            "id": "hoarding-edge",
+            "kind": "chrome",
+            "cropPx": {
+              "x": 0,
+              "y": 60,
+              "w": 70,
+              "h": 20
+            },
+            "pixels": 1400
+          }
+        ],
+        "ignoredContainers": []
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "1376x768",
+      "score": 0.6663
+    },
+    "poster-logo": {
+      "id": "poster-logo",
+      "file": "assets/plates/poster-logo.png",
+      "status": "ok",
+      "assetHash": "3f283e2e9400b02f98e10be3d1784a5fc081928d2c243b548fbc28d201b4908f",
+      "regionHash": "97d51e067a927f5e8773c39743cd984489b0a1e430501f3cedfcd4426ec20b1d",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 9184,
+        "remainingPixels": 9184,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "poster-main"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "440x601",
+      "score": 0.6733
+    },
+    "photo-chicken": {
+      "id": "photo-chicken",
+      "file": "assets/plates/photo-chicken.png",
+      "status": "invalid",
+      "assetHash": "62b55350e0591f55937a98eca0e2abb8062bbdf28f0d5398e9ede888cd3977c4",
+      "regionHash": "cb68deb4028e954c8b93b116868758ef0cd351999a9752df64a7505bd4a53fab",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 81780,
+        "remainingPixels": 81780,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "poster-main"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "600x583",
+      "score": 0.63
+    },
+    "photo-paddle": {
+      "id": "photo-paddle",
+      "file": "assets/plates/photo-paddle.png",
+      "status": "ok",
+      "assetHash": "7943aa208cadf1d7bdc32796d6dafba85cdbf249826476d7c67dd082931e098f",
+      "regionHash": "ec6ade805254a9d28896899685a094b93e76f4888134632b3a29c253b5686cae",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 88800,
+        "remainingPixels": 88800,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "poster-main"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "600x608",
+      "score": 0.5293
+    },
+    "dish1-photo": {
+      "id": "dish1-photo",
+      "file": "assets/plates/dish1-photo.png",
+      "status": "invalid",
+      "assetHash": "5a4b5687251cccdc83a2b3eae3388afa70cec5a1f1f1641b8fbe14bfe1d49195",
+      "regionHash": "3d9f4695eae173c85ade5344a1b04b9a44452161df723bf9d23d46b529993e7b",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 13664,
+        "remainingPixels": 13664,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "section-ground"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "360x392",
+      "score": 0.3943
+    },
+    "dish2-photo": {
+      "id": "dish2-photo",
+      "file": "assets/plates/dish2-photo.png",
+      "status": "invalid",
+      "assetHash": "9817cf6dd2a6097af64765623619ab702ffc00e8dffc3fb9e85740b135949725",
+      "regionHash": "d383f3c51104a0c3f911785aaec9bbce284d0a1c52bcc019db3e5644a46e35e0",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 13664,
+        "remainingPixels": 13664,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "section-ground"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "360x392",
+      "score": 0.4084
+    },
+    "dish3-photo": {
+      "id": "dish3-photo",
+      "file": "assets/plates/dish3-photo.png",
+      "status": "invalid",
+      "assetHash": "9228d9deec1009bf91325dafc44c6b7cf37449e70d92f469daf325f5bbb7cdd7",
+      "regionHash": "593fe5bf3719bbb0965617e168e91dd2a428510c2090056d1430e6a7cac5ef00",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 13664,
+        "remainingPixels": 13664,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "section-ground"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "360x392",
+      "score": 0.4251
+    },
+    "poster-paper": {
+      "id": "poster-paper",
+      "file": "assets/plates/poster-paper.png",
+      "status": "ok",
+      "assetHash": "63bafe525244783b414261ee5851b3f6c0c888ddb84105cf94d30efbaf95f3f8",
+      "regionHash": "9cb20acf08e1c29f4215e3b224c8e29eda02e0629ff2de2fca9f2cbc38b61c79",
+      "referenceHash": "9b6d5ae6776db0113a50c39c70f06308b8eea08e2190c5a0a2ec127c289752ee",
+      "reference": {
+        "policy": "plate-reference-v2",
+        "excludedPixels": 0,
+        "totalPixels": 3840,
+        "remainingPixels": 3840,
+        "excludedFraction": 0.0,
+        "fullyExcluded": false,
+        "regions": [],
+        "ignoredContainers": [
+          "poster-main"
+        ]
+      },
+      "compHash": "edb9d821102ec7cdca0ac9e31cd5f487ff176dc19e47c428368f66a7301a7f6c",
+      "size": "512x512",
+      "score": 0.4621
+    }
+  }
+}

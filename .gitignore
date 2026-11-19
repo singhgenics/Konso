@@ -7,3 +7,13 @@
 reference/
 # superseded images
 assets/old/
+
+# v2 build working files (raw Flow takes, video masters, music takes, inspector output)
+.taste-skill/
+src/v2/raw/
+src/v2/vraw/
+src/v2/up/
+src/v2/music/
+src/v2/media.jsonl
+src/v2/ref-*.jpg
+src/v2/*.log

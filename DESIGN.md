@@ -1,122 +1,242 @@
 ---
 name: Konso
-description: The pre-launch site for Konso (Pan Asian Kitchen | Bar, Cavelossim) in the Konso brand kit only, bottle green, gold foil and cream.
+description: Pre-launch site for Konso, Pan Asian Kitchen | Bar, Cavelossim. A dark bottle-green room where the food is the only light.
 colors:
-  bottle-green: "#051C0A"
-  konso-green: "#0B2A14"
-  gold: "#D89D3C"
-  gold-hi: "#F0BE62"
-  gold-lo: "#AA7A28"
-  cream: "#F2E8D2"
-  veg-green: "#2E7D32"
-  nonveg-brown: "#8B3A1A"
-  chilli: "#B5321C"
-gradients:
-  gold-foil: "linear-gradient(180deg, #EBB85B, #E2AA4A, #DA9F3E, #D49739, #D19333)"
+  bottle-green: "#06180D"
+  ground-edge: "#041209"
+  ground-pool: "#103E20"
+  bar-scrim: "rgba(5,28,10,.92)"
+  steam-cream: "#F2E8D2"
+  quiet-cream: "#CFC4A8"
+  gold-foil: "#D89D3C"
+  gold-highlight: "#F0BE62"
 typography:
   display:
     fontFamily: "Prata, Georgia, serif"
-    fontSize: "clamp(4.5rem, 12vw, 9.5rem)"
+    fontSize: "clamp(52px, 7vw, 120px)"
+    fontWeight: 400
+    lineHeight: 0.95
+    letterSpacing: "-0.025em"
+  display-poster:
+    fontFamily: "Prata, Georgia, serif"
+    fontSize: "clamp(88px, 15vw, 240px)"
     fontWeight: 400
     lineHeight: 0.85
-    textTransform: uppercase
+    letterSpacing: "-0.03em"
+  display-place:
+    fontFamily: "Prata, Georgia, serif"
+    fontSize: "clamp(64px, 15.4vw, 260px)"
+    fontWeight: 400
+    lineHeight: 0.9
+    letterSpacing: "-0.03em"
+  headline-dish:
+    fontFamily: "Prata, Georgia, serif"
+    fontSize: "clamp(64px, 11.5vw, 200px)"
+    fontWeight: 400
+    lineHeight: 0.88
+    letterSpacing: "-0.03em"
   headline:
     fontFamily: "Prata, Georgia, serif"
-    fontSize: "clamp(1.7rem, 2.4vw, 2.2rem)"
+    fontSize: "clamp(40px, 5vw, 80px)"
     fontWeight: 400
     lineHeight: 1
-  body:
-    fontFamily: "Montserrat, system-ui, sans-serif"
-    fontSize: "1.0625rem"
+    letterSpacing: "-0.02em"
+  title:
+    fontFamily: "Prata, Georgia, serif"
+    fontSize: "clamp(20px, 1.7vw, 26px)"
     fontWeight: 400
-    lineHeight: 1.6
-  label:
-    fontFamily: "Montserrat, system-ui, sans-serif"
-    fontWeight: 600
-    letterSpacing: "0.16em to 0.18em"
-    textTransform: uppercase
-  price:
-    fontFamily: "Montserrat, system-ui, sans-serif"
+    lineHeight: 1.2
+  body:
+    fontFamily: "Montserrat, Helvetica Neue, Arial, sans-serif"
+    fontSize: "clamp(16px, 1.15vw, 18px)"
+    fontWeight: 400
+    lineHeight: 1.65
+  body-lead:
+    fontFamily: "Montserrat, Helvetica Neue, Arial, sans-serif"
+    fontSize: "18px"
     fontWeight: 500
-    note: "Prata's old-style figures are swapped for Montserrat digits through the PrataN face"
+    lineHeight: 1.65
+  label:
+    fontFamily: "Montserrat, Helvetica Neue, Arial, sans-serif"
+    fontSize: "12.5px"
+    fontWeight: 600
+    letterSpacing: "0.18em"
+  label-tab:
+    fontFamily: "Montserrat, Helvetica Neue, Arial, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    letterSpacing: "0.14em"
+rounded:
+  focus: "2px"
+  pill: "999px"
 spacing:
-  gutter: "clamp(16px, 4vw, 56px)"
-  station: "clamp(56px, 8vw, 120px)"
-  touch: "48px"
+  gutter: "clamp(16px, 3.2vw, 48px)"
+  bar-y: "18px"
+  nav-gap: "clamp(18px, 2.4vw, 40px)"
+  glass-gap: "clamp(12px, 2.4vw, 40px)"
 components:
-  button-ink: { backgroundColor: "{colors.bottle-green}", textColor: "{colors.cream}", hover: "gold face, green label" }
-  button-hero: { backgroundColor: "{colors.gold}", textColor: "{colors.bottle-green}" }
-  button-line: { backgroundColor: transparent, border: "2px currentColor", hover: "green face, cream label" }
-  rail: { backgroundColor: "{colors.bottle-green}", logo: "kit wordmark, gold foil, tightly cropped", links: "{colors.cream}" }
-  sticker-gold: { background: "{gradients.gold-foil}", textColor: "{colors.bottle-green}", use: "happy hour, Opening soon seal" }
-  bill-cream: { backgroundColor: "{colors.cream}", textColor: "{colors.bottle-green}" }
-  tag: { backgroundColor: "{colors.gold}", textColor: "{colors.bottle-green}", use: "Goa, Signature, Bestseller" }
-  link-on-cream: { textColor: "{colors.bottle-green}", accent: "{colors.gold-lo} arrow and underline" }
-  link-on-green: { textColor: "{colors.gold}" }
+  menu-tab:
+    backgroundColor: "{colors.gold-foil}"
+    textColor: "{colors.bottle-green}"
+    typography: "{typography.label-tab}"
+    rounded: "{rounded.pill}"
+    padding: "13px 24px"
+  menu-tab-hover:
+    backgroundColor: "{colors.gold-highlight}"
+    textColor: "{colors.bottle-green}"
+  nav-link:
+    textColor: "{colors.steam-cream}"
+    typography: "{typography.label}"
+    padding: "10px 0"
+  nav-link-hover:
+    textColor: "{colors.gold-highlight}"
+  sound-toggle:
+    textColor: "{colors.steam-cream}"
+    typography: "{typography.label}"
+    rounded: "{rounded.pill}"
+    padding: "0 12px"
+    height: "44px"
+  top-bar-solid:
+    backgroundColor: "{colors.bar-scrim}"
+    padding: "18px {spacing.gutter}"
+  poster-caption:
+    textColor: "{colors.gold-highlight}"
+    typography: "{typography.body-lead}"
+  glass-caption:
+    textColor: "{colors.steam-cream}"
+    typography: "{typography.title}"
+  menu-link:
+    textColor: "{colors.gold-highlight}"
+    typography: "{typography.body-lead}"
 ---
 
 # Design System: Konso
 
-The site wears the Konso brand kit and nothing else (owner's decision, 2026-11-16, after a side-by-side preview against the older room palette). The kit lives in `Garden/web/brand-kit/` (tokens in `konso-tokens.css` and `brand-tokens.json`, logos in `logo/`, fonts in `fonts/`).
+## Overview
 
-How it is built: `assets/site.css` holds layout, components and motion; `assets/brandkit.css`, loaded after it, maps every colour to the kit and removes the old wood and paper textures. Change colours in `brandkit.css`, not in `site.css`.
+**Creative North Star: "The Dark Green Room"**
 
-## Colours
+A deep bottle-green room where the food is the only light. Every screen holds one lit thing (a dish, a drink, a wok in flame) and its name in gold foil, set the way a poster sets a title. The page is short and nearly wordless: the food, the clips and the names do the talking, and the visitor leaves through one door, the gold Menu tab to the revolving menu.
 
-Four kit colours carry the whole site:
+The room is a fixed raster ground, not a flat fill: an emerald light pool over near-black bottle green, carrying the brand wallpaper's paper grain (assets/v2/img/ground.webp, made in code by src/v2/ground.py; a portrait cut, ground-sm.webp, takes over below a 4:5 aspect ratio). Content scrolls over it while the light stays put, like light in a room. Photographs and Veo clips are either cut-outs or feathered into this ground with alpha masks, so nothing sits in a box.
 
-- **Bottle green `#051C0A`**: the top rail, hero, footer, the Bar section, the deals and Find us boards, all body text and headings on cream, ink buttons.
-- **Konso green `#0B2A14`**: the second green. Tap cards, the story map, the dish cards on the Bar band, the edges of the scene glows.
-- **Gold foil `#D89D3C`** (gradient `#EBB85B` to `#D19333`; highlight `#F0BE62`, shadow `#AA7A28`): the wordmark, headings on green, stickers (happy hour, Opening soon), tags, prices on green, the scroll progress bar, the main hero button.
-- **Cream `#F2E8D2`**: the page, the paper cards and bills, text on green.
+The world refuses the category default of a photo hero with "Book a table", menu cards and prices. There are no cards, no panels, no shadows and no price figures anywhere.
 
-Only three things keep their own colours, on purpose: the green and brown veg / non-veg squares (an FSSAI requirement), and the red chilli heat icons.
+**Key Characteristics:**
+- One fixed emerald-pool ground with paper grain; no section changes the background.
+- Prata display set in raster gold foil for names; cream Prata for section headings.
+- Food and drink in saturated colour, cut out or mask-feathered, never boxed or framed.
+- One gold solid on the page: the Menu tab.
+- Motion is scroll-driven, transform and opacity only, and fully reducible.
 
-**Contrast rule.** Gold on cream is about 3:1, too low for small text. On cream, links are bottle green with a gold-lo arrow and underline; gold text is used only on green, or at display size. Lighthouse accessibility is 100 on both pages (2026-11-16).
+## Colors
 
-## Type
+A two-temperature palette: cool, near-black greens for the room, warm cream and gold for everything that speaks.
 
-- **Prata** for every heading and station word (STEAM, BAR, WOK, THE MENU), uppercase at display size, sentence case below.
-- **Montserrat** for reading text, labels (uppercase, tracked), buttons and prices. Prices use Montserrat digits even inside Prata headings, through the `PrataN` face (Prata's old-style figures read badly as prices).
-- The **wordmark is artwork**, never typed: `assets/brand/konso-wordmark-gold.svg` in the hero, the tightly cropped `konso-wordmark-gold-tight.svg` in the rail, and `konso-lockup-gold.svg` (with "Pan Asian Kitchen | Bar") in the footer.
+### Primary
+- **Gold Foil** (#D89D3C): the one solid accent. Fill of the Menu tab, the skip link and text selection; the fallback colour under the foil raster; the nav underline on hover. Also the base of the foil texture (assets/v2/img/foil.webp, procedural from the kit gold ramp #AA7A28 to #F0BE62 by src/v2/foiltex.py).
+- **Gold Highlight** (#F0BE62): hover state of the Menu tab and nav links, the focus ring, and small gold text (poster captions, the revolving-menu link). 10.7:1 on the bottle green, 7.1:1 on the pool.
 
-## Page
+### Neutral
+- **Bottle Green** (#06180D): body background under the ground raster, text on the gold tab, the browser color-scheme anchor.
+- **Ground Edge** (#041209) and **Ground Pool** (#103E20): the darkest edge and the brightest emerald of the ground raster. They live in the image, not in CSS; check contrast against the pool, the brightest point text can land on.
+- **Bar Scrim** (rgba(5,28,10,.92)): the top bar once the visitor has scrolled past 85% of the hero.
+- **Steam Cream** (#F2E8D2): body text, section headings, nav links, dish captions. 15.1:1 on bottle green.
+- **Quiet Cream** (#CFC4A8): legal line and secondary text. 10.6:1 on bottle green, 7:1 on the pool.
 
-Order: hero (steaming bao video), headline strip (Dim sum. Bao. Bottled beer. Craft cocktails.), **Steam** (dim sum scene, dim sum cards, bao scene, bao cards), **Bar** (cocktail scene, bottled beer, craft cocktails), deals board, story, wok, garden, Find us. The full menu is its own page, `menu.html`, under Menu in the rail.
+### Named Rules
+**The One Gold Solid Rule.** Gold as a filled shape appears once per screen: the Menu tab. Everywhere else gold is lettering (foil or highlight text) or a 1.5px hover underline.
 
-## Scroll scenes
+**The Room Never Changes Rule.** There is one ground for the whole page. Sections do not get their own background colours, cream panels or bands; a cream "find us" panel was tried and removed for this reason.
 
-Three pinned, full-bleed scenes: a dim sum basket, a bao and a kokum feni sour that pull apart and come together as you scroll, then dissolve into the finished dish. Each has its own kit shade so you feel the move from one to the next: dim sum in deep green with a warm gold glow, bao in the darkest bottle green, the cocktail in Konso green under a stronger gold spotlight. Each scene fades in from the page colour and back out into it (no hard colour cut).
+## Typography
 
-Rules that keep them lag-free (measured 60 fps, no long tasks, desktop and phone):
-- Positions are measured on load and resize only; scrolling reads no layout.
-- Only `transform` and `opacity` change while scrolling.
-- A scene's pictures load only as it comes within about two screens, and it shows once they have all decoded.
-- Reduced motion and `?still` show the scenes as static stacks.
+**Display Font:** Prata (with Georgia, serif)
+**Body Font:** Montserrat, variable 100-900 (with Helvetica Neue, Arial, sans-serif)
 
-## Motion and loading
+**Character:** Prata is the brand kit's high-contrast didone-leaning serif, used at poster scale with tight negative tracking; Montserrat is the kit's lockup face, quiet in body, tracked and uppercased only for the nav row.
 
-Motion rules (reviewed 2026-11-16 with ui-ux-pro-max, Emil Kowalski's design engineering and Apple's fluid-interface guidance):
-- **Smooth scroll** is Lenis at `lerp .13`: a short glide that settles in under a second after a flick (it was ~1.5 s at `.085` and felt floaty). Anchor jumps take 0.9 s.
-- **Scenes follow the scroll 1:1** while Lenis runs, drawn in the same frame (no second layer of easing on top of Lenis). They ease over ~70 ms only when Lenis is off.
-- **Menu drop-down** grows from its button (180 ms ease-out, from 0.97 scale) and closes faster than it opens (120 ms); it never snaps.
-- **Press feedback** on every pressable thing: buttons and tabs 0.97, headline cards 0.98. Hover effects only on real pointers (`hover: hover and pointer: fine`).
-- **Photo reveal** settles from 1.2x over 800 ms; lists stagger 55 ms per item.
-- **Phones** drop the per-layer blurred shadows on the moving scene layers and use one static soft shadow under the dish (cheap for phone GPUs).
-- Measured: whole page scrolled with real wheel input at 4x CPU slowdown, 1 frame over 25 ms in 966 (desktop), 0 in 1,080 (phone).
+### Hierarchy
+- **Display** (400, clamp(52px, 7vw, 120px), 0.95): the split hero headline, "Pan Asian kitchen" above the clip and "and bar" below it, in foil. Phone: clamp(34px, 10vw, 44px).
+- **Display Poster** (400, clamp(88px, 15vw, 240px), 0.85): the single verb on a poster screen ("Toss", "Pour"), in foil. Phone: 26vw.
+- **Display Place** (400, clamp(64px, 15.4vw, 260px), 0.9): the place name in Find us, in foil, as a maps link. Phone: 14.6vw.
+- **Headline Dish** (400, clamp(64px, 11.5vw, 200px), 0.88): dish names in the line-up, in foil. Phone: clamp(48px, 15vw, 88px).
+- **Headline** (400, clamp(40px, 5vw, 80px), 1): section headings ("The bar") in steam cream. The line-up's heading is the exception: it sits inside the pinned stage, bottom-left at 6svh, at clamp(26px, 2.4vw, 36px), so it never competes with the dish names.
+- **Title** (400, clamp(20px, 1.7vw, 26px), 1.2): drink names under the glasses, max 14ch. Phone: 20px.
+- **Body** (400, clamp(16px, 1.15vw, 18px), 1.65): the few lines of copy; hero side lines at 16px / 1.7. Lead lines (poster caption, find-us lead, the menu link) at 18px, weight 500-600.
+- **Label** (600, 12.5px, 0.18em, uppercase): nav links and the Sound control. The Menu tab is the same style at 13px / 0.14em.
 
+All Prata headings carry kerning and ligatures on, `text-wrap: balance`, and tracking from -0.02em to -0.03em, tighter as the size grows.
 
-Motion plays once: cards and photos settle in on first view, lists stagger in, video clips play only while on screen. The hero poster is preloaded; every other video poster is set only as its clip comes near. Lighthouse on a phone profile (2026-11-16): home 95 performance, menu page 95, both 100 accessibility, best practices and SEO.
+### Named Rules
+**The Foil Is For Names Rule.** Gold foil lettering (the raster texture clipped to text, with padding so caps and descenders stay inside the gold) is reserved for names: the hero lines, poster verbs, dish names and the place. Section headings and captions stay steam cream. Foil is a raster from the kit ramp, never a CSS gradient.
 
-## Do and don't
+**The Label Row Rule.** Uppercase tracked Montserrat lives only in the top bar (nav, Sound, Menu tab) and the footer lockup artwork. Body copy, captions and links elsewhere are sentence case.
 
-- **Do** take every colour from the four kit colours; add a tint of one of them before adding anything new.
-- **Do** keep the veg / non-veg marks and chillies in their own colours.
-- **Do** use the kit SVG logos; never retype "Konso".
-- **Don't** bring back the room palette (brick, burgundy, Goa blue, bougainvillea, cognac) on the website; it belongs to the restaurant's interior.
-- **Don't** put small gold text on cream.
-- **Don't** animate layout or paint properties in the scroll scenes.
+## Layout
 
-## History
+A single full-bleed column of screen-height scenes over the fixed ground. The horizontal gutter is fluid (clamp(16px, 3.2vw, 48px)); vertical rhythm is measured in svh so each scene owns roughly one viewport: hero 100svh, posters 100svh, the line-up a pinned 100svh stage with a runway of 4 × 80svh (4 × 70svh on phones), the bar and Find us padded at 12svh / 8svh and 8svh / 6svh.
 
-The site began as a red plywood "hoarding" (Cabin East, October 2026), moved to the garden-decor room palette on 2026-10-29, and to the Konso brand kit on 2026-11-16. The old palette notes live in git history; the older rules at the end of `site.css` are overridden by `brandkit.css`, not deleted.
+- **Top bar:** a three-column grid (1fr auto 1fr): wordmark left, links centred, Sound and Menu right. Fixed, transparent over the hero, scrim after it.
+- **Hero:** the 16:9 clip centred at 96svh tall, the headline split above and below it, location line bottom-left and hours bottom-right at mid-height.
+- **Poster:** the clip fills the screen; one word and one caption sit left at max 40% width, vertically centred.
+- **The bar:** four glasses in a four-column grid, bottoms on one line (align end), max 1400px, captions centred under each.
+- **Find us:** lead line, the place name at full width, the menu link.
+
+One breakpoint, 820px. Below it: the nav links hide (Sound collapses to its equaliser, Menu stays), the hero clip widens to 200vw behind a centred headline and the hours line drops, posters move their word to the top and centre it with the clip in the lower 62%, the glasses go two by two, and Find us centres.
+
+## Elevation & Depth
+
+Flat: there is no box-shadow anywhere. Depth comes from light and layering instead: the ground's light pool, alpha masks that feather every photograph and clip into the ground (radial ellipses for centred subjects, a vertical 0-12-88-100% fade for full-bleed clips), and z-ordered cut-outs. In the line-up the dish sits in front of its name, ingredients burst behind the name, and "far" ingredients are smaller and at 55-60% opacity to read as distance.
+
+### Named Rules
+**The Feather, Don't Frame Rule.** A photograph never shows a rectangular edge on the ground: it is a cut-out with transparency, or it is masked to fade into the green.
+
+## Shapes
+
+Almost no geometry of its own; the silhouettes are the food. The only drawn shapes are the pill (999px) for the Menu tab and the Sound control, the 1.5px gold hover underline on nav links, the 3px equaliser bars with 2px ends, and a 2px-radius focus outline. No borders, no dividers, no cards.
+
+## Components
+
+### Buttons
+- **Menu tab (primary, the only one):** gold foil fill, bottle-green text, label-tab style, pill shape, 13px 24px padding. Hover: gold highlight and a 2px lift; active: scales to 0.96. Links to the revolving menu.
+- **Sound toggle (ghost):** cream label "Sound" beside four 3px equaliser bars at staggered rest heights (40/85/60/100%); 44px minimum target, pill shape. Pressed: the bars animate (1s alternate, staggered delays) and the music fades in to 0.7 volume; it pauses when the tab is hidden. Off until the visitor asks. On phones the word is visually hidden and only the bars show.
+
+### Navigation
+- **Top bar:** gold wordmark SVG (44-60px tall, 42px on phones) left; three label-style links centred, gap clamp(18px, 2.4vw, 40px). Hover turns the link gold highlight and draws a 1.5px gold underline from the left (0.45s). The bar takes the scrim after the hero. Anchor links scroll smoothly through Lenis.
+
+### Hero
+The Veo clip of a dumpling on chopsticks, mask-feathered into the ground, scales in from 1.08 and fades in on load; the two foil headline lines rise out of an overflow mask with a 0.15s stagger. A few cut-out ingredients drift at the edges, each with its own parallax speed and spin.
+
+### Poster
+One clip, one word, one caption: a full-screen Veo loop (masked top and bottom) slowly zooms from 1.14 to 1.0 across the scroll; a foil verb and an 18px gold-highlight caption naming the dish or drink. Clips load and play only near the viewport.
+
+### The Line-up (signature)
+One pinned 100svh stage on which four dishes take turns, its small cream heading anchored bottom-left. Each dish's foil name rises in, then the cut-out dish drops from above with a back-ease overshoot and a tilt, crossing the bottom of its name; six of its own ingredients burst outward and spin behind the name; then it slides down and fades as the next one lands, so the stage is never empty. Dishes with a clip hand the still over to the live clip in the same spot once the clip is playing. With reduced motion the stage unpins into a plain stack.
+
+### The Bar
+Four cut-out glasses at dish scale (clamp(240px, 46vh, 520px) tall, 30vh on phones), bottoms on one line, each named in Prata title below. Hover lifts a glass 10px and scales it 1.03. A single happy-hour line closes the section.
+
+### Find Us and Footer
+The place name in display-place foil links to the map; a gold-highlight "Open the revolving menu" link sits under it. The footer is the gold Konso lockup (wordmark with "Pan Asian Kitchen | Bar") centred at min(70vw, 880px) and a quiet-cream legal line, max 60ch.
+
+### Motion (applies to all components)
+One easing for everything, an expo-out curve (cubic-bezier(.16,1,.3,1)). Scroll effects measure positions once on load and resize and then write only transform and opacity (plus a visibility toggle for off-stage dishes) per frame, and skip the frame when the scroll has not moved. Entrances rise 28px and fade, staggered 80ms. Under `prefers-reduced-motion` transitions drop to near zero, entrances show at rest, clips do not autoplay and the line-up unpins.
+
+## Do's and Don'ts
+
+### Do:
+- **Do** keep every screen on the one fixed ground (ground.webp, ground-sm.webp on portrait screens) and let sections be transparent over it.
+- **Do** set names in Prata gold foil using the foil raster clipped to text, with the .14em / .1em paint-box padding so ascenders and descenders stay gold.
+- **Do** cut out dishes and drinks or feather them into the ground with an alpha mask; give drifting ingredients a near and a far size (far at 55-60% opacity).
+- **Do** animate with transform and opacity only, measure layout outside the scroll loop, load and play clips only near the viewport, and give every effect a reduced-motion state.
+- **Do** keep text at or above the measured contrast: steam cream, quiet cream and gold highlight all clear 7:1 on the brightest pool (#103E20).
+- **Do** keep tap targets at 44px or more (the Sound control is 44 × 44 minimum).
+
+### Don't:
+- **Don't** add a second gold solid (buttons, badges, bands): the Menu tab is the only one.
+- **Don't** give a section its own background colour or a cream panel; the room never changes.
+- **Don't** put a photograph in a rectangle, card or frame, and don't add box-shadows.
+- **Don't** fake foil with a CSS gradient or set foil on body copy or section headings.
+- **Don't** use uppercase tracked labels outside the top bar.
+- **Don't** show prices, booking prompts or menu cards; the page links out to the revolving menu instead.

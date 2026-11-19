@@ -3,6 +3,30 @@
 Public site for Konso (Pan Asian Kitchen | Bar), opening soon in Cavelossim, South Goa.
 Live at https://singhgenics.github.io/Konso/ (GitHub Pages, `main`, root).
 
+## The site (rebuilt 2026-11-19)
+
+`index.html` is hand-written now (no build step): `assets/v2/konso.css`, `assets/v2/konso.js`, images in `assets/v2/img`, cut-out dishes and ingredients in `assets/v2/cut`, clips in `assets/v2/video`, music in `assets/v2/audio`. **Do not run `src/build.mjs` or `src/patch-scenes.mjs`: they generate the old site and would overwrite this page.** The old full menu page `menu.html` stays in the repo so old links keep working, but nothing links to it; every menu link goes to the revolving menu (singhgenics.github.io/Garden/menu/table/).
+
+Owner's brief: short, not text heavy, the food does the talking; 5 foods and 4 drinks only; no prices; no restaurant renders (the room is not built yet); brand green, gold foil, Prata + Montserrat.
+
+Page: hero (dumpling clip, gold foil headline) → "Toss" (wok-fire clip, Konso Fever) → The line-up (Steamer for two, Bao Down, Konso Fever, K-Pop Wings: each drops in, settles, its ingredients burst out; Steamer and Bao hand over to a live clip once landed) → "Pour" (kokum sour clip) → the bar (4 drinks, glasses crossfade) → Right now at Konso (pick an hour, the dish changes) → Find us → footer lockup. Sound toggle plays a lounge loop (off until tapped).
+
+Motion rules: positions are measured on load/resize only; each frame writes transform and opacity only; no live blur. Measured 2026-11-19 with real wheel scrolling at 2x DPR: 60 fps, p99 16.8 ms, no dropped frames, desktop and phone. Reduced motion shows the same content without travel.
+
+## Making the pictures (src/v2)
+
+All in the Flow project **Konso Website v2** (id in `src/v2/PROJECT_ID`), nano-2.1, free.
+- `src/v2/run.sh [id]`: generates the stills (prompts in `jobs.txt`, `scenes.txt`, `style-dish.txt`, `style-drink.txt`; dish jobs use the old menu photo as the single reference). Takes land in `src/v2/raw` (git-ignored).
+- `src/v2/cut.py`: cuts a dish out of its green studio ground (rembg isnet + a "not the green ground" mask so plates and baskets stay) and bakes a soft contact shadow; `ing` mode splits the ingredient flat-lay into pieces. Needs a Python with `rembg[cpu]` and `scipy`.
+- `src/v2/vid.sh <id> <frame>`: Veo Lite loop (same start and end frame = seamless), ~10 credits; prompts in `vprompts.txt`. Steamer and Bao start frames are the cut-out on the ground image, so the clip matches the page.
+- `src/v2/ground.py`: the background (emerald light pool on bottle green with the brand wallpaper's paper grain). `src/v2/foiltex.py`: the gold foil texture for display type, from the kit's gold ramp.
+- Upscales: `gflow image upscale` only finds recent images in a busy project (older tiles are not loaded); 0.102.1 still fails on them. Clips were upscaled to 1080p with `gflow video upscale`.
+- Music: ElevenLabs Music v2.5 lounge instrumental (take A of two, both checked for vocals), level-matched into `assets/v2/audio/konso.mp3`.
+
+Pictures are styled renders of real menu dishes and say so in the footer. Replace them with real photos on the same green backdrop once the kitchen is cooking: each is one file.
+
+## Older notes (previous site)
+
 Static HTML/CSS/JS, no runtime build. `index.html` is generated; edit `src/template.html`.
 
 ## Rebuild
