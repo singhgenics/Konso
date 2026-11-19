@@ -1,6 +1,6 @@
 # Konso website
 
-Public site for Konso (Pan Asian Kitchen | Pub), opening soon in Cavelossim, South Goa.
+Public site for Konso (Pan Asian Kitchen | Bar), opening soon in Cavelossim, South Goa.
 Live at https://singhgenics.github.io/Konso/ (GitHub Pages, `main`, root).
 
 Static HTML/CSS/JS, no runtime build. `index.html` is generated; edit `src/template.html`.

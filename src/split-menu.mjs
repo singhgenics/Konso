@@ -19,7 +19,7 @@ home = home.replace('<a class="skip" href="menu.html">Skip to the menu</a>', '<a
 // the menu page: same head, rail, footer and scripts; rail section links point back to the home page
 let page = relink(html.slice(0, html.indexOf('<main id="top">'))) + '<main id="top" class="menu-page">\n' + menu + '\n' + html.slice(html.indexOf('</main>'));
 page = page
-  .replace(/<title>[^<]*<\/title>/, '<title>Menu · Konso · Pan Asian Kitchen | Pub</title>')
+  .replace(/<title>[^<]*<\/title>/, '<title>Menu · Konso · Pan Asian Kitchen | Bar</title>')
   .replace(/(<meta name="description" content=")[^"]*/, '$1The full Konso menu with prices: dim sum, bao, wok, mains, curries, desserts, beer, spirits, cocktails and zero-proof drinks')
   .replace('<a class="skip" href="menu.html">Skip to the menu</a>', '<a class="skip" href="#menu">Skip to the menu</a>')
   .replace('<a class="rail-logo" href="#top" aria-label="Konso, back to top"', '<a class="rail-logo" href="./" aria-label="Konso, home page"')

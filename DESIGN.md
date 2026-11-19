@@ -1,6 +1,6 @@
 ---
 name: Konso
-description: The pre-launch site for Konso (Pan Asian Kitchen | Pub, Cavelossim) in the Konso brand kit only, bottle green, gold foil and cream.
+description: The pre-launch site for Konso (Pan Asian Kitchen | Bar, Cavelossim) in the Konso brand kit only, bottle green, gold foil and cream.
 colors:
   bottle-green: "#051C0A"
   konso-green: "#0B2A14"
@@ -78,7 +78,7 @@ Only three things keep their own colours, on purpose: the green and brown veg / 
 
 - **Prata** for every heading and station word (STEAM, BAR, WOK, THE MENU), uppercase at display size, sentence case below.
 - **Montserrat** for reading text, labels (uppercase, tracked), buttons and prices. Prices use Montserrat digits even inside Prata headings, through the `PrataN` face (Prata's old-style figures read badly as prices).
-- The **wordmark is artwork**, never typed: `assets/brand/konso-wordmark-gold.svg` in the hero, the tightly cropped `konso-wordmark-gold-tight.svg` in the rail, and `konso-lockup-gold.svg` (with "Pan Asian Kitchen | Pub") in the footer.
+- The **wordmark is artwork**, never typed: `assets/brand/konso-wordmark-gold.svg` in the hero, the tightly cropped `konso-wordmark-gold-tight.svg` in the rail, and `konso-lockup-gold.svg` (with "Pan Asian Kitchen | Bar") in the footer.
 
 ## Page
 
