@@ -6,7 +6,8 @@
   const phone = () => innerWidth <= 820;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const ease = t => 1 - Math.pow(1 - t, 3);
-  if (reduce) root.classList.add('no-runway');
+  // Reduce Motion: keep the videos and soft fades, drop the travel (falls, spins, parallax, smooth scroll)
+  if (reduce) root.classList.add('gentle');
 
   /* Smooth scroll */
   let lenis = null;
@@ -79,16 +80,15 @@
       if (!v.poster && v.dataset.poster) v.poster = phone() && v.dataset.posterSm ? v.dataset.posterSm : v.dataset.poster;
       if (saveData) return;
       if (!v.src && v.dataset.src) { v.src = phone() && v.dataset.srcSm ? v.dataset.srcSm : v.dataset.src; }
-      if (!reduce) v.play().catch(() => {});
+      v.play().catch(() => {});
       v.closest('section')?.classList.add('is-in');
     } else { v.pause(); }
   }), { rootMargin: '100% 0px' });
   clips.forEach(v => io.observe(v));
   if (!phone() && heroMedia.dataset.poster) heroMedia.poster = heroMedia.dataset.poster;
-  if (heroMedia.dataset.src && !reduce && !saveData) { heroMedia.src = phone() ? heroMedia.dataset.srcSm : heroMedia.dataset.src; heroMedia.play().catch(() => {}); }
-  const heroIO = new IntersectionObserver(([e]) => { if (reduce || saveData) return; e.isIntersecting ? heroMedia.play().catch(() => {}) : heroMedia.pause(); });
+  if (heroMedia.dataset.src && !saveData) { heroMedia.src = phone() ? heroMedia.dataset.srcSm : heroMedia.dataset.src; heroMedia.play().catch(() => {}); }
+  const heroIO = new IntersectionObserver(([e]) => { if (saveData) return; e.isIntersecting ? heroMedia.play().catch(() => {}) : heroMedia.pause(); });
   heroIO.observe(hero);
-  if (reduce) heroMedia.removeAttribute('autoplay'), heroMedia.pause();
 
   /* Entrances: heading, then text, then picture */
   const riseSel = '.poster__word,.poster__cap,.pour__title,.glass,.pour__note';
@@ -116,7 +116,7 @@
   const PH = phone();
   const slotOf = y => ((y - M.drops.top + vh * 0.55) / Math.max(1, M.drops.h - vh + vh * 0.55)) * drops.length;
   const yOfSlot = seg => seg / drops.length * Math.max(1, M.drops.h - vh + vh * 0.55) + M.drops.top - vh * 0.55;
-  const dropTargets = y => { const seg = slotOf(y); drops.forEach((d, i) => { d.local = seg - i; d.tIn = d.local > -0.05 ? 1 : 0; d.tOut = (i < drops.length - 1 && d.local > 0.86) ? 1 : 0; }); };
+  const dropTargets = y => { const seg = slotOf(y); drops.forEach((d, i) => { d.local = seg - i; d.tIn = d.local > -0.05 ? 1 : 0; d.tOut = (i < drops.length - 1 && d.local > (reduce ? 0.95 : 0.86)) ? 1 : 0; }); };
   const dropStep = dt => {
     let moving = false;
     drops.forEach(d => {
@@ -129,15 +129,15 @@
       if (vis === 'hidden') return;
       const up = 1 - xin;                                       // 1 = still above the screen
       d.dish.style.opacity = (clamp(xin * 2) * (1 - xout)).toFixed(3);
-      d.dish.style.transform = `translate3d(0,${(up * -vh * 0.6 + xout * vh * 0.3).toFixed(1)}px,0) rotate(${(up * -14 + xout * 8).toFixed(2)}deg) scale(${(0.9 + 0.1 * Math.min(1, xin) - 0.08 * xout).toFixed(4)})`;
+      if (!reduce) d.dish.style.transform = `translate3d(0,${(up * -vh * 0.6 + xout * vh * 0.3).toFixed(1)}px,0) rotate(${(up * -14 + xout * 8).toFixed(2)}deg) scale(${(0.9 + 0.1 * Math.min(1, xin) - 0.08 * xout).toFixed(4)})`;
       d.word.style.opacity = (clamp(xin * 3) * (1 - xout)).toFixed(3);
-      d.word.style.transform = `translate3d(0,${(clamp(up) * 36 - xout * 28).toFixed(1)}px,0)`;
-      const b = ease(clamp((d.local - 0.1) / 0.7));            // the burst follows the scroll (parallax)
+      if (!reduce) d.word.style.transform = `translate3d(0,${(clamp(up) * 36 - xout * 28).toFixed(1)}px,0)`;
+      const b = reduce ? 1 : ease(clamp((d.local - 0.1) / 0.7));            // the burst follows the scroll (parallax)
       const R = Math.min(vw, vh * 1.3);
       d.bits.forEach(t => {
         const r = R * t.dist * (0.25 + 0.75 * b);
         const x = Math.cos(t.ang) * r * (PH ? 0.8 : 1.25), yy = Math.sin(t.ang) * r * 0.8 - b * vh * (t.far ? 0.03 : 0.08);
-        t.img.style.transform = `translate3d(${x.toFixed(1)}px,${yy.toFixed(1)}px,0) rotate(${(t.spin * b).toFixed(1)}deg) scale(${(0.5 + 0.5 * Math.min(1, b * 1.6)).toFixed(3)})`;
+        t.img.style.transform = `translate3d(${x.toFixed(1)}px,${yy.toFixed(1)}px,0) rotate(${(reduce ? 0 : t.spin * b).toFixed(1)}deg) scale(${(0.5 + 0.5 * Math.min(1, b * 1.6)).toFixed(3)})`;
         t.img.style.opacity = ((t.far ? 0.55 : 1) * clamp(xin * 2 - 0.6) * (1 - xout)).toFixed(3);
       });
       if (d.clip) {
@@ -175,14 +175,13 @@
     if (y !== lastY) {
       lastY = y;
       bar.classList.toggle('is-solid', y > M.hero * 0.45);
-      if (reduce) return;
-      if (y < M.hero * 1.2) heroMedia.style.translate = `0 ${(y * -0.18).toFixed(1)}px`;
+      if (!reduce && y < M.hero * 1.2) heroMedia.style.translate = `0 ${(y * -0.18).toFixed(1)}px`;
       if (inDrops) { warmClips(); dropTargets(y); springing = true; }
-      M.posters.forEach(P => { if (y > P.top - vh && y < P.top + P.h) { const q = clamp((y - P.top + vh) / (P.h + vh)); P.el.style.transform = `scale(${(1.14 - q * 0.14).toFixed(4)})`; } });
-      floats.forEach(f => { const rel = y + vh / 2 - f.top; if (Math.abs(rel) < vh * 1.4) f.el.style.transform = `translate3d(0,${(-rel * f.speed).toFixed(1)}px,0) rotate(${(rel / vh * f.spin).toFixed(1)}deg)`; });
+      if (!reduce) M.posters.forEach(P => { if (y > P.top - vh && y < P.top + P.h) { const q = clamp((y - P.top + vh) / (P.h + vh)); P.el.style.transform = `scale(${(1.14 - q * 0.14).toFixed(4)})`; } });
+      if (!reduce) floats.forEach(f => { const rel = y + vh / 2 - f.top; if (Math.abs(rel) < vh * 1.4) f.el.style.transform = `translate3d(0,${(-rel * f.speed).toFixed(1)}px,0) rotate(${(rel / vh * f.spin).toFixed(1)}deg)`; });
       clearTimeout(settleT); if (inDrops) settleT = setTimeout(settle, 220);
     }
-    if (springing && !reduce) springing = dropStep(dt);
+    if (springing) springing = dropStep(dt);
   };
 
   let ticking = false;
@@ -191,8 +190,7 @@
   addEventListener('load', measure);
   addEventListener('resize', () => { measure(); frame(); });
   measure();
-  if (reduce) { frame(); addEventListener('scroll', () => frame(), { passive: true }); }
-  else { wake(); if (!lenis) addEventListener('scroll', wake, { passive: true }); }
+  wake(); if (!lenis) addEventListener('scroll', wake, { passive: true });
 })();
 
 /* Music: the visitor turns it on; fades in and out */
