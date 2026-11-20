@@ -402,3 +402,7 @@ a,button,input,.tab,.sound{touch-action:manipulation}
   .poster__media{transform:none!important}
   .sound[aria-pressed=true] .sound__eq i{animation:none;transform:scaleY(.6)}
 }
+
+/* Find us: Cavelossim set smaller (2026-11-20) */
+.find__place{font-size:clamp(48px,8.4vw,150px)}
+@media (max-width:820px){.find__place,.find__place.foil{font-size:12vw}}
