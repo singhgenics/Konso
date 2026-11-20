@@ -66,8 +66,22 @@ def plate_aware(im, cut):
     k = max(8, w // 40)
     corners = np.concatenate([a[:k, :k].reshape(-1, 3), a[:k, -k:].reshape(-1, 3), a[-k:, :k].reshape(-1, 3), a[-k:, -k:].reshape(-1, 3)])
     bg = np.median(corners, axis=0)
-    dist = np.sqrt(((a - bg) ** 2).sum(-1))
-    col = dist > 70
+    # Ground light can fall off across the frame: compare each pixel with the ground NEAR it (normalised blur of
+    # the pixels the matte model calls background), so brighter patches of backdrop are not mistaken for the dish.
+    g0 = bg[1] - (bg[0] + bg[2]) / 2
+    m0 = ((np.asarray(cut)[:, :, 3] < 30) & ((a[..., 1] - (a[..., 0] + a[..., 2]) / 2) > 0.6 * g0)).astype(np.float32)
+    s = max(12, w // 12)
+    wsum = ndimage.gaussian_filter(m0, s)
+    local = np.stack([ndimage.gaussian_filter(a[..., c] * m0, s) for c in range(3)], -1) / np.maximum(wsum, 1e-3)[..., None]
+    local = np.where((wsum > 0.05)[..., None], local, bg)
+    dist = np.sqrt(((a - local) ** 2).sum(-1))
+    # a real cast shadow is the ground, only darker (same hue): never count it as dish; shadow() bakes a soft one
+    r = (a + 4) / (local + 4)
+    shade = (r.mean(-1) < 0.9) & ((r.max(-1) - r.min(-1)) < 0.35)
+    # the ground is strongly green; dark slate, cream rims and food are not, even when close in brightness
+    gdom = lambda c: c[..., 1] - (c[..., 0] + c[..., 2]) / 2
+    notgreen = (gdom(local) - gdom(a)) > 16
+    col = ((dist > 70) | notgreen) & ~shade
     col = ndimage.binary_opening(col, iterations=2)
     m = np.asarray(cut)[:, :, 3] > 128
     u = ndimage.binary_fill_holes(m | col)
