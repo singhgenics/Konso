@@ -66,7 +66,7 @@ for sid, inner in re.findall(r'<section class="sec[^"]*" id="(\w+)">(.*?)</secti
             cur['items'].insert(0, item) if not cur['items'] else cur['items'].append(item)
 
 FOOD = ['m-dim-sum-bao', 'm-from-the-wok', 'm-soups-salads', 'm-mains', 'm-something-sweet']
-DRINKS = ['m-beer', 'm-cocktails', 'm-zero-proof', 'm-whisky-vodka']
+DRINKS = ['m-beer', 'm-cocktails', 'm-zero-proof', 'm-whisky', 'm-vodka', 'm-wine']
 by = {s['id']: s for s in SECS}
 missing = [k for k in FOOD + DRINKS if k not in by] + [s['id'] for s in SECS if s['id'] not in FOOD + DRINKS]
 if missing: sys.exit(f'menu-sync: section names changed in build.py, update FOOD/DRINKS: {missing}')
@@ -74,9 +74,13 @@ if missing: sys.exit(f'menu-sync: section names changed in build.py, update FOOD
 # ---- photos: keep the website's own photo for a dish, else convert the picture-menu photo
 page = open(PAGE, encoding='utf-8').read()
 PHOTO = {html.unescape(a).lower(): s for s, a in re.findall(r'<img class="dish-img" src="(assets/menu/[\w-]+\.webp)" alt="([^"]+?), (?:plated|served)"', page)}
+# dishes renamed in build.py keep the photo they had under their old name
+RENAMED = {'pink panchayat': 'assets/menu/coconuthigh.webp', 'tingle all the way': 'assets/menu/sichuan.webp', 'yak attack': 'assets/menu/soju.webp',
+           'lychee lemon-gras': 'assets/menu/lychee.webp', 'tam-tam margarita': 'assets/menu/margarita.webp', 'somaek bomb': 'assets/menu/somaek.webp'}
 def photo(d):
     key = clean(d['name']).lower()
     if key in PHOTO: return PHOTO[key]
+    if key in RENAMED and os.path.exists(os.path.join(ROOT, RENAMED[key])): return RENAMED[key]
     if d.get('photo'):
         out = f'assets/menu/pm-{d["img"]}.webp'
         if not os.path.exists(os.path.join(ROOT, out)):
@@ -137,3 +141,71 @@ page = page[:a] + '\n' + new + '\n  ' + page[b:]
 open(PAGE, 'w', encoding='utf-8').write(page)
 n = sum(len(s['items']) for s in SECS)
 print(f'menu-sync: {len(SECS)} sections, {n} lines ({sum(1 for s in SECS for d in s["items"] if d["kind"]=="note")} deals) written to menu.html')
+
+# ---- the home page's menu (index.html, between the menu markers): two-column list, round thumbnails, prices
+#      Same data and photos as menu.html; thumbnails are 160 px squares cut from the dish photos.
+HOME = os.path.join(ROOT, 'index.html')
+THUMBS = os.path.join(ROOT, 'assets', 'menu', 'thumb')
+os.makedirs(THUMBS, exist_ok=True)
+def thumb(src):
+    name = os.path.splitext(os.path.basename(src))[0] + '.webp'
+    out = os.path.join(THUMBS, name)
+    if not os.path.exists(out):
+        im = Image.open(os.path.join(ROOT, src)).convert('RGB'); w, h = im.size; s = min(w, h)
+        im.crop(((w - s) // 2, (h - s) // 2, (w - s) // 2 + s, (h - s) // 2 + s)).resize((160, 160), Image.LANCZOS).save(out, 'WEBP', quality=78, method=6)
+    return 'assets/menu/thumb/' + name
+def rupee(s): return s   # no currency symbol, same rule as the picture menu
+def home_item(d):
+    if d['kind'] == 'note':
+        return f'<li class="mi mi--note"><p><strong>{E(d["title"])}</strong> {E(rupee(d["desc"]))}</p></li>'
+    name = clean(d['name']); img = photo(d)
+    pic = f'<img class="mi__img" src="{thumb(img)}" alt="" width="80" height="80" loading="lazy" decoding="async">' if img else '<span class="mi__img mi__img--k" aria-hidden="true"></span>'
+    desc, price = ns['split_price'](clean(d['desc']), clean(d.get('price', '')))
+    tag = f'<span class="mi__tag">{E("Goa" if d.get("tag") == "Konkan touch" else d["tag"])}</span>' if d.get('tag') else ''
+    one = price and ' · ' not in price and not re.search(r'[A-Za-z]{3}', price)
+    opts = ''
+    if price and not one:
+        parts = []
+        for x in price.split(' · '):
+            m = re.match(r'^(.*?)(\d[\d,]*(?: / \d[\d,]*)?)$', x.strip())
+            parts.append(f'<span>{E(m.group(1).strip().capitalize())} <b>{E(rupee(m.group(2)))}</b></span>' if m and m.group(1).strip() else f'<span><b>{E(rupee(x.strip()))}</b></span>')
+        opts = f'<p class="mi__opts">{"".join(parts)}</p>'
+    pr = f'<p class="mi__price">{E(rupee(price))}</p>' if one else ''
+    return (f'<li class="mi">{pic}<div class="mi__body"><div class="mi__top"><h4 class="mi__name">{E(name)}{marks(name)}</h4>{pr}</div>'
+            f'{tag}<p class="mi__desc">{E(desc)}</p>{opts}</div></li>')
+def home_sec(s):
+    lede = f'<p class="msec__lede">{E(s["lede"])}</p>' if s['lede'] else ''
+    return (f'<section class="msec" aria-labelledby="h{s["id"][1:]}"><header class="msec__head"><p class="label">{E(s["small"])}</p>'
+            f'<span class="orn" aria-hidden="true"></span><h3 id="h{s["id"][1:]}">{E(s["title"])}</h3>{lede}</header>'
+            f'<ul class="mlist">{"".join(home_item(d) for d in s["items"])}</ul></section>')
+def home_panel(pid, ids, first):
+    return (f'<div class="mpanel" id="mp-{pid}" role="tabpanel" aria-labelledby="mt-{pid}"{"" if first else " hidden"}>'
+            + ''.join(home_sec(by[i]) for i in ids) + '</div>')
+home = open(HOME, encoding='utf-8').read()
+A, B = '<!-- menu:start (written by src/menu-sync.py) -->', '<!-- menu:end -->'
+if A in home and B in home:
+    block = (f'{A}\n<div class="mtabs" role="tablist" aria-label="Menu">'
+             '<button class="mtab" role="tab" id="mt-food" aria-controls="mp-food" aria-selected="true" type="button">Food</button>'
+             '<button class="mtab" role="tab" id="mt-drinks" aria-controls="mp-drinks" aria-selected="false" tabindex="-1" type="button">Drinks</button></div>\n'
+             f'{home_panel("food", FOOD, True)}\n{home_panel("drinks", DRINKS, False)}\n{B}')
+    home = home[:home.index(A)] + block + home[home.index(B) + len(B):]
+    # prices shown elsewhere on the page (signature cards, bar glasses) follow the menu: data-dish="<name on the menu>"
+    PRICE = {}
+    for s in SECS:
+        for d in s['items']:
+            if d['kind'] == 'note':
+                m = re.match(r'^(.*?)\s*·\s*(\d[\d,]*)$', d['title'])
+                if m: PRICE[m.group(1).strip().lower()] = m.group(2)
+                continue
+            desc, price = ns['split_price'](clean(d['desc']), clean(d.get('price', '')))
+            nums = re.findall(r'\d[\d,]*', price)
+            if not nums: continue
+            single = ' · ' not in price and not re.search(r'[A-Za-z]{3}', price)
+            PRICE[clean(d['name']).lower()] = price if single else 'from ' + min(nums, key=lambda x: int(x.replace(',', '')))
+    def fill(m):
+        key = html.unescape(m.group(2)).lower()
+        if key not in PRICE: sys.exit(f'menu-sync: data-dish="{m.group(2)}" is not on the menu any more')
+        return f'{m.group(1)}{E(PRICE[key])}{m.group(3)}'
+    home = re.sub(r'(<(?:p|b)\b[^>]*data-dish="([^"]+)"[^>]*>)[^<]*(</(?:p|b)>)', fill, home)
+    open(HOME, 'w', encoding='utf-8').write(home)
+    print('menu-sync: home page menu written to index.html')

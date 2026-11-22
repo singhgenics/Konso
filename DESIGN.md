@@ -240,3 +240,8 @@ One easing for everything, an expo-out curve (cubic-bezier(.16,1,.3,1)). Scroll 
 - **Don't** fake foil with a CSS gradient or set foil on body copy or section headings.
 - **Don't** use uppercase tracked labels outside the top bar.
 - **Don't** show prices, booking prompts or menu cards; the page links out to the revolving menu instead.
+
+## Restyle, 2026-11-22
+Owner's references: the iFoods menu page (dark, small tracked gold labels with a diamond ornament, calm serif headings, two-column priced menu with round thumbnails) and SpiceRoute (cream bands with dark food cards), with the logo's green-on-cream. Smaller type throughout (headings 30-56px, Toss 56-108px).
+Order: info strip, sticky header, hero (words left, dumpling video right), cream "Our signatures" (4 dark cards; Steamer and Bao fade from still to their Veo loop), wok Toss video, the full menu (Food/Drinks tabs), the bar (kokum pour video, 4 glasses with prices), cream Visit (hours, Maps, green lockup), footer.
+The home menu and every `data-dish` price are written by `python3 src/menu-sync.py` from Garden/menu/build.py: run it after any menu change. No currency symbol (picture-menu rule).

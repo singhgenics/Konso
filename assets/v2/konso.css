@@ -1,408 +1,278 @@
-/* Konso, 2026-11-19: the dark green room; the food is the light. */
+/* Konso, 2026-11-22: dark green rooms with cream bands between them (logo colours), classic restaurant layout,
+   small gold labels with an ornament, calm serif headings, a full priced menu. */
 @font-face{font-family:"Prata";src:url("fonts/Prata-Regular.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"Montserrat";src:url("fonts/Montserrat.woff2") format("woff2");font-weight:100 900;font-display:swap} /* taste-skill-ignore: brand text face */
 
 :root{
-  --bg:#06180D;            /* deep bottle green, the ground at its edges */
-  --surface:#0B2A14;       /* Konso green */
-  --ink:#F2E8D2;           /* steam cream */
-  --muted:#CFC4A8;         /* cream, quieter; 9:1 on --bg */
-  --accent:#D89D3C;        /* gold foil */
-  --accent-hi:#F0BE62;
+  --bg:#06180D;            /* bottle green */
+  --bg-2:#041209;          /* strip and footer */
+  --surface:#0B2A14;       /* Konso green: cards */
+  --ink:#F2E8D2;           /* cream type on green */
+  --muted:#C9BFA4;         /* quieter cream, 8:1 on --bg */
+  --gold:#D89D3C;
+  --gold-hi:#F0BE62;
+  --line:rgba(216,157,60,.28);
+  --cream:#F7F1E3;         /* the logo's paper */
+  --cream-2:#EFE6D2;
+  --green-ink:#061C0E;     /* the logo's green */
+  --green-muted:#44503F;   /* 7:1 on --cream */
+  --gold-dark:#87591A;     /* gold that reads on cream, 5:1 */
   --display:"Prata",Georgia,serif;
   --text:"Montserrat","Helvetica Neue",Arial,sans-serif;
-  --s-hero:clamp(48px,6.4vw,104px);
-  --s-h2:clamp(40px,5vw,80px);
-  --s-h3:clamp(26px,2.4vw,36px);
-  --s-body:clamp(16px,1.15vw,18px);
-  --s-small:14px;
-  --gut:clamp(16px,3.2vw,48px);
+  --gut:clamp(16px,4vw,56px);
+  --max:1240px;
   --ease:cubic-bezier(.23,1,.32,1);
+  --orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='76' height='10' viewBox='0 0 76 10'%3E%3Cg fill='none' stroke='%23D89D3C'%3E%3Cpath d='M0 5h26M50 5h26'/%3E%3Cpath d='M31 5l3.5-3.5L38 5l-3.5 3.5zM38 5l3.5-3.5L45 5l-3.5 3.5z'/%3E%3C/g%3E%3Ccircle cx='28.5' cy='5' r='1' fill='%23D89D3C'/%3E%3Ccircle cx='47.5' cy='5' r='1' fill='%23D89D3C'/%3E%3C/svg%3E");
+  --orn-dark:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='76' height='10' viewBox='0 0 76 10'%3E%3Cg fill='none' stroke='%2387591A'%3E%3Cpath d='M0 5h26M50 5h26'/%3E%3Cpath d='M31 5l3.5-3.5L38 5l-3.5 3.5zM38 5l3.5-3.5L45 5l-3.5 3.5z'/%3E%3C/g%3E%3Ccircle cx='28.5' cy='5' r='1' fill='%2387591A'/%3E%3Ccircle cx='47.5' cy='5' r='1' fill='%2387591A'/%3E%3C/svg%3E");
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scrollbar-color:var(--accent) var(--bg);overflow-x:clip}
+html{-webkit-text-size-adjust:100%;scrollbar-color:var(--gold) var(--bg);overflow-x:clip;-webkit-tap-highlight-color:transparent}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--s-body)/1.6 var(--text);-webkit-font-smoothing:antialiased;overflow-x:clip}
-/* The ground: emerald light pool on bottle green with the brand paper grain, fixed like the light in a room */
+@media (prefers-reduced-motion:no-preference){html:not(.lenis){scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15.5px/1.7 var(--text);-webkit-font-smoothing:antialiased;overflow-x:clip}
 body::before{content:"";position:fixed;inset:0;z-index:-10;background:var(--bg) url("img/ground.webp") center/cover no-repeat;pointer-events:none}
 @media (max-aspect-ratio:4/5){body::before{background-image:url("img/ground-sm.webp")}}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
-::selection{background:var(--accent);color:var(--bg)}
-:focus-visible{outline:2px solid var(--accent-hi);outline-offset:4px;border-radius:2px}
-::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2b3f22;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
-h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;letter-spacing:-.02em;line-height:1;text-wrap:balance}
-p{margin:0}
-.skip{position:absolute;left:-999px;top:8px;background:var(--accent);color:var(--bg);padding:10px 14px;z-index:99}
+a,button{touch-action:manipulation}
+::selection{background:var(--gold);color:var(--bg)}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:2px}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;margin:0;line-height:1.12;letter-spacing:-.01em;text-wrap:balance;font-kerning:normal}
+p,dl,dd,figure{margin:0}
+.skip{position:absolute;left:-999px;top:8px;background:var(--gold);color:var(--bg);padding:10px 14px;z-index:99}
 .skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* Top bar: wordmark, four links, the one gold tab */
-.bar{position:fixed;inset:0 0 auto;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px var(--gut);pointer-events:none}
-.bar>*{pointer-events:auto}
-.bar__mark img{height:clamp(44px,4vw,60px);width:auto}
-.bar__links{display:flex;gap:clamp(18px,2.4vw,40px);font-size:15px;font-weight:500}
-.bar__links a{text-decoration:none;padding:10px 0;position:relative;transition:color .3s var(--ease)}
-.bar__links a::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:1.5px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
-.bar__links a:hover{color:var(--accent-hi)}.bar__links a:hover::after{transform:scaleX(1)}
-.tab{justify-self:end;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:600;font-size:15px;padding:12px 22px;border-radius:999px;transition:transform .35s var(--ease),background .3s}
-.tab:hover{background:var(--accent-hi);transform:translateY(-2px)}
-.tab:active{transform:scale(.96)}
-.bar.is-solid{background:rgba(6,24,13,.92)}
-@media (max-width:820px){.bar{grid-template-columns:1fr auto;padding:12px 16px}.bar__links{display:none}.bar__mark img{height:42px}}
+/* Shared pieces: tracked gold label, the little ornament, buttons, gold foil type */
+.label{font-size:11.5px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)} /* taste-skill-ignore: the brand kit's label style */
+.label span{opacity:.6;margin:0 .3em}
+.orn{display:block;width:76px;height:10px;margin:12px auto 14px;background:var(--orn) center/contain no-repeat}
+.orn--left{margin-left:0}
+.light .label{color:var(--gold-dark)}
+.light .orn{background-image:var(--orn-dark)}
+.head{text-align:center;max-width:var(--max);margin:0 auto}
+.head h2{font-size:clamp(30px,3vw,44px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 26px;background:var(--gold);color:var(--bg);border:1px solid var(--gold);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-radius:2px;transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .16s var(--ease)} /* taste-skill-ignore: the brand kit's label style */
+.btn:hover{background:var(--gold-hi);border-color:var(--gold-hi)}
+.btn:active{transform:scale(.97)}
+.btn--line{background:transparent;color:var(--gold-hi)}
+.btn--line:hover{background:var(--gold);color:var(--bg)}
+.btn--green{background:var(--green-ink);border-color:var(--green-ink);color:var(--cream)}
+.btn--green:hover{background:#163A22;border-color:#163A22}
+.foil{background:#D89D3C url("img/foil.webp") center/cover;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;padding:.12em .04em .08em;margin:-.12em -.04em -.08em} /* taste-skill-ignore: gold foil lettering is the brand wordmark treatment (raster foil, not a gradient) */
 
-/* Hero: the opening look, headline split around the dumpling */
-.hero{position:relative;height:100svh;min-height:620px;display:grid;place-items:center;overflow:hidden}
-.hero__stage{position:absolute;inset:0;display:grid;place-items:center}
-.hero__media{height:96svh;width:auto;max-width:none;aspect-ratio:16/9;object-fit:cover;
-  -webkit-mask-image:radial-gradient(ellipse 46% 52% at 50% 52%,#000 58%,transparent 100%); /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-          mask-image:radial-gradient(ellipse 46% 52% at 50% 52%,#000 58%,transparent 100%); /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-  transform:scale(1.08);opacity:0;transition:transform 2.4s var(--ease),opacity 1.4s var(--ease)}
-.is-ready .hero__media{transform:scale(1);opacity:1}
-.hero__title{position:absolute;inset:0;font-size:var(--s-hero);line-height:.95;text-align:center;z-index:2}
-.hero__line{position:absolute;left:0;right:0;display:block;padding:0 var(--gut)}
-.hero__line--a{top:15svh}
-.hero__line--b{top:56svh}
-.hero__line>span{display:inline-block}
-.hero__left,.hero__right{position:absolute;top:50svh;font-size:var(--s-body);max-width:16em;z-index:2}
-.hero__left{left:var(--gut)}
-.hero__right{right:var(--gut);text-align:right}
-@media (max-width:820px){
-  .hero{min-height:560px}
-  .hero__stage{display:block}
-  .hero__media{position:absolute;height:auto;width:200vw;left:50%;top:30svh;margin-left:-100vw}
-  .hero__line--a{top:15svh}.hero__line--b{top:66svh}
-  .hero__title{font-size:clamp(40px,11vw,64px)}
-  .hero__left{top:auto;bottom:6svh;left:16px;right:16px;max-width:none;text-align:center}
-  .hero__right{display:none}
-}
-
-/* The line-up: one dish per screen. It drops in and settles; its ingredients burst out around it. */
-.drops{position:relative;padding-top:20svh}
-.drops__title{font-size:var(--s-h2);padding:0 var(--gut);position:relative;z-index:2}
-.drop{position:relative;height:190svh}
-.drop:first-of-type{margin-top:-6svh}
-.drop__stage{position:sticky;top:0;height:100svh;display:grid;place-items:center;overflow:hidden;contain:layout paint}
-.drop__word{position:absolute;inset:auto var(--gut);top:29%;transform:translate3d(0,-50%,0);text-align:center;font-size:clamp(64px,11.5vw,200px);line-height:.88;letter-spacing:-.03em;color:var(--ink);opacity:.92;z-index:1;will-change:transform,opacity;pointer-events:none}
-.drop__dish{position:relative;z-index:3;margin-top:22vh;width:min(60vh,48vw);height:auto;will-change:transform,opacity;backface-visibility:hidden}
-.drop__burst{position:absolute;inset:0;z-index:2;pointer-events:none}
-.drop__burst img{position:absolute;left:50%;top:50%;width:var(--sz);height:auto;margin:calc(var(--sz) / -2) 0 0 calc(var(--sz) / -2);will-change:transform,opacity;backface-visibility:hidden}
-.drop__burst img.front{z-index:4}
-@media (max-width:820px){.drop{height:160svh}.drop__dish{width:84vw;margin-top:16vh}.drop__word{top:30%}.drop__word{font-size:clamp(52px,17vw,96px)}}
-.no-runway .drop{height:auto}
-.no-runway .drop__stage{position:relative;height:auto;padding:10svh 0;display:grid;gap:4svh}
-.no-runway .drop__word{position:static;transform:none}
-
-/* The bar: sticky glass, active list */
-.pour{display:grid;grid-template-columns:5fr 1fr 5fr 1fr;gap:0;padding:22svh var(--gut) 18svh;align-items:start} /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-.pour__note{margin-top:40px;color:var(--ink)}
-@media (max-width:820px){
-  .pour{grid-template-columns:1fr;padding:14svh 16px 10svh}
-}
-
-/* Finale: the plates turn as the page scrolls, like the revolving table */
-.spice{position:absolute;inset:0;pointer-events:none;z-index:2}
-.spice img{position:absolute;width:var(--sz);height:auto;left:var(--l);top:var(--t);will-change:transform;opacity:var(--lit,1)}
-.hero .spice{z-index:1}
-
-
-/* Right now: pick an hour, the dish changes */
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;max-width:420px;height:44px;background:transparent;margin:6px 0 0;cursor:pointer}
-input[type=range]::-webkit-slider-runnable-track{height:4px;background:#2b3f22;border-radius:4px}
-input[type=range]::-moz-range-track{height:4px;background:#2b3f22;border-radius:4px}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--accent);margin-top:-12px;transition:transform .2s var(--ease)}
-input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:var(--accent)}
-input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
-
-
-/* Find us: the place as display type */
-.find{position:relative;min-height:92svh;display:grid;grid-template-rows:1fr auto auto;padding:12svh var(--gut) 8svh;background:var(--ink);color:var(--bg)}
-.find__lead{font-size:clamp(20px,1.6vw,24px);max-width:22em}
-.find__place{font-size:clamp(64px,15.4vw,260px);line-height:.9;letter-spacing:-.03em;margin:6svh 0 4svh}
-.find__place a{text-decoration:none;transition:color .4s var(--ease)}
-.find__place a:hover{color:#8a5a12}
-@media (max-width:820px){.find{min-height:86svh;padding:10svh 16px 6svh}.find__place{font-size:16.5vw}}
-
-/* Footer: the garden photograph is the footer */
-.foot{position:relative;height:100svh;min-height:560px;overflow:hidden;display:grid;grid-template-rows:auto 1fr auto auto;padding:28px var(--gut) 24px;place-items:center stretch}
-.foot__lockup{grid-row:2;align-self:center;width:min(70vw,880px);height:auto;margin:0 auto}
-.foot__legal{grid-row:4;font-size:13px;color:var(--muted);text-align:center}
-@media (max-width:820px){.foot{height:88svh}}
-
-/* Entrances: parts of each section rise in, staggered. Content is visible if the script never runs. */
-.js [data-rise]{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform 1.1s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
-.js [data-rise].in{opacity:1;transform:none}
-.js .hero__line>span{transform:translateY(60%);opacity:0;transition:transform .9s var(--ease),opacity .6s}
-.js .is-ready .hero__line>span{transform:none;opacity:1}
-.js .is-ready .hero__line--b>span{transition-delay:.15s}
-.hero__line{overflow:hidden;padding-bottom:.08em}
-
-
-/* Action posters: one moment, one word */
-.poster{position:relative;height:100svh;min-height:560px;overflow:hidden;display:grid;align-content:center;padding:0 var(--gut)}
-.poster__media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;
-  -webkit-mask-image:linear-gradient(#0000,#000 12%,#000 88%,#0000);mask-image:linear-gradient(#0000,#000 12%,#000 88%,#0000); /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-  transform:scale(var(--zoom,1.08));will-change:transform}
-.poster__word{font-size:clamp(88px,15vw,240px);line-height:.85;letter-spacing:-.03em;max-width:40%}
-.poster__cap{margin-top:28px;font-size:var(--s-body);color:var(--ink)}
-@media (max-width:820px){
-  .poster{align-content:start;padding-top:14svh}
-  .poster__media{top:auto;bottom:0;height:62%;object-position:70% 50%}
-  .poster__word{font-size:26vw;max-width:none}
-}
-
-/* Sound: off until asked */
-.bar__end{justify-self:end;display:flex;align-items:center;gap:10px}
-.bar__end .tab{justify-self:auto}
-.sound{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 14px;min-height:24px;font-size:15px;font-weight:500;border-radius:999px;transition:color .3s var(--ease)}
-.sound:hover{color:var(--accent-hi)}
-.sound:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
-.sound__eq{display:flex;align-items:flex-end;gap:3px;height:16px}
-.sound__eq i{display:block;width:3px;height:100%;background:currentColor;border-radius:2px;transform-origin:bottom;transition:transform .3s var(--ease-out)}
+/* Info strip and header */
+.strip{display:flex;justify-content:space-between;gap:24px;padding:8px var(--gut);background:var(--bg-2);font-size:12px;color:var(--muted);letter-spacing:.04em;border-bottom:1px solid rgba(216,157,60,.14)}
+.strip p:first-child{display:flex;gap:28px}
+.strip__end{color:var(--gold)}
+.bar{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:14px var(--gut);background:rgba(6,24,13,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s ease}
+.bar.is-solid{border-bottom-color:rgba(216,157,60,.16)}
+.bar__mark img{height:34px;width:auto}
+.bar__links{display:flex;gap:clamp(18px,2.6vw,40px);font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase} /* taste-skill-ignore: the brand kit's label style */
+.bar__links a{text-decoration:none;padding:10px 0;position:relative;transition:color .2s ease}
+.bar__links a::after{content:"";position:absolute;left:0;right:.22em;bottom:4px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.bar__links a:hover{color:var(--gold-hi)}
+.bar__links a:hover::after{transform:scaleX(1)}
+.bar__end{justify-self:end;display:flex;align-items:center;gap:8px}
+.bar__end .btn{min-height:40px;padding:0 18px;font-size:11px}
+.sound{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;min-width:44px;padding:0 10px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;transition:color .2s ease} /* taste-skill-ignore: the brand kit's label style */
+.sound:hover{color:var(--gold-hi)}
+.sound:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.sound__eq{display:flex;align-items:flex-end;gap:3px;height:14px}
+.sound__eq i{display:block;width:2.5px;height:100%;background:currentColor;border-radius:2px;transform-origin:bottom}
+.sound__eq i:nth-child(1){transform:scaleY(.4)}.sound__eq i:nth-child(2){transform:scaleY(.85)}.sound__eq i:nth-child(3){transform:scaleY(.6)}.sound__eq i:nth-child(4){transform:scaleY(1)}
 .sound[aria-pressed=true] .sound__eq i{animation:eq 1s ease-in-out infinite alternate}
 .sound[aria-pressed=true] .sound__eq i:nth-child(2){animation-delay:-.4s}
 .sound[aria-pressed=true] .sound__eq i:nth-child(3){animation-delay:-.7s}
 .sound[aria-pressed=true] .sound__eq i:nth-child(4){animation-delay:-.2s}
 @keyframes eq{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
-@media (max-width:820px){.sound__label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}}
 
-/* Konso's own bar, full width, before the drinks */ /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-.pour{padding-top:6svh}
+/* Hero: words left, the dumpling right */
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:clamp(16px,3vw,48px);max-width:1440px;margin:0 auto;min-height:min(calc(100svh - 108px),860px);padding:clamp(32px,5vh,64px) var(--gut)}
+.hero__title{font-size:clamp(34px,3.7vw,56px);line-height:1.08;max-width:13em}
+.hero__lede{margin-top:20px;max-width:30em;color:var(--muted);font-size:16px}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero__pic{position:relative;align-self:stretch;display:grid;place-items:center}
+.hero__media{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 58%,transparent 100%); /* taste-skill-ignore: alpha mask feathers the photo into the ground */
+          mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 58%,transparent 100%);
+  transform:scale(1.04);transition:transform 1.6s var(--ease)}
+.is-ready .hero__media{transform:none}
 
-/* Type, from the brand kit: Prata display in gold foil, Montserrat labels tracked like the lockup */
-h1,h2,h3,.drop__word,.poster__word,.find__place{font-feature-settings:"kern","liga";text-rendering:optimizeLegibility;font-kerning:normal}
-.foil{background:#D89D3C url("img/foil.webp") center/cover;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent} /* taste-skill-ignore: gold foil lettering is the brand wordmark treatment (raster foil, not a gradient) */
-.hero__title{font-size:clamp(52px,7vw,120px);letter-spacing:-.025em}
-.hero__line>span{padding-bottom:.06em}
-.drop__word,.poster__word{letter-spacing:-.03em}
-.bar__links{font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase} /* taste-skill-ignore: the brand kit's label style */
-.tab{font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:13px 24px} /* taste-skill-ignore: the brand kit's label style */
-.sound{font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase} /* taste-skill-ignore: the brand kit's label style */
-.poster__cap,.foot__top,.find__right{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-hi)} /* taste-skill-ignore: the brand kit's label style */
-.hero__left,.hero__right{font-size:15px;line-height:1.7;letter-spacing:.01em}
-body{line-height:1.65}
-.drops__title,.pour__list h2,.hour__text h2{letter-spacing:-.02em}
-.hero__line>span{background:#D89D3C url("img/foil.webp") center/cover;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent} /* taste-skill-ignore: gold foil lettering is the brand wordmark treatment (raster foil, not a gradient) */
-/* foil type: pad the paint box so tall caps and descenders sit inside the gold */
-.foil,.hero__line>span{padding:.14em .04em .1em;margin:-.14em -.04em -.1em}
-.drop__word.foil{padding:.14em .04em .1em;margin:0}
-/* the dish lands as a still, then comes alive as its clip in the same spot */
-.drop__media{position:relative;z-index:3;margin-top:22vh;will-change:transform,opacity;backface-visibility:hidden}
-.drop__media .drop__dish{margin:0;will-change:auto}
-.drop__clip{position:absolute;left:50%;top:50%;width:252.6%;height:auto;aspect-ratio:16/9;transform:translate(-50%,-55.6%);opacity:0;transition:opacity .9s var(--ease);pointer-events:none;
-  -webkit-mask-image:radial-gradient(ellipse 34% 44% at 50% 55%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 34% 44% at 50% 55%,#000 55%,transparent 100%)} /* taste-skill-ignore: alpha mask feathers the clip into the ground */
-.drop__media.is-live .drop__clip{opacity:1}
-.drop__media.is-live .drop__dish{opacity:0!important;transition:opacity .9s var(--ease)}
-@media (max-width:820px){.drop__media{margin-top:16vh}}
-/* ingredients pass behind the gold names, never over them */
-.drop__burst{z-index:0}
-.drop__word{z-index:1}
-.drop__word{z-index:5}
-.drop__media{z-index:6}
+/* Cream bands */
+.light{background:var(--cream);color:var(--green-ink);color-scheme:light}
+.light h2,.light h3{color:var(--green-ink)}
 
-/* gate fixes: name sits in flow above its dish (never under it); captions readable; tighter find panel */
-.drop__stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1vh}
-.drop__word{position:relative;inset:auto;top:auto;transform:none;max-width:92vw}
-.drop__media,.drop__media.drop__media{margin-top:0}
-.drop__dish{width:min(54vh,46vw)}
-@media (max-width:820px){.drop__dish{width:80vw}.drop__word{font-size:clamp(48px,15vw,88px)}}
-.poster__cap{font-size:18px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--accent-hi)}
-.find{min-height:0;grid-template-rows:auto auto auto;padding:16svh var(--gut) 10svh}
-.find__place{margin:4svh 0 6svh}
-.foot__legal{max-width:60ch;margin:0 auto}
-@media (max-width:820px){.hero__title{font-size:clamp(34px,10vw,44px)}}
+/* Signatures: four dark cards on cream */
+.sig{padding:clamp(64px,10vh,112px) var(--gut)}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px);max-width:var(--max);margin:clamp(32px,5vh,52px) auto 0}
+.card{background:var(--surface);color:var(--ink);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(6,28,14,.06),0 18px 40px -24px rgba(6,28,14,.45);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.card__pic{position:relative;aspect-ratio:1/1;overflow:hidden}
+.card__pic img,.card__pic video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card__pic video{opacity:0;transition:opacity .9s var(--ease)}
+.card__pic::after{content:"";position:absolute;inset:auto 0 0;height:34%;background:linear-gradient(transparent,var(--surface));pointer-events:none}
+.card.is-live .card__pic video{opacity:1}
+.card__body{display:flex;flex-direction:column;gap:8px;padding:4px 20px 22px;flex:1}
+.card h3{font-size:21px;color:var(--ink)}
+.card__body p{font-size:13.5px;line-height:1.6;color:var(--muted)}
+.card__body .card__price{margin-top:auto;padding-top:6px;font-size:15px;font-weight:600;color:var(--gold-hi);letter-spacing:.02em}
+@media (hover:hover) and (pointer:fine){.card:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(6,28,14,.06),0 26px 50px -24px rgba(6,28,14,.55)}}
 
-/* Find us on the green ground: no cream panel */
-.find{background:transparent;color:var(--ink)}
-.find__place a:hover{color:inherit;opacity:.85}
-@media (max-width:820px){.find__place{font-size:14.6vw}}
-.drop__media{z-index:2}
-.foot__legal,.hour__label{font-size:14px}
-.foot{height:auto;min-height:72svh;row-gap:6svh}
-.hero__left,.hero__right{font-size:16px}
-.pour__note{font-size:16px}
-.foot__legal{font-size:15px}
-.drop{height:165svh}
-@media (max-width:820px){.drop{height:150svh}}
-/* hit-testing: the headline box lets the video through; only the lines take hits */
-.hero__title{pointer-events:none}
-.hero__line>span{pointer-events:auto}
-.poster{isolation:isolate}
-.poster__media{z-index:0}
-.poster__word,.poster__cap{position:relative;z-index:1}
+/* The wok: one full-width moment */
+.poster{position:relative;isolation:isolate;min-height:min(88svh,820px);display:grid;align-content:center;padding:0 var(--gut);overflow:hidden}
+.poster__media{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover;
+  -webkit-mask-image:linear-gradient(#0000,#000 10%,#000 90%,#0000);mask-image:linear-gradient(#0000,#000 10%,#000 90%,#0000)} /* taste-skill-ignore: alpha mask feathers the photo into the ground */
+.poster__text{max-width:min(38%,460px)}
+.poster__word{font-size:clamp(56px,7vw,108px);line-height:.95}
+.poster__cap{margin-top:18px;font-size:15.5px;color:var(--ink)}
 
-/* Review fixes, 2026-11-19 */
-/* the line-up: the dish is the hero of its screen and crosses the bottom of its gold name */
-.drop{height:132svh}
-@media (max-width:820px){.drop{height:125svh}}
-.drop__stage{gap:0}
-.drop__word{z-index:1}
-.drop__media{z-index:6;margin-top:calc(-0.32 * clamp(64px,11.5vw,200px))}
-.drop__dish{width:min(64vh,56vw)}
-@media (max-width:820px){.drop__dish{width:92vw}.drop__media{margin-top:calc(-0.3 * clamp(48px,15vw,88px))}}
+/* The menu: iFoods-style two-column list */
+.menu{padding:clamp(72px,11vh,120px) var(--gut) clamp(56px,8vh,96px)}
+.mtabs{display:flex;justify-content:center;gap:6px;margin:28px auto 0}
+.mtab{all:unset;cursor:pointer;position:relative;padding:12px 22px;min-height:20px;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);transition:color .2s ease} /* taste-skill-ignore: the brand kit's label style */
+.mtab::after{content:"";position:absolute;left:22px;right:calc(22px + .24em);bottom:4px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .35s var(--ease)}
+.mtab[aria-selected=true]{color:var(--gold-hi)}
+.mtab[aria-selected=true]::after{transform:scaleX(1)}
+.mtab:hover{color:var(--ink)}
+.mtab:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.mpanel{max-width:1140px;margin:0 auto}
+.msec{margin-top:clamp(52px,8vh,84px)}
+.msec__head{text-align:center}
+.msec__head .label{font-size:11px;letter-spacing:.26em}
+.msec__head h3{font-size:clamp(26px,2.4vw,34px)}
+.msec__lede{margin-top:6px;font-size:13.5px;color:var(--muted)}
+.mlist{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(32px,5vw,72px);
+  background:linear-gradient(to right,transparent calc(50% - .5px),var(--line) calc(50% - .5px),var(--line) calc(50% + .5px),transparent calc(50% + .5px))}
+.mi{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;align-items:start;padding:14px 0}
+.mi__img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--surface)}
+.mi__img--k{background:var(--surface) url("brand/konso-monogram-K-gold.svg") center/46% no-repeat}
+.mi__top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.mi__name{font-size:17px;line-height:1.3;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px}
+.mi__price{font-size:15px;font-weight:600;color:var(--gold-hi);white-space:nowrap;font-variant-numeric:tabular-nums}
+.mi__tag{display:inline-block;margin-top:5px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)} /* taste-skill-ignore: the brand kit's label style */
+.mi__desc{margin-top:4px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.mi__opts{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:6px;font-size:13px;color:var(--muted)}
+.mi__opts b{color:var(--gold-hi);font-weight:600;font-variant-numeric:tabular-nums}
+.mi--note{grid-column:1/-1;display:block;margin:10px 0;padding:12px 18px;border:1px solid var(--line);border-radius:10px;background:rgba(11,42,20,.92);text-align:center;font-size:13.5px;color:var(--muted)}
+.mi--note strong{font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold-hi);margin-right:6px}
+.diet{display:inline-block;width:11px;height:11px;border:1.5px solid;border-radius:2px;vertical-align:-1px;position:relative;flex:none}
+.diet::after{content:"";position:absolute;inset:2px;border-radius:50%;background:currentColor}
+.diet-veg{color:#4CAF5A}
+.diet-nonveg{color:#C0562E}
+.diet-both{color:var(--gold)}
+.heat{display:inline-flex;gap:1px;flex:none}
+.heat svg{width:8px;height:11px;fill:#E25A3A}
+.menu__foot{max-width:1140px;margin:56px auto 0;text-align:center;font-size:13px;color:var(--muted)}
+.menu__foot .diet{margin:0 3px 0 8px}
+.menu__foot a{color:var(--gold-hi)}
 
-/* the bar: four lit glasses in a line, staggered like a back bar */
-.pour{display:block;padding:20svh var(--gut) 16svh;text-align:center}
-.pour__title{font-size:var(--s-h2);margin-bottom:6svh}
-.glasses{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.6vw,28px);align-items:end;max-width:1500px;margin:0 auto}
-.glass{margin:0;display:grid;gap:14px;justify-items:center}
-.glass:nth-child(even){transform:translateY(5vh)}
-.glass img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;
-  -webkit-mask-image:radial-gradient(ellipse 48% 50% at 50% 52%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 48% 50% at 50% 52%,#000 60%,transparent 100%); /* taste-skill-ignore: alpha mask feathers the photo into the ground */
-  transition:transform .8s var(--ease)}
-.glass:hover img{transform:translateY(-10px) scale(1.03)}
-.glass figcaption{font-family:var(--display);font-size:clamp(20px,1.7vw,26px);line-height:1.2;max-width:14ch}
-.js .glass[data-rise]{transform:translateY(40px)}
-.js .glass[data-rise].in:nth-child(even){transform:translateY(5vh)}
-.pour__note{margin-top:10svh;font-size:18px}
-@media (max-width:820px){.glasses{grid-template-columns:1fr 1fr;row-gap:5vh}.glass:nth-child(even){transform:translateY(4vh)}.glass figcaption{font-size:20px}}
+/* The bar */
+.barsec{padding:clamp(64px,10vh,112px) var(--gut);border-top:1px solid rgba(216,157,60,.12)}
+.barsec__top{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(32px,5vw,72px);align-items:center;max-width:var(--max);margin:0 auto}
+.barsec__pic{border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:var(--surface)}
+.barsec__media{width:100%;height:100%;object-fit:cover}
+.barsec__text h2{font-size:clamp(30px,3vw,44px)}
+.barsec__text p{margin-top:16px;color:var(--muted);max-width:32em}
+.barsec__text .barsec__hh{color:var(--gold-hi);font-weight:500}
+.barsec__text .btn{margin-top:28px}
+.glasses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,32px);align-items:end;max-width:var(--max);margin:clamp(48px,8vh,88px) auto 0}
+.glass{display:grid;gap:12px;justify-items:center;text-align:center}
+.glass img{width:auto;max-width:100%;height:clamp(200px,32vh,340px);object-fit:contain;transition:transform .6s var(--ease)}
+.glass figcaption{font-family:var(--display);font-size:17px;line-height:1.3}
+.glass figcaption b{display:block;margin-top:4px;font:600 14px var(--text);color:var(--gold-hi)}
+@media (hover:hover) and (pointer:fine){.glass:hover img{transform:translateY(-8px)}}
 
-/* sound: equaliser bars at rest are staggered, the control is a 44px target */
-.sound{min-height:44px;min-width:44px;justify-content:center;padding:0 12px}
-.sound__eq{height:18px}
-.sound__eq i:nth-child(1){transform:scaleY(.4)}.sound__eq i:nth-child(2){transform:scaleY(.85)}.sound__eq i:nth-child(3){transform:scaleY(.6)}.sound__eq i:nth-child(4){transform:scaleY(1)}
-.drop__clip{max-width:none}
-.drop__burst{z-index:0}
-.drop__word{z-index:5}
-.drop__media{z-index:6}
+/* Visit: cream, with the green lockup */
+.find{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center;padding:clamp(64px,10vh,112px) max(var(--gut),calc((100vw - var(--max)) / 2))}
+.find h2{font-size:clamp(30px,3vw,44px)}
+.find__text>p:not(.label){margin-top:14px;color:var(--green-muted);font-size:16px}
+.find__hours{display:grid;gap:0;margin:28px 0 32px;max-width:400px;border-top:1px solid rgba(6,28,14,.14)}
+.find__hours div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(6,28,14,.14)}
+.find__hours dt{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-dark);align-self:center} /* taste-skill-ignore: the brand kit's label style */
+.find__hours dd{font-family:var(--display);font-size:17px}
+.find__logo{width:min(100%,460px);height:auto;justify-self:center}
 
-/* Review round 2 */
-.drop{height:118svh}
-@media (max-width:820px){.drop{height:112svh}}
-.drop__media--wide{margin-top:calc(-0.62 * clamp(64px,11.5vw,200px))}
-@media (max-width:820px){.drop__media--wide{margin-top:calc(-0.55 * clamp(48px,15vw,88px))}}
-/* the bar: cut-out glasses at dish scale, bottoms on one line */
-.pour{padding:12svh var(--gut) 8svh}
-.pour__title{margin-bottom:3svh}
-.glasses{align-items:end;gap:clamp(12px,2.4vw,40px);max-width:1400px}
-.glass img{-webkit-mask-image:none;mask-image:none;width:auto;max-width:100%;height:clamp(240px,46vh,520px);aspect-ratio:auto;object-fit:contain}
-.glass:nth-child(even){transform:none}
-.js .glass[data-rise].in:nth-child(even){transform:none}
-.pour__note{margin-top:5svh}
-@media (max-width:820px){.glasses{row-gap:6vh}.glass img{height:30vh}}
-.find{padding:8svh var(--gut) 6svh}
-.find__place{margin:3svh 0 2svh}
-.find__menu{font-size:18px;font-weight:600}
-.find__menu a{color:var(--accent-hi)}
+/* Footer */
+.foot{display:grid;justify-items:center;gap:22px;padding:56px var(--gut) max(32px,env(safe-area-inset-bottom));background:var(--bg-2);text-align:center}
+.foot__mark{width:130px;height:auto}
+.foot__links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase} /* taste-skill-ignore: the brand kit's label style */
+.foot__links a{text-decoration:none;padding:8px 0}
+.foot__links a:hover{color:var(--gold-hi)}
+.foot__legal{font-size:12.5px;color:var(--muted)}
 
-/* One pinned stage for the whole line-up: dishes hand over in place, the screen is never empty */
-.drops{height:calc(4 * 80svh + 100svh);padding-top:0}
-.drops__title{position:absolute;top:13svh;left:0;z-index:7}
-.drops__stage{position:sticky;top:0;height:100svh;overflow:hidden}
-.drop,.drop:first-of-type{position:absolute;inset:0;height:auto;margin:0}
-.drop__stage{position:absolute;inset:0;height:100%;padding-top:6svh}
-@media (max-width:820px){.drops{height:calc(4 * 70svh + 100svh)}.drop,.drop:first-of-type{height:auto}}
-.no-runway .drops{height:auto}
-.no-runway .drops__title{position:static;padding-top:14svh}
-.no-runway .drops__stage{position:static;height:auto;overflow:visible}
-.no-runway .drop{position:relative}
-.no-runway .drop__stage{position:relative;padding:8svh 0}
-.drop__stage{isolation:isolate}
-.drop__burst{z-index:-1}
-.drop__word{will-change:opacity}
-@media (max-width:820px){.find{text-align:center;justify-items:center}.find__lead{margin:0 auto}}
-@media (max-width:820px){.poster{justify-items:center;text-align:center}.poster__word{max-width:none}}
-.drops__title{position:absolute;top:auto;bottom:6svh;left:0;z-index:7;font-size:clamp(26px,2.4vw,36px);padding:0 var(--gut)}
+/* Entrances: a short rise. Content is visible if the script never runs. */
+.js [data-rise]{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
+.js [data-rise].in{opacity:1;transform:none}
 
-/* Motion polish (emil-design-eng + ui-ux-pro-max): short strong ease-out reveals, gated hovers, press feedback */
-:root{--ease-out:cubic-bezier(.23,1,.32,1)}
-.js [data-rise]{transform:translateY(14px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);transition-delay:calc(var(--i,0) * 60ms)}
-.hero__media{transition:transform 1.4s var(--ease-out),opacity 1s var(--ease-out)}
-.js .hero__line>span{transition:transform .8s var(--ease-out),opacity .5s var(--ease-out)}
-.tab{transition:transform 160ms var(--ease-out),background-color .2s ease}
-.tab:hover{transform:none}
-.tab:active,.sound:active{transform:scale(.97)}
-.sound{transition:transform 160ms var(--ease-out),color .2s ease}
-.glass:hover img{transform:none}
-@media (hover:hover) and (pointer:fine){
-  .tab:hover{transform:translateY(-2px)}
-  .glass:hover img{transform:translateY(-10px) scale(1.03)}
+/* Tablet */
+@media (max-width:1080px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .glasses{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-.bar__links a::after{transition:transform .35s var(--ease-out)}
-
-/* Hero: the brand leads. Gold foil wordmark, lockup tagline, the dumpling hanging below. */
-.hero__title{position:absolute;inset:auto 0;top:9svh;display:grid;justify-items:center;gap:clamp(10px,1.6svh,18px);z-index:3;pointer-events:none}
-.hero__mark{width:clamp(240px,34vw,600px);height:auto;pointer-events:auto}
-.hero__tag{font-family:var(--text);font-weight:600;font-size:clamp(12px,1.05vw,16px);letter-spacing:.32em;text-transform:uppercase;color:var(--accent);padding-left:.32em;pointer-events:auto} /* taste-skill-ignore: the brand lockup descriptor */
-.hero__tag span{opacity:.7;margin:0 .35em}
-.hero__media{height:80svh;margin-top:22svh}
-.hero__left,.hero__right{top:auto;bottom:9svh}
-.js .hero__mark{clip-path:inset(0 0 100% 0);transform:translateY(18px);transition:clip-path 1.1s var(--ease-out),transform 1.1s var(--ease-out)}
-.js .is-ready .hero__mark{clip-path:inset(0 0 0 0);transform:none}
-.js .hero__tag{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease-out) .5s,transform .7s var(--ease-out) .5s}
-.js .is-ready .hero__tag{opacity:1;transform:none}
-/* the small bar logo waits until the hero's wordmark has gone */
-.bar__mark{transition:opacity .4s var(--ease-out),transform .4s var(--ease-out)}
-.bar:not(.is-solid) .bar__mark{opacity:0;transform:translateY(-6px);pointer-events:none}
+/* Phone */
 @media (max-width:820px){
-  .hero__title{top:11svh}
-  .hero__mark{width:68vw}
-  .hero__tag{font-size:13px;letter-spacing:.24em}
-  .hero__media{width:190vw;margin-left:-95vw;top:28svh;margin-top:0;height:auto}
-  .hero__left{bottom:5svh}
+  body{font-size:15px}
+  .strip{justify-content:center}
+  .strip p:first-child{gap:16px}
+  .strip p:first-child span:first-child,.strip__end{display:none}
+  .bar{grid-template-columns:1fr auto;padding:10px max(16px,env(safe-area-inset-left)) 10px max(16px,env(safe-area-inset-right))}
+  .bar__links{display:none}
+  .bar__mark img{height:30px}
+  .sound__label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .hero{grid-template-columns:1fr;min-height:0;padding:28px 16px 40px;gap:8px;text-align:center}
+  .hero__text{order:2}
+  .hero__pic{order:1;margin:0 -16px}
+  .hero__media{width:150%;max-width:none;margin-left:-25%}
+  .hero .orn--left{margin-left:auto}
+  .hero__title{font-size:clamp(30px,8.4vw,40px);margin:0 auto}
+  .hero__lede{margin:14px auto 0;font-size:15px}
+  .hero__cta{justify-content:center;margin-top:24px}
+  .sig{padding:56px 0}
+  .sig .head{padding:0 16px}
+  .cards{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 16px;scroll-padding:0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .cards::-webkit-scrollbar{display:none}
+  .card{flex:0 0 76vw;scroll-snap-align:start}
+  .poster{min-height:0;padding:56px 16px 0;align-content:start;text-align:center}
+  .poster__text{max-width:none}
+  .poster .orn--left{margin-left:auto}
+  .poster__media{position:relative;inset:auto;z-index:0;height:auto;aspect-ratio:3/4;margin:24px -16px 0;width:calc(100% + 32px);max-width:none}
+  .poster__word{font-size:clamp(52px,16vw,72px)}
+  .menu{padding:64px 16px 48px}
+  .mlist{grid-template-columns:1fr;background:none}
+  .mi{grid-template-columns:56px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid rgba(216,157,60,.12)}
+  .mi__img{width:56px;height:56px}
+  .mi__name{font-size:16px}
+  .barsec{padding:56px 16px}
+  .barsec__top{grid-template-columns:1fr;text-align:center}
+  .barsec .orn--left{margin-left:auto}
+  .barsec__text p{margin-left:auto;margin-right:auto}
+  .glasses{grid-template-columns:1fr 1fr;row-gap:36px}
+  .glass img{height:clamp(170px,26vh,240px)}
+  .find{grid-template-columns:1fr;padding:56px 16px;text-align:center}
+  .find .orn--left{margin-left:auto}
+  .find__hours{margin:24px auto 28px}
+  .find__logo{order:-1;width:min(72vw,320px)}
 }
-.hero__title{gap:6px}
-.hero__media{margin-top:27svh;height:76svh}
-@media (max-width:820px){.hero__media{top:31svh}}
-.hero__title{gap:clamp(14px,2svh,22px)}
-.hero__mark{width:clamp(220px,30vw,540px)}
-.hero__media{margin-top:24svh}
-@media (max-width:820px){.hero__title{top:12svh}.hero__mark{width:62vw}.hero__media{margin-top:0;top:24svh;height:auto}}
-
-/* Mobile pass, 2026-11-20 */
-/* the hero picture paints on the first frame; only its gentle settle animates */
-.hero__media,.js .hero__media{opacity:1}
-/* touch: no grey tap flash, no double-tap zoom delay on controls */
-html{-webkit-tap-highlight-color:transparent}
-a,button,input,.tab,.sound{touch-action:manipulation}
-/* anchors glide when the platform's own scrolling is in charge (touch screens) */
-@media (prefers-reduced-motion:no-preference){html:not(.lenis){scroll-behavior:smooth}}
-/* notch and home-bar safe areas (viewport-fit=cover) */
-.bar{padding-left:max(var(--gut),env(safe-area-inset-left));padding-right:max(var(--gut),env(safe-area-inset-right));padding-top:max(12px,env(safe-area-inset-top))}
-.foot{padding-bottom:max(24px,env(safe-area-inset-bottom))}
-@media (max-width:820px){
-  .bar{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
-  .hero__left{bottom:max(5svh,calc(env(safe-area-inset-bottom) + 16px))}
-}
-/* phones held sideways: everything has to fit a short screen */
+/* Phones held sideways */
 @media (max-width:950px) and (max-height:500px) and (orientation:landscape){
-  .hero{min-height:100svh}
-  .hero__title{top:6svh}
-  .hero__mark{width:26vw}
-  .hero__media{width:auto;height:84svh;left:auto;margin-left:0;top:auto;margin-top:16svh}
-  .hero__left{bottom:6svh;left:max(16px,env(safe-area-inset-left));right:auto;text-align:left;max-width:30vw}
-  .drop__dish{width:min(56vh,40vw)}
-  .drop__word{font-size:clamp(40px,9vw,72px)}
-  .poster{align-content:center;padding-top:0;justify-items:start;text-align:left}
-  .poster__media{top:0;height:100%}
-  .poster__word{font-size:15vw}
-  .glasses{grid-template-columns:repeat(4,1fr)}
-  .glass img{height:44vh}
-}
-@media (max-width:950px) and (max-height:500px) and (orientation:landscape){
-  .hero__title{top:calc(64px + env(safe-area-inset-top))}
-  .hero__mark{width:22vw}
-  .hero__media{margin-top:22svh;height:80svh}
-  .hero .spice{display:none}
-  .hero__right{bottom:6svh;right:max(16px,env(safe-area-inset-right))}
+  .hero{grid-template-columns:5fr 6fr;text-align:left}
+  .hero__text{order:1}.hero__pic{order:2;margin:0}
+  .hero__media{width:100%;margin:0}
+  .hero .orn--left{margin-left:0}
+  .hero__cta{justify-content:flex-start}
+  .poster__media{aspect-ratio:16/9}
 }
 
-/* Reduce Motion: things still fade in and the videos still play; nothing travels, spins, zooms or bounces */
+/* Reduce Motion: fades only; videos still play */
 @media (prefers-reduced-motion:reduce){
-  .hero__media,.is-ready .hero__media{transform:none;transition:opacity 1.2s var(--ease-out)}
-  .js .hero__line>span,.js .is-ready .hero__line>span{transform:none;transition:opacity .8s var(--ease-out)}
-  .js .hero__mark{clip-path:none;transform:none;opacity:0;transition:opacity 1.1s var(--ease-out)}
-  .js .is-ready .hero__mark{opacity:1}
-  .js .hero__tag,.js .is-ready .hero__tag{transform:none;transition:opacity .8s var(--ease-out) .4s}
-  .js [data-rise],.js [data-rise].in,.js .glass[data-rise],.js .glass[data-rise].in:nth-child(even){transform:none;transition:opacity .8s var(--ease-out);transition-delay:calc(var(--i,0) * 60ms)}
-  .glass img,.glass:hover img{transform:none}
-  .bar__mark,.bar:not(.is-solid) .bar__mark{transform:none}
-  .bar__links a::after,.tab,.sound{transition-property:opacity,color,background-color}
-  .poster__media{transform:none!important}
+  .hero__media,.is-ready .hero__media{transform:none;transition:none}
+  .js [data-rise],.js [data-rise].in{transform:none;transition:opacity .6s var(--ease);transition-delay:calc(var(--i,0) * 60ms)}
+  .card,.card:hover,.glass img,.glass:hover img{transform:none!important}
   .sound[aria-pressed=true] .sound__eq i{animation:none;transform:scaleY(.6)}
 }
 
-/* Find us: Cavelossim set smaller (2026-11-20) */
-.find__place{font-size:clamp(48px,8.4vw,150px)}
-@media (max-width:820px){.find__place,.find__place.foil{font-size:12vw}}
+/* in-page jumps land below the sticky header */
+main [id]{scroll-margin-top:76px}
+@media (max-width:820px){main [id]{scroll-margin-top:60px}}
