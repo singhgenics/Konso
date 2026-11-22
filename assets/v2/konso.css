@@ -131,9 +131,8 @@ p,dl,dd,figure{margin:0}
 /* The menu: iFoods-style two-column list */
 .menu{padding:clamp(72px,11vh,120px) var(--gut) clamp(56px,8vh,96px)}
 .mtabs{display:flex;justify-content:center;gap:6px;margin:28px auto 0}
-.mtab{all:unset;cursor:pointer;position:relative;padding:12px 22px;min-height:20px;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);transition:color .2s ease} /* taste-skill-ignore: the brand kit's label style */
+.mtab{all:unset;cursor:pointer;position:relative;padding:12px 22px;min-height:20px;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);transition:color .2s ease,transform .16s var(--ease)} /* taste-skill-ignore: the brand kit's label style */
 .mtab::after{content:"";position:absolute;left:22px;right:calc(22px + .24em);bottom:4px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .2s var(--ease)}
-.mtab{transition:color .2s ease,transform .16s var(--ease)}
 .mtab:active{transform:scale(.97)}
 .mtab[aria-selected=true]{color:var(--gold-hi)}
 .mtab[aria-selected=true]::after{transform:scaleX(1)}
@@ -208,6 +207,9 @@ p,dl,dd,figure{margin:0}
 /* Entrances: a short staggered rise. Content stays visible if the script never runs. */
 .js [data-rise]{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
 .js [data-rise].in{opacity:1;transform:none}
+/* menu rows are read in quick succession: a shorter, smaller rise and a tighter stagger */
+.js .mi[data-rise]{transform:translateY(10px);transition:opacity .45s var(--ease),transform .45s var(--ease);transition-delay:calc(var(--i,0) * 40ms)}
+.js .mi[data-rise].in{transform:none}
 
 /* Tablet */
 @media (max-width:1080px){
@@ -271,7 +273,7 @@ p,dl,dd,figure{margin:0}
 /* Reduce Motion: fades only; videos still play */
 @media (prefers-reduced-motion:reduce){
   .hero__media,.is-ready .hero__media{transform:none;transition:none}
-  .js [data-rise],.js [data-rise].in{transform:none;transition:opacity .6s var(--ease);transition-delay:calc(var(--i,0) * 60ms)}
+  .js [data-rise],.js [data-rise].in,.js .mi[data-rise]{transform:none;transition:opacity .6s var(--ease);transition-delay:calc(var(--i,0) * 60ms)}
   .card,.card:hover,.glass img,.glass:hover img{transform:none!important}
   .sound[aria-pressed=true] .sound__eq i{animation:none;transform:scaleY(.6)}
 }
