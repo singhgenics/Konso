@@ -14,8 +14,14 @@
   let lenis = null;
   if (!reduce && fine && window.Lenis) {
     lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
-    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
+    if (window.gsap && window.ScrollTrigger) {            // one clock: GSAP drives Lenis, Lenis tells ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(t => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
   }
   const goTo = el => {
     if (lenis) lenis.scrollTo(el, { offset: -barH() });
@@ -92,6 +98,36 @@
     hero.classList.remove('is-ready'); void hero.offsetWidth; hero.classList.add('is-ready');
     items.forEach(el => { el.classList.remove('in'); rio.unobserve(el); });
     requestAnimationFrame(() => requestAnimationFrame(() => items.forEach(el => rio.observe(el))));
+  }
+
+  /* Scroll-linked depth (GSAP ScrollTrigger). Transform only; nothing here runs with Reduce Motion. */
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+    mm.add({ wide: '(min-width: 821px)', narrow: '(max-width: 820px)', calm: '(prefers-reduced-motion: reduce)' }, ctx => {
+      const { wide, calm } = ctx.conditions;
+      if (calm) return;
+      // 1. Hero: the dumpling drifts up slower than the words; the words lift and fade as the hero leaves
+      gsap.to('.hero__pic', { yPercent: -10, scale: 1.06, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to('.hero__text', { yPercent: -30, opacity: 0, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: '75% top', scrub: true } });
+      // 2. Signature cards: each photo shifts inside its frame as the card passes
+      gsap.utils.toArray('.card__pic').forEach(pic => {
+        gsap.fromTo(pic.querySelectorAll('img,video'), { yPercent: -7, scale: 1.14 }, { yPercent: 7, scale: 1.14, ease: 'none',
+          scrollTrigger: { trigger: pic, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+      // 3. Toss: the wok zooms out from close up and the word glides up; on desktop the section holds while it happens
+      const toss = gsap.timeline({ scrollTrigger: { trigger: '.poster', start: wide ? () => `top ${barH()}px` : 'top 80%', end: wide ? '+=70%' : 'bottom 40%',
+        pin: wide, scrub: 0.6, anticipatePin: 1 } });
+      toss.fromTo('.poster__media', { scale: 1.32 }, { scale: 1, ease: 'none' }, 0)
+          .fromTo('.poster__word', { yPercent: 60 }, { yPercent: 0, ease: 'power2.out' }, 0)
+          .fromTo('.poster__cap', { yPercent: 120, opacity: 0 }, { yPercent: 0, opacity: 1, ease: 'power2.out' }, 0.25);
+      // 4. Bar: the pour moves gently inside its frame
+      gsap.fromTo('.barsec__media', { yPercent: -6, scale: 1.12 }, { yPercent: 6, scale: 1.12, ease: 'none',
+        scrollTrigger: { trigger: '.barsec__pic', start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+    addEventListener('load', () => ScrollTrigger.refresh());
   }
 
   /* Header gets its hairline once the page moves */
