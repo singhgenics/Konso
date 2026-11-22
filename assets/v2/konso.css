@@ -100,6 +100,7 @@ p,dl,dd,figure{margin:0}
           mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 58%,transparent 100%);
   transform:scale(1.04);transition:transform 1.6s var(--ease)}
 .is-ready .hero__media{transform:none}
+.hero:not(.is-ready) .hero__media{transition:none}
 
 /* Cream bands */
 .light{background:var(--cream);color:var(--green-ink);color-scheme:light}
@@ -204,6 +205,10 @@ p,dl,dd,figure{margin:0}
 .foot__legal{font-size:12.5px;color:var(--muted)}
 
 
+/* Entrances: a short staggered rise. Content stays visible if the script never runs. */
+.js [data-rise]{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0) * 70ms)}
+.js [data-rise].in{opacity:1;transform:none}
+
 /* Tablet */
 @media (max-width:1080px){
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -266,6 +271,7 @@ p,dl,dd,figure{margin:0}
 /* Reduce Motion: fades only; videos still play */
 @media (prefers-reduced-motion:reduce){
   .hero__media,.is-ready .hero__media{transform:none;transition:none}
+  .js [data-rise],.js [data-rise].in{transform:none;transition:opacity .6s var(--ease);transition-delay:calc(var(--i,0) * 60ms)}
   .card,.card:hover,.glass img,.glass:hover img{transform:none!important}
   .sound[aria-pressed=true] .sound__eq i{animation:none;transform:scaleY(.6)}
 }

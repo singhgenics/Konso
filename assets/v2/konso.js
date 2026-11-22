@@ -1,4 +1,4 @@
-/* Konso, 2026-11-22: calm motion. Videos load near the screen and play only on screen; the one authored moment is the signature cards fading from still to loop;
+/* Konso, 2026-11-22: calm motion. Videos load near the screen and play only on screen; blocks rise in once (the Konso mark replays them);
    the menu has Food and Drinks tabs; music only when asked. */
 (() => {
   const root = document.documentElement;
@@ -40,8 +40,20 @@
     });
   });
 
+  /* The Konso mark: back to the very top, then the page plays its entrances again */
+  const toTop = () => {
+    const done = () => { replay(); history.replaceState(null, '', location.pathname + location.search); };
+    if (lenis) { lenis.scrollTo(0, { duration: 1.1, onComplete: done }); return; }
+    if (scrollY < 2) { done(); return; }
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    const t0 = performance.now();
+    const wait = () => (scrollY < 2 || performance.now() - t0 > 2000) ? done() : requestAnimationFrame(wait);
+    requestAnimationFrame(wait);
+  };
+  document.querySelectorAll('a[href="#top"]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); toTop(); }));
+
   /* In-page links land below the sticky header */
-  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  document.querySelectorAll('a[href^="#"]:not([href="#top"])').forEach(a => a.addEventListener('click', e => {
     const id = a.getAttribute('href'); const el = id.length > 1 && document.querySelector(id);
     if (!el) return;
     e.preventDefault();
@@ -70,6 +82,17 @@
     } else v.pause();
   }), { rootMargin: '60% 0px' });
   vids.forEach(v => vio.observe(v));
+
+  /* Entrances: each block rises in once as it comes on screen, a few at a time (fades only with Reduce Motion) */
+  const SEL = '.hero__title,.hero__lede,.hero__cta,.head,.card,.poster__text,.msec__head,.mi,.barsec__pic,.barsec__text,.glass,.find__text,.find__logo,.menu__foot';
+  const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  const items = [...document.querySelectorAll(SEL)];
+  items.forEach(el => { el.setAttribute('data-rise', ''); el.style.setProperty('--i', [...el.parentNode.children].indexOf(el) % 4); rio.observe(el); });
+  function replay() {
+    hero.classList.remove('is-ready'); void hero.offsetWidth; hero.classList.add('is-ready');
+    items.forEach(el => { el.classList.remove('in'); rio.unobserve(el); });
+    requestAnimationFrame(() => requestAnimationFrame(() => items.forEach(el => rio.observe(el))));
+  }
 
   /* Header gets its hairline once the page moves */
   const solid = () => bar.classList.toggle('is-solid', scrollY > 8);
