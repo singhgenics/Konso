@@ -28,7 +28,7 @@ def make(w, h, pools, out):
     col = base + (POOL - base) * light[..., None]
     col = col * (1 + grain(w, h)[..., None] * 1.6)          # brand paper grain
     col += np.random.default_rng(3).normal(0, .9, col.shape)  # dither: no banding
-    Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).save(out, 'WEBP', quality=88, method=6)
+    Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).save(out, 'WEBP', quality=97, method=6)   # 97: lower settings smooth the dark grain into visible blocks
     print(out, w, h)
 make(2560, 1600, [(.5, .30, .55, .55, .85), (.16, .86, .38, .32, .38)], '../../assets/v2/img/ground.webp')
 make(1170, 2532, [(.5, .30, .75, .38, .85), (.2, .82, .6, .25, .35)], '../../assets/v2/img/ground-sm.webp')

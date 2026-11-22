@@ -1,4 +1,4 @@
-/* Konso, 2026-11-22: calm motion. Videos load near the screen and play only on screen; sections rise in once;
+/* Konso, 2026-11-22: calm motion. Videos load near the screen and play only on screen; the one authored moment is the signature cards fading from still to loop;
    the menu has Food and Drinks tabs; music only when asked. */
 (() => {
   const root = document.documentElement;
@@ -31,7 +31,6 @@
       document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
     });
     if (focus) tab.focus();
-    rise(document.getElementById(tab.getAttribute('aria-controls')));
   };
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => select(t));
@@ -71,19 +70,6 @@
     } else v.pause();
   }), { rootMargin: '60% 0px' });
   vids.forEach(v => vio.observe(v));
-
-  /* Entrances: headings, then text, then cards, a few at a time */
-  const SEL = '.head,.card,.poster__text,.msec__head,.mi,.barsec__pic,.barsec__text,.glass,.find__text,.find__logo';
-  const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
-  function rise(scope) {
-    scope.querySelectorAll(SEL).forEach(el => {
-      if (el.hasAttribute('data-rise')) return;
-      const sibs = [...el.parentNode.children];
-      el.setAttribute('data-rise', ''); el.style.setProperty('--i', sibs.indexOf(el) % 4);
-      rio.observe(el);
-    });
-  }
-  rise(document);
 
   /* Header gets its hairline once the page moves */
   const solid = () => bar.classList.toggle('is-solid', scrollY > 8);

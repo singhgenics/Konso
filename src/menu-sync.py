@@ -175,8 +175,8 @@ def home_item(d):
             f'{tag}<p class="mi__desc">{E(desc)}</p>{opts}</div></li>')
 def home_sec(s):
     lede = f'<p class="msec__lede">{E(s["lede"])}</p>' if s['lede'] else ''
-    return (f'<section class="msec" aria-labelledby="h{s["id"][1:]}"><header class="msec__head"><p class="label">{E(s["small"])}</p>'
-            f'<span class="orn" aria-hidden="true"></span><h3 id="h{s["id"][1:]}">{E(s["title"])}</h3>{lede}</header>'
+    return (f'<section class="msec" aria-labelledby="h{s["id"][1:]}"><header class="msec__head">'
+            f'<h3 id="h{s["id"][1:]}">{E(s["title"])}</h3><p class="msec__sub">{E(s["small"])}</p>{lede}</header>'
             f'<ul class="mlist">{"".join(home_item(d) for d in s["items"])}</ul></section>')
 def home_panel(pid, ids, first):
     return (f'<div class="mpanel" id="mp-{pid}" role="tabpanel" aria-labelledby="mt-{pid}"{"" if first else " hidden"}>'
